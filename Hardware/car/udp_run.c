@@ -1,7 +1,3 @@
-/*
- * udpclient.c - A simple UDP client
- * usage: udpclient <host> <port>
- */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
