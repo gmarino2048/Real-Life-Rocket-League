@@ -5,11 +5,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
 #include <netdb.h>
+#include <arpa/inet.h>
 
-#define BUFSIZE 1024
+#define PORT 1234 //port we're communicating on
 
 //perror wrapper
 void error(char *msg) {
@@ -18,88 +17,75 @@ void error(char *msg) {
 }
 
 int main(int argc, char **argv) {
-  //********test states
+  //**********************test states*********************************
   int states[] = {1, 2, 3, 4, 5, -1};
 
-  //********server shit
+  //***********************server*****************************
   int sockfd; //socket
-  int portno; //port
-  int clientlen; //byte size of client address
-  struct sockaddr_in serveraddr; //server address
-  struct sockaddr_in clientaddr; //client address
-  struct hostent *hostp; //client host info
-  char buf[BUFSIZE]; //buffer we'll be using
-  char *hostaddrp; //host address string
+  struct sockaddr_in server; //server address
+  struct sockaddr_in client; //client address
+  socklen_t serverlen = sizeof(server); // byte size of server address
+  socklen_t clientlen = sizeof(client); //byte size of client address
+  int msglen; //message byte size
+  char msg[80]; //buffer we'll be using
   int optval; //flag for setsockopt
-  int n; //message byte size
-
-  //port we'll be operating on
-  portno = 1234;
+  //build the server address
+  memset((char *)&server, 0, serverlen);
+  server.sin_family = AF_INET;
+  server.sin_addr.s_addr = inet_addr("192.168.1.12"); //self address
+  server.sin_port = htons(PORT);
   //creates socket
-  sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-  if (sockfd < 0){
+  if((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0){
     error("ERROR opening socket");
   }
   else{
     fprintf(stderr, "socket open\n");
   }
-  //setsockopt enables the reuse of this port immediately after
-  //use. disables port timeout.
+  //setsockopt enables the reuse of this port immediately after use.
+  //disables port timeout.
   optval = 1;
   setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR,
 	     (const void *)&optval , sizeof(int));
-  //build the server address
-  bzero((char *) &serveraddr, sizeof(serveraddr));
-  serveraddr.sin_family = AF_INET;
-  serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
-  serveraddr.sin_port = htons((unsigned short)portno);
   //binds socket to port
-  if (bind(sockfd, (struct sockaddr *) &serveraddr,
-	   sizeof(serveraddr)) < 0){
+  if (bind(sockfd, (struct sockaddr *)&server, serverlen) < 0){
     error("ERROR on binding");
   }
   else{
-    fprintf(stderr, "bound.\n");
+    fprintf(stderr, "socket bound.\n");
   }
-  //builds client address
-  memset(&clientaddr, 0, sizeof(clientaddr));
-  clientlen = sizeof(clientaddr);
-  clientaddr.sin_family = AF_INET;
-  clientaddr.sin_addr.s_addr = inet_addr("192.168.1.7"); //ip address of pi
-  clientaddr.sin_port = htons((unsigned short)portno);
-  hostp = gethostbyaddr((const char *)&clientaddr,
-			  clientlen, AF_INET);
-  if (hostp == NULL){
-    error("ERROR on gethostbyaddr");
+  //waits to recieve connection
+  fprintf(stderr, "waiting for handshake...");
+  if(
+    (msglen = recvfrom(sockfd, msg, sizeof(msg), 0,
+    (struct sockaddr *)&client, &clientlen)) > 0){
+    fprintf(stderr, "%s\n", msg);
   }
   else{
-    fprintf(stderr, "host found.\n");
+    error("recvfrom failed.");
   }
-  hostaddrp = inet_ntoa(clientaddr.sin_addr);
-  if (hostaddrp == NULL){
-      error("ERROR on inet_ntoa\n");
-  }
-  else{
-    fprintf(stderr, "ready to send.\n");
-  }
-
+  //ensures msg buffer is clear
+  bzero(msg, sizeof(msg));
+  msglen = -1;
   //indexing variable
   int i = 0;
   fprintf(stderr, "Starting test sequence: \n");
   //starts sending data
   while (1) {
-    sprintf((char *)&buf, "%d", states[i]);
+    sprintf((char *)&msg, "%d", states[i]);
     fprintf(stderr, "Sending state %d\n", states[i]);
     //sending state
-    n = sendto(sockfd, buf, strlen(buf), 0,
-	       (struct sockaddr *) &clientaddr, clientlen);
-    if (n < 0)
+    if ((msglen = sendto(sockfd, msg, sizeof(msg), 0,
+	      (struct sockaddr *)&client, clientlen)) < 0){
       error("ERROR in sendto");
+    }
+    //checks for end game state
     if(states[i] == -1){
       break;
     }
+    //waits between sending states
+    sleep(2);
     i++;
-    sleep(3);
   }
+  close(sockfd);
   return 1;
 }

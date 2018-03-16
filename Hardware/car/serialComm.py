@@ -27,7 +27,7 @@ def main():
                 ser.write(b"{0}".format(state))
                 ser.close()
                 if state == '-1':
-                    KeyboardInterrupt
+                    raise KeyboardInterrupt
                 break
     os.remove("/tmp/myfifo")
 
