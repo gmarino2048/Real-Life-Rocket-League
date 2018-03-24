@@ -243,7 +243,7 @@
       <label for="psw"><b>Password</b></label>
       <input type="password" placeholder="Enter Password" name="psw" required>
         
-      <button type="submit">Submit</button>
+      <button type="submit" id="direct">Submit</button>
       <label>
         <input type="checkbox" checked="checked" name="remember"> Remember me
       </label>
@@ -275,7 +275,9 @@ onclick="document.getElementById('id02').style.display='block'" style="width:aut
       <input type="text" placeholder="Enter Username" name="uname" required>
       <label for="psw"><b>Password</b></label>
       <input type="password" placeholder="Enter Password" name="psw" required>
-      <sbutton type="submit">Submit</sbutton>
+        
+      <sbutton type="submit" id="direct">Submit</sbutton>
+        
       <label>
         <input type="checkbox" checked="checked" name="remember"> Remember me
       </label>
@@ -286,9 +288,9 @@ onclick="document.getElementById('id02').style.display='block'" style="width:aut
     </div>
   </form>
 </div>
-<button3 style="width:auto"> Guest </button3>
+<button3 style="width:auto" id="direct1"> Guest </button3>
 
-<script>
+<script type=text/javascript>
 // Get the modal
 var modal = document.getElementById('id01');
 
@@ -306,6 +308,14 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
-</script>
+    document.getElementById("direct").onclick = function(){
+        location.href = "Game_Lobby.html";
+    }
+    document.getElementById("direct1").onclick = function(){
+        location.href = "Login_Page.html";
+    }
+             
+    
+    </script>
     </body>
 </html>

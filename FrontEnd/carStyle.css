@@ -1,4 +1,5 @@
 <!DOCTYPE CSS>
+/*CarSoccer style */
 .bgimg{
     background-color: black;
     min-height:100%;
@@ -68,7 +69,10 @@
     transform: translate(-0%,130%);
 }
 
+/* Welcome Page */
 
+
+/* Unknown style */
 .boxed{
     border: 1px solid white;
     background-color: white;
