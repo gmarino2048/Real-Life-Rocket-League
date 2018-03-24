@@ -22,10 +22,12 @@
     
     <body onload="startGame()">
     <script type ="text/javascript">
-        var car;
+        var rCar;
+        var bCar;
         function startGame(){
             arena.start();
-            car = new component(30, 30, "red" , 10, 120);
+            rCar = new component(30, 30, "red" , 150, 120);
+            bCar = new component(30, 30, "blue" , 300, 120);
         }
         var arena = {
             canvas: document.createElement("canvas"), start : function(){
@@ -69,40 +71,48 @@
         /*Key Pressed*/
         function updateArena(){
             arena.clear();
-            car.newPos();
-            car.update();
-            car.speedX=0;
-            car.speedY=0;
+            rCar.newPos();
+            rCar.update();
+            rCar.speedX=0;
+            rCar.speedY=0;
+            
+            bCar.newPos();
+            bCar.update();
+            bCar.speedX=0;
+            bCar.speedY=0;
             
             //left arrow
-            if(arena.key && arena.key == 37){car.speedX = -1;
+            if(arena.key && arena.key == 37){bCar.speedX = -1;
             }
             //right arrow
-            if(arena.key && arena.key == 39){car.speedX = 1;
+            if(arena.key && arena.key == 39){bCar.speedX = 1;
             }
             //up arrow
-            if(arena.key && arena.key == 38){car.speedY = -1;
+            if(arena.key && arena.key == 38){bCar.speedY = -1;
             }
             //down arrow
-            if(arena.key && arena.key == 40){car.speedY = 1;
+            if(arena.key && arena.key == 40){bCar.speedY = 1;
             }
             //left (a)
-            if(arena.key && arena.key == 65){car.speedX = -1;
+            if(arena.key && arena.key == 65){rCar.speedX = -1;
             }
             //right (d)
-            if(arena.key && arena.key == 68){car.speedX = 1;
+            if(arena.key && arena.key == 68){rCar.speedX = 1;
             }
             //up (w)
-            if(arena.key && arena.key == 87){car.speedY = -1;
+            if(arena.key && arena.key == 87){rCar.speedY = -1;
             }
             //down (s)
-            if(arena.key && arena.key == 83){car.speedY = 1;
+            if(arena.key && arena.key == 83){rCar.speedY = 1;
             }
-            car.newPos();
-            car.update();
+            rCar.newPos();
+            rCar.update();
+            
+            rCar.newPos();
+            rCar.update();
         }
         
-        function moveup(){
+        /*function moveup(){
             car.speedY = -1;
         }
         
@@ -118,7 +128,7 @@
         function clearmove(){
             car.speedX =0;
             car.speedY =0;
-        }
+        }*/
         
     </script>
         <div style="text-align:center; width:480px;">
