@@ -15,24 +15,53 @@
             canvas{
                 border:1px solida #d3d3d3;
                 background-color: #f1f1f1;
+                transform: translate(50%,30%);
+                border: none;
+                position: absolute;
+            }
+            buttonQ{
+                padding: 15px 25px;
+                font-size: 24px;
+                text-align: center;
+                cursor: pointer;
+                outline: none;
+                color: black;
+                background-color:red;
+                border: none;
+                border-radius: 15px;
+                position: absolute;
+                top:60%;
+                left: 45.5%;
+                transform: translate(50%, 230%);
+            }
+            buttonQ :hover {
+                background-color:crimson
+            }
+            buttonQ:active{
+                background-color: red;
+                box-shadow: 0 5px #666;
+                transform: translate3d(4px)
             }
         </style>
         
     </head>
     
     <body onload="startGame()">
+        <buttonQ class = "buttonQ" id ="buttonQ"> QUIT </buttonQ>
     <script type ="text/javascript">
         var rCar;
         var bCar;
+        var myBackground;
         function startGame(){
-            arena.start();
-            rCar = new component(30, 30, "red" , 150, 120);
-            bCar = new component(30, 30, "blue" , 300, 120);
+            bCar = new component(40, 40, "new-blue-car-cartoon-transportation-free-sports.png" , 300, 120, "image");
+            rCar = new component(40, 40, "red_car.png" , 540, 120, "image");
+            myBackground = new component(880, 470, "soccer_field_311115.jpg", 0, 0, "image");
+             arena.start();
         }
         var arena = {
             canvas: document.createElement("canvas"), start : function(){
-                this.canvas.width = 480;
-                this.canvas.height = 270;
+                this.canvas.width = 880;
+                this.canvas.height = 470;
                 this.context = this.canvas.getContext("2d");
                 
                 document.body.insertBefore(this.canvas, document.body.childNodes[0]);
@@ -49,7 +78,12 @@
                 this.context.clearRect(0,0, this.canvas.width, this.canvas.height);
             }
         }
-        function component(width, height, color, x, y){
+        function component(width, height, color, x, y, type){
+        this.type = type;
+        if(type == "image"){
+            this.image = new Image();
+            this.image.src = color;
+        }
             this.area = arena
             this.width = width;
             this.height = height;
@@ -59,18 +93,23 @@
             this.y = y;
             this.update = function(){
                 ctx = arena.context;
+                if(type == "image"){
+                    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+                }else{
                 ctx.fillStyle = color;
                 ctx.fillRect(this.x, this.y, this.width, this.height);
+            }
             }
             this.newPos = function(){
                 this.x += this.speedX;
                 this.y += this.speedY;
             }
         }
-        
         /*Key Pressed*/
         function updateArena(){
             arena.clear();
+            myBackground.newPos();
+            myBackground.update();
             rCar.newPos();
             rCar.update();
             rCar.speedX=0;
@@ -82,28 +121,28 @@
             bCar.speedY=0;
             
             //left arrow
-            if(arena.key && arena.key == 37){bCar.speedX = -1;
+            if(arena.key && arena.key == 37){rCar.speedX = -1;
             }
             //right arrow
-            if(arena.key && arena.key == 39){bCar.speedX = 1;
+            if(arena.key && arena.key == 39){rCar.speedX = 1;
             }
             //up arrow
-            if(arena.key && arena.key == 38){bCar.speedY = -1;
+            if(arena.key && arena.key == 38){rCar.speedY = -1;
             }
             //down arrow
-            if(arena.key && arena.key == 40){bCar.speedY = 1;
+            if(arena.key && arena.key == 40){rCar.speedY = 1;
             }
             //left (a)
-            if(arena.key && arena.key == 65){rCar.speedX = -1;
+            if(arena.key && arena.key == 65){bCar.speedX = -1;
             }
             //right (d)
-            if(arena.key && arena.key == 68){rCar.speedX = 1;
+            if(arena.key && arena.key == 68){bCar.speedX = 1;
             }
             //up (w)
-            if(arena.key && arena.key == 87){rCar.speedY = -1;
+            if(arena.key && arena.key == 87){bCar.speedY = -1;
             }
             //down (s)
-            if(arena.key && arena.key == 83){rCar.speedY = 1;
+            if(arena.key && arena.key == 83){bCar.speedY = 1;
             }
             rCar.newPos();
             rCar.update();
@@ -112,6 +151,12 @@
             rCar.update();
         }
         
+        </script>
+         <script type= "text/javascript">
+        document.getElementById("buttonQ").onclick = function(){
+            location.href = "EndGame.html";
+        }
+    </script>
         /*function moveup(){
             car.speedY = -1;
         }
@@ -130,12 +175,5 @@
             car.speedY =0;
         }*/
         
-    </script>
-        <div style="text-align:center; width:480px;">
-        <button onmousedown="moveup()" onmouseup="clearmove()" ontouchstart="moveup()"> UP </button><br><br>
-            <button onmousedown = "moveleft()" onmouseup="clearmove()" ontouchstart ="moveleft()">LEFT</button>
-            <button onmousedown ="moveright()" onmouseup="clearmove()" ontouchstart="moveright()">RIGHT</button><br><br>
-            <button onmousedown="movedown()" onmouseup="clearmove()" ontouchstart="movedown()">DOWN</button>
-        </div>
     </body>
 </html>
