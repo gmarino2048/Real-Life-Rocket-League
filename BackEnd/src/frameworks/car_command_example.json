@@ -1,0 +1,6 @@
+{
+	"messageType": "carCommand", // details the type of message (command from front end to car in this case)
+	"stateCode": 4, // state describing how the car should move
+	"carNo": 1, // which car (0,1 or 1,2); based on car number, I can figure out which command to send to which car
+
+}

@@ -19,8 +19,9 @@ public class Message implements Runnable {
 		this.received = new DatagramPacket(buffer, buffer.length, this.address, this.port);
 		this.message = new String(this.received.getData(), 0, this.received.getLength());
 	
-	
 	}
+	
+	
 
 	@Override
 	public void run() {
