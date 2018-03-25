@@ -53,7 +53,7 @@
         var bCar;
         var myBackground;
         function startGame(){
-            bCar = new component(40, 40, "new-blue-car-cartoon-transportation-free-sports.png" , 300, 120, "image");
+            //bCar = new component(40, 40, "new-blue-car-cartoon-transportation-free-sports.png" , 300, 120, "image");
             rCar = new component(40, 40, "red_car.png" , 540, 120, "image");
             myBackground = new component(880, 470, "soccer_field_311115.jpg", 0, 0, "image");
              arena.start();
@@ -115,10 +115,10 @@
             rCar.speedX=0;
             rCar.speedY=0;
             
-            bCar.newPos();
+            /*bCar.newPos();
             bCar.update();
             bCar.speedX=0;
-            bCar.speedY=0;
+            bCar.speedY=0;*/
             
             //left arrow
             if(arena.key && arena.key == 37){rCar.speedX = -1;
@@ -133,16 +133,16 @@
             if(arena.key && arena.key == 40){rCar.speedY = 1;
             }
             //left (a)
-            if(arena.key && arena.key == 65){bCar.speedX = -1;
+            if(arena.key && arena.key == 65){rCar.speedX = -1;
             }
             //right (d)
-            if(arena.key && arena.key == 68){bCar.speedX = 1;
+            if(arena.key && arena.key == 68){rCar.speedX = 1;
             }
             //up (w)
-            if(arena.key && arena.key == 87){bCar.speedY = -1;
+            if(arena.key && arena.key == 87){rCar.speedY = -1;
             }
             //down (s)
-            if(arena.key && arena.key == 83){bCar.speedY = 1;
+            if(arena.key && arena.key == 83){rCar.speedY = 1;
             }
             rCar.newPos();
             rCar.update();
