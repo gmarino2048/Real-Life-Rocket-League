@@ -1,0 +1,87 @@
+<!DOCTYPE CSS>
+/*CarSoccer style */
+.bgimg{
+    background-color: black;
+    min-height:100%;
+    background-position: center;
+    background-size: cover;
+}
+
+.button{
+    padding: 15px 25px;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: black;
+    background-color:red;
+    border: none;
+    border-radius: 15px;
+    position: absolute;
+    top:60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    transform: translate(-50%,700%)
+}
+
+.button:hover {background-color:crimson}
+
+.button:active{
+    background-color: red;
+    box-shadow: 0 5px #666;
+    transform: translate3d(4px)
+}
+
+.button1{
+    padding: 15px 25px;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: black;
+    border: none;
+    border-radius: 15px;
+    position: absolute;
+    top:60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    transform: translate(-50%,700%)
+}
+
+.container{
+    position:relative;
+    text-align: center;
+    color: white;
+}
+
+.centered{
+    color:white;
+    font-size: 300px;
+    font-family: "Bookman", "URW Bookman L", serif;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    left:0;
+    line-height: 200px;
+    margin-top:-100px;
+    transform: translate(-0%,130%);
+}
+
+/* Welcome Page */
+
+
+/* Unknown style */
+.boxed{
+    border: 1px solid white;
+    background-color: white;
+    width: 30%;
+    position: absolute;
+    top: 30%;
+    left: 0;
+    height: 400px;
+    margin-top: -50px;
+    transform: translate(120%, 0%);
+    
+}
