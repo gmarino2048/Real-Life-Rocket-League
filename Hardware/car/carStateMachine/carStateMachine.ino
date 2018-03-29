@@ -6,21 +6,22 @@ STATE TABLE
 'a' - start/end game, handled inside serialEvent()
 '0' - neutral
 '1' - Forward, drive()
-'2' - Turn Right, right()            
+'2' - Turn Right, right()
 '3' - Reverse, reverse()
-'4' - Turn Left, left()             
+'4' - Turn Left, left()
 '5' - Forward+Right, rdrive()
 '6' - Forward+Left, ldrive()
 '7' - Reverse+Right, rreverse()
 '8' - Reverse+Left, lreverse()
 '9' - Brake, brake()
-'10' - boost, boost()
+'b' - boost, boost()
 */
 
 
 //*******************Global Variables and Definitions*******************
-  
+
   //*************turn motor (stepper motor)*****************
+  #define enS   3//pin
   #define sIn1  4//pin
   #define sIn2  5//pin
   #define sIn3  6//pin
@@ -28,8 +29,8 @@ STATE TABLE
   //delay between polarity shifts for stepper
   #define DELAYTIME  1//ms
   //how long steppers should run for 90 degree turn
-  #define TURNTIME  10000//ms
-  
+  #define TURNTIME  400//ms
+
   //******************drive motor***************************
   //enable allows for in1/in2 to accept input and takes rpm
   #define enA  11//pin
@@ -39,14 +40,14 @@ STATE TABLE
   #define in2  10//pin
   //normal speed
   #define NSPD  150//rpm
-  
+
   //********************boost state*************************
   //boost speed
   #define BSPD  250//rpm
   //boost duration
-  #define BDUR  10000//ms
+  #define BDUR  3000//ms
   //cooldown duration
-  #define CDUR  30000//ms
+  #define CDUR  9000//ms
   //flag to indicate if boost is active
   int boostSet;
   //flag to indicate if boost CAN be active
@@ -55,7 +56,7 @@ STATE TABLE
   unsigned long bTimer;
   //how long since last boosted
   unsigned long cooldown;
-  
+
   //**********************program state*********************
   //timer for whole program
   unsigned long totalTime;
@@ -67,7 +68,7 @@ STATE TABLE
   int lastTurn;
   //rpm enA is set to, changes depending on boost
   int driveSpeed;
-  
+
 //****************************Utility Functions***************************
 
 void setup(){
@@ -76,6 +77,7 @@ void setup(){
   pinMode(in1, OUTPUT);
   pinMode(in2, OUTPUT);
   //sets stepper control pins
+  pinmode(enS, OUTPUT);
   pinMode(sIn1, OUTPUT);
   pinMode(sIn2, OUTPUT);
   pinMode(sIn3, OUTPUT);
@@ -93,34 +95,22 @@ void setup(){
 //called at end of loop whenever there is new serial data
 void serialEvent(){
   while(Serial.available()){
-    //need newState to check for new game
-    char newState = (char)(Serial.read());
+    state = (char)(Serial.read());
   }
-  if(state != 'a'){
-    state = newState;
-    if(state == 'a'){
-      //straightens wheels, turns off all motors.
-      straight();
-      brake();
-    }
-    if(state == '9'){
-      state = '0'
-      brake();
-    }
-   }
-  else{
-    //new game
-    if(newState == 'a'){
-      //resets all flags
-      setup();
-      //sets state to neutral so it can start recieving commands
-      state = '0';
-    }
+  if(state == 'a'){
+    straight();
+    brake();
+    setup();
+  }
+  if(state == '9'){
+    state = '0';
+    brake();
   }
 }
 
 //stepper helper funtion - just sets all stepper pins low
 void stepOff(){
+  digitalWrite(enS, LOW);
   digitalWrite(sIn1, LOW);
   digitalWrite(sIn2, LOW);
   digitalWrite(sIn3, LOW);
@@ -130,7 +120,8 @@ void stepOff(){
 //right 1, left -1
 void stepRoutine(int lOrR, unsigned long time){
   //so that they can be set in loop
-  off(1);
+  stepOff();
+  digitalWrite(enS, HIGH);
   int stepPins[] = {sIn1, sIn2, sIn3, sIn4};
   int i;
   if(lOrR){
@@ -139,7 +130,7 @@ void stepRoutine(int lOrR, unsigned long time){
   }
   else{
     //start rotation counter clockwise
-    i = 3; 
+    i = 3;
   }
   //to time our loop
   totalTime = millis();
@@ -167,7 +158,7 @@ void stepRoutine(int lOrR, unsigned long time){
     loopTime = millis();
   }
   //stepper off
-  off(1);
+  stepOff();
 }
 
 //makes sure wheels are straight
@@ -212,7 +203,7 @@ void toggleBoost(){
 
 //drive, we're going forward now
 //takes direction
-//states '1', '5', and '6' 
+//states '1', '5', and '6'
 void drive(int turn){
   if(turn == 0){
     //sets wheels straight
@@ -290,12 +281,13 @@ void brake(){
   digitalWrite(sIn4, LOW);
 }
 
-//boost, things are about to get faster '10'
+//boost, things are about to get faster 'b'
 void boost(){
   //checks if we are allowed to boost
   if(bReady){
     toggleBoost();
   }
+  analogWrite(enA, driveSpeed);
 }
 
 //*******************************Control Loop******************************
@@ -340,7 +332,7 @@ void loop(){
     state = '0';
     reverse(-1);
   }
-  if(state == '10'){
+  if(state == 'b'){
     state = '0';
     boost();
   }
