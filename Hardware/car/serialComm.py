@@ -4,10 +4,10 @@ import serial
 import time
 import os
 import sys
+#sets the port of the arduino + the baud rate
+ser = serial.Serial('/dev/ttyACM0',9600)
 
 def main():
-    #sets the port of the arduino + the baud rate
-    ser = serial.Serial('/dev/ttyACM0',9600)
     #path for FIFO
     FIFO = "/tmp/myfifo"
     #control loop
@@ -26,8 +26,8 @@ def main():
                 if state == '-1':
                     raise KeyboardInterrupt
                 break
-    ser.close()
     os.remove("/tmp/myfifo")
+    ser.close()
 
 if __name__ == '__main__':
     try:
@@ -35,8 +35,9 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print 'Interrupted'
         try:
-            ser.close()
             os.remove("/tmp/myfifo")
+            ser.write(b"a");
+            ser.close()
             sys.exit(0)
         except SystemExit:
             os._exit(0)

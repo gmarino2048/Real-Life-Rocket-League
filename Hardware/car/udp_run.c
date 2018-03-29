@@ -101,7 +101,8 @@ int main(int argc, char **argv) {
   else{
     fprintf(stderr, "socket named.\n");
   }
-  server.sin_addr.s_addr = inet_addr("192.168.1.12");
+  /*
+  //server.sin_addr.s_addr = inet_addr("192.168.1.12");
   //creates dialogue
   if((msglen = sendto(sockfd, msg, sizeof(msg), 0,
      (struct sockaddr *)&server, serverlen)) < 0){
@@ -110,20 +111,7 @@ int main(int argc, char **argv) {
   else{
     fprintf(stderr, "handshake sent.\n");
   }
-  if((msglen = sendto(sockfd, msg, sizeof(msg), 0,
-     (struct sockaddr *)&server, serverlen)) < 0){
-    error("sendto failed");
-  }
-  else{
-    fprintf(stderr, "handshake sent.\n");
-  }
-  if((msglen = sendto(sockfd, msg, sizeof(msg), 0,
-     (struct sockaddr *)&server, serverlen)) < 0){
-    error("sendto failed");
-  }
-  else{
-    fprintf(stderr, "handshake sent.\n");
-  }
+  */
   //clears communication buffer
   bzero(msg, strlen(msg));
   msglen = -1;
@@ -138,7 +126,8 @@ int main(int argc, char **argv) {
     }
     else{
       //updates state
-      state = atoi((char *)&msg);
+      uint32_t myInt1 = msg[0] + (msg[1] << 8) + (msg[2] << 16) + (msg[3] << 24);
+      state = (int)myInt1;
       //passes state into pipe
       fd = open(myFIFO, O_WRONLY);
       //for whatever reason, arduino reads '-1' as '1'
@@ -146,8 +135,12 @@ int main(int argc, char **argv) {
         sprintf(arr1, "a");
         write(fd, arr1, sizeof(arr1));
       }
+      if(state == 10){
+        sprintf(arr1, "b");
+        write(fd, arr1,sizeof(arr1));
+      }
       else{
-        sprintf(arr1, "%d", states[i]);
+        sprintf(arr1, "%d", state);
         write(fd, arr1, sizeof(arr1));
       }
       close(fd);
