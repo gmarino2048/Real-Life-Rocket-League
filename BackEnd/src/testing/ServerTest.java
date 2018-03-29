@@ -11,17 +11,20 @@ public class ServerTest {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		ServerSocket sock;
 		try {
-			ServerSocket sock = new ServerSocket(portNo);
+			sock = new ServerSocket(portNo);
 
 			while (true) {
 				parseAndPrint(sock.accept());
 			}
+			//sock.close();
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
+			
 		}
 
 	}
