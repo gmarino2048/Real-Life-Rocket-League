@@ -75,22 +75,25 @@ public class Authenticator {
 		return false;
 	}
 	
-	public String setDecryptionKey () {
-		
+	public String setEncryptionKey () {
+		return "";
 	}
 	
-	public String setDecryptionKey (String status) {
-		
+	public String setEncryptionKey (String status) {
+		return "";
 	}
 	
 	public String getSecureUserInput (String message) {
-		
+		return "";
 	}
 	
 	public String getUserName () {
-		
+		return "";
 	}
 	
+	public void UpdateInformation () {
+		
+	}
 	
 	public void setUsername (String newUserName) {
 		
@@ -123,6 +126,9 @@ public class Authenticator {
 		//Check that encryption key exists
 		if (encryptionKey != null) {
 			try {
+				//Show the manager the encryption key
+				System.out.println("The key used for this encryption is:\n" + encryptionKey);
+				
 				//Convert encryption key to byte array
 				byte[] key = encryptionKey.getBytes(CHARSET);
 				
@@ -130,7 +136,6 @@ public class Authenticator {
 				keySpec = new DESedeKeySpec(key);
 				skFactory = SecretKeyFactory.getInstance(ENCRYPTION_SCHEME);
 				cipher = Cipher.getInstance(ENCRYPTION_SCHEME);
-				
 				secretKey = skFactory.generateSecret(keySpec);
 				
 				//Encrypt the string
@@ -144,19 +149,65 @@ public class Authenticator {
 				e.printStackTrace(System.out);
 				
 				//Input new key and try again
-				setDecryptionKey("Encryption Key Not Set.");
+				setEncryptionKey("Encryption Failed.");
 				return encrypt(regex);
 			}
 		}
 		//Otherwise prompt for encryption key and try again
 		else {
-			setDecryptionKey("Encryption Key Not Set.");
+			setEncryptionKey("Encryption Key Not Set.");
 			return encrypt(regex);
 		}
 	}
 	
-	private String decrypt (byte[] regex) {
-		
+	
+	/*
+	 * decrypt
+	 * 
+	 * This method encrypts a string using the DESede scheme
+	 * 
+	 * Arguments:
+	 * regex, the encrypted string
+	 * 
+	 * Returns:
+	 * The string decrypted based on encryptionKey
+	 */
+	private String decrypt (String regex) {
+		//Check that an encryption key exists
+		if (encryptionKey != null) {
+			try {
+				//Show the manager the encryption key
+				System.out.println("The key used for this encryption is:\n" + encryptionKey);
+				
+				//Convert encryption key to byte array
+				byte[] key = encryptionKey.getBytes(CHARSET);
+				
+				//Set up the encryption
+				keySpec = new DESedeKeySpec(key);
+				skFactory = SecretKeyFactory.getInstance(ENCRYPTION_SCHEME);
+				cipher = Cipher.getInstance(ENCRYPTION_SCHEME);
+				secretKey = skFactory.generateSecret(keySpec);
+				
+				//Decrypt the String
+				cipher.init(Cipher.DECRYPT_MODE, secretKey);
+				byte[] encrypted = regex.getBytes(CHARSET);
+				byte[] unencrypted = cipher.doFinal(encrypted);
+				return new String(unencrypted, CHARSET);
+			}
+			catch (Exception e) {
+				//Print error
+				e.printStackTrace(System.out);
+				
+				//Input new key and try again
+				setEncryptionKey("Decryption Failed.");
+				return decrypt(regex);
+			}
+		}
+		//Otherwise prompt for encryption key and try again
+		else {
+			setEncryptionKey("Encryption Key Not Set.");
+			return decrypt(regex);
+		}
 	}
 	
 	
