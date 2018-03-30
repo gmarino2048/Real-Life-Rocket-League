@@ -18,6 +18,8 @@ import java.security.spec.*;
 import javax.crypto.*;
 import javax.crypto.spec.*;
 
+import java.io.*;
+
 
 public class Authenticator {
 	
@@ -34,8 +36,8 @@ public class Authenticator {
 	private String key1;
 	private String key2;
 	
-	//File readers and writers, for  the access.oauth file
-	
+	//The OAuth file manager which saves the information
+	private OAuthFileManager fileManager;
 	
 	//The key to decrypt the access.oauth file
 	private String encryptionKey;
@@ -59,7 +61,7 @@ public class Authenticator {
 	 * properly.
 	 */
 	public Authenticator () {
-		
+		fileManager = new OAuthFileManager();
 	}
 	
 	/*
@@ -71,7 +73,7 @@ public class Authenticator {
 	 * Returns:
 	 * true if the file is found, false if the file could not be found
 	 */
-	public boolean informationFound () {
+	public boolean fileFound () {
 		return false;
 	}
 	
