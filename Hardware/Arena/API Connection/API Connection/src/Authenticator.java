@@ -13,7 +13,10 @@
  * Method Summary:
  * 
  */
+import java.io.UnsupportedEncodingException;
+import java.security.spec.*;
 import javax.crypto.*;
+import javax.crypto.spec.*;
 
 
 public class Authenticator {
@@ -35,7 +38,18 @@ public class Authenticator {
 	
 	
 	//The key to decrypt the access.oauth file
-	private String decryptionKey;
+	private String encryptionKey;
+	
+	//Data members necessary for encryption
+	private static final String ENCRYPTION_SCHEME = "DESede";
+	private static final String CHARSET = "UTF8";
+	private KeySpec keySpec;
+	private SecretKeyFactory skFactory;
+	private Cipher cipher;
+	private SecretKey secretKey;
+	
+	
+	
 	
 	/*
 	 * Constructor
@@ -52,14 +66,24 @@ public class Authenticator {
 	 * informationFound
 	 * 
 	 * This method parses the local directory for the "access.oauth"
-	 * file. If the file is found, the informationFound method
-	 * returns true, otherwise the method returns false.
+	 * file.
+	 * 
+	 * Returns:
+	 * true if the file is found, false if the file could not be found
 	 */
 	public boolean informationFound () {
 		return false;
 	}
 	
 	public String setDecryptionKey () {
+		
+	}
+	
+	public String setDecryptionKey (String status) {
+		
+	}
+	
+	public String getSecureUserInput (String message) {
 		
 	}
 	
@@ -81,6 +105,57 @@ public class Authenticator {
 	}
 	
 	public void SetAuthenticationTokens (String newToken1, String newToken2) {
+		
+	}
+	
+	/*
+	 * encrypt
+	 * 
+	 * This method encrypts a string using the DESede scheme
+	 * 
+	 * Arguments:
+	 * regex, the unencryped string
+	 * 
+	 * Returns:
+	 * A new string encrypted based on encryptionKey
+	 */
+	private String encrypt (String regex) {
+		//Check that encryption key exists
+		if (encryptionKey != null) {
+			try {
+				//Convert encryption key to byte array
+				byte[] key = encryptionKey.getBytes(CHARSET);
+				
+				//Set up the encryption
+				keySpec = new DESedeKeySpec(key);
+				skFactory = SecretKeyFactory.getInstance(ENCRYPTION_SCHEME);
+				cipher = Cipher.getInstance(ENCRYPTION_SCHEME);
+				
+				secretKey = skFactory.generateSecret(keySpec);
+				
+				//Encrypt the string
+				cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+				byte[] unencrypted = regex.getBytes(CHARSET);
+				byte[] encrypted = cipher.doFinal(unencrypted);
+				return new String(encrypted, CHARSET);
+			}
+			catch (Exception e) {
+				//Print error
+				e.printStackTrace(System.out);
+				
+				//Input new key and try again
+				setDecryptionKey("Encryption Key Not Set.");
+				return encrypt(regex);
+			}
+		}
+		//Otherwise prompt for encryption key and try again
+		else {
+			setDecryptionKey("Encryption Key Not Set.");
+			return encrypt(regex);
+		}
+	}
+	
+	private String decrypt (byte[] regex) {
 		
 	}
 	
