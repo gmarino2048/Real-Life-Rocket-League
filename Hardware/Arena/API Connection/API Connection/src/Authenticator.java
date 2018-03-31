@@ -14,9 +14,13 @@
  * 
  */
 import java.security.spec.*;
-import javax.crypto.*;
-import javax.crypto.spec.*;
+import java.util.Scanner;
 
+import javax.crypto.*;
+import javax.crypto.spec.*;Web Front End
+Back End Server
+Car
+Arena
 
 
 public class Authenticator {
@@ -48,22 +52,51 @@ public class Authenticator {
 	private Cipher cipher;
 	private SecretKey secretKey;
 	
-	
-	
-	
 	/*
 	 * Constructor
 	 * 
 	 * The Authenticator constructor takes no arguments and is
 	 * meant to be called once so that the variables are initialized
 	 * properly.
+	 * 
 	 */
 	public Authenticator () {
+		// Create the file manager used to update the access.oauth file
 		fileManager = new OAuthFileManager();
 	}
 	
+	/*
+	 * setEncryptionKey
+	 * 
+	 * This method takes the user specified encryption key from stdin and
+	 * resets the encryption key. This method is usually called if the 
+	 * encryption key is not already set or if the user calls the function.
+	 * 
+	 */
 	public void setEncryptionKey () {
+		// Create the scanner to listen to user input
+		Scanner scan = new Scanner(System.in);
 		
+		// Print out the standard messages and read the user input
+		System.out.println("Enter the new encryption key below:");
+		String newEncryptionKey = scan.nextLine();
+		
+		// Get user confirmation that the key is correct
+		System.out.println("The new encryption key entered is: " + newEncryptionKey);
+		System.out.println("Is this correct? (y/n)");
+		String confirmation = scan.nextLine();
+		
+		// Update the encryption Key and close the scanner
+		if (confirmation.equalsIgnoreCase("y") || confirmation.equalsIgnoreCase("yes")) {
+			encryptionKey = newEncryptionKey;
+			scan.close();
+		}
+		
+		// Retry getting the encryption Key
+		else {
+			scan.close();
+			setEncryptionKey();
+		}
 	}
 	
 	/*
@@ -74,11 +107,10 @@ public class Authenticator {
 	 * sent to the user in order to update the encryption key.
 	 * 
 	 * Arguments:
-	 * newEncryptionKey, the new encryption key to be set
 	 * message, the message to display to the user
 	 * 
 	 */
-	public void setEncryptionKey (String newEncryptionkey, String message) {
+	public void setEncryptionKey (String message) {
 		// Send the output to the Server manager
 		System.out.println(message);
 		

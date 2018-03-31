@@ -232,10 +232,6 @@ public class OAuthFileManager {
 	 * readFile
 	 */
 	public void readFile () {
-		//Exit the function if any of the fields are null
-		if (nullCheck()) {
-			return;
-		}
 		
 		try {
 			reader = new BufferedReader(new FileReader(accessFile));
