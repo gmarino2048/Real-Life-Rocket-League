@@ -13,36 +13,34 @@
  * Method Summary:
  * 
  */
-import java.io.UnsupportedEncodingException;
 import java.security.spec.*;
 import javax.crypto.*;
 import javax.crypto.spec.*;
 
-import java.io.*;
 
 
 public class Authenticator {
 	
-	//The username to log into the particle cloud
+	// The username to log into the particle cloud
 	private String username;
 	
-	//The password for the particle cloud
+	// The password for the particle cloud
 	private String password;
 	
-	//The device ID to connect to
+	// The device ID to connect to
 	private String deviceID;
 	
-	//The OAuth 2.0 access tokens
+	// The OAuth 2.0 access tokens
 	private String key1;
 	private String key2;
 	
-	//The OAuth file manager which saves the information
+	// The OAuth file manager which saves the information
 	private OAuthFileManager fileManager;
 	
-	//The key to decrypt the access.oauth file
+	// The key to decrypt the access.oauth file
 	private String encryptionKey;
 	
-	//Data members necessary for encryption
+	// Data members necessary for encryption
 	private static final String ENCRYPTION_SCHEME = "DESede";
 	private static final String CHARSET = "UTF8";
 	private KeySpec keySpec;
@@ -64,25 +62,28 @@ public class Authenticator {
 		fileManager = new OAuthFileManager();
 	}
 	
+	public void setEncryptionKey () {
+		
+	}
+	
 	/*
-	 * informationFound
+	 * setEncryptionKey
 	 * 
-	 * This method parses the local directory for the "access.oauth"
-	 * file.
+	 * This method uses the previously defined setEncryptionKey method
+	 * to update the encryption key. This method enables a message to be
+	 * sent to the user in order to update the encryption key.
 	 * 
-	 * Returns:
-	 * true if the file is found, false if the file could not be found
+	 * Arguments:
+	 * newEncryptionKey, the new encryption key to be set
+	 * message, the message to display to the user
+	 * 
 	 */
-	public boolean fileFound () {
-		return false;
-	}
-	
-	public String setEncryptionKey () {
-		return "";
-	}
-	
-	public String setEncryptionKey (String status) {
-		return "";
+	public void setEncryptionKey (String newEncryptionkey, String message) {
+		// Send the output to the Server manager
+		System.out.println(message);
+		
+		// Update the encryption Key
+		setEncryptionKey();
 	}
 	
 	public String getSecureUserInput (String message) {
