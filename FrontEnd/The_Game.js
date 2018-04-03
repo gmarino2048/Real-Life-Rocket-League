@@ -71,41 +71,49 @@ function updateArena() {
 
     //left arrow
     if (arena.key && arena.key == 37) {
-    rCar.speedX = -1;
+        rCar.speedX = -1;
+        bCar.speedX = -1;
     }
     //right arrow
     if (arena.key && arena.key == 39) {
-    rCar.speedX = 1;
+        rCar.speedX = 1;
+        bCar.speedX = 1;
     }
     //up arrow
     if (arena.key && arena.key == 38) {
-    rCar.speedY = -1;
+        rCar.speedY = -1;
+        bCar.speedY = -1;
     }
     //down arrow
     if (arena.key && arena.key == 40) {
-    rCar.speedY = 1;
+        rCar.speedY = 1;
+        bCar.speedY = 1;
     }
     //left (a)
     if (arena.key && arena.key == 65) {
-    rCar.speedX = -1;
+        rCar.speedX = -1;
+        bCar.speedX = -1;
     }
     //right (d)
     if (arena.key && arena.key == 68) {
-    rCar.speedX = 1;
+        rCar.speedX = 1;
+        bCar.speedX = 1;
     }
     //up (w)
     if (arena.key && arena.key == 87) {
-    rCar.speedY = -1;
+        rCar.speedY = -1;
+        bCar.speedY = -1;
     }
     //down (s)
     if (arena.key && arena.key == 83) {
-    rCar.speedY = 1;
+        rCar.speedY = 1;
+        bCar.speedY = 1;
     }
     rCar.newPos();
     rCar.update();
 
-    rCar.newPos();
-    rCar.update();
+    bCar.newPos();
+    bCar.update();
 }
 document.getElementById("buttonQ").onclick = function () {
     location.href = "EndGame.html";
