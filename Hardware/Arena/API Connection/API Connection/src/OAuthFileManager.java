@@ -200,12 +200,13 @@ public class OAuthFileManager {
 	 * writeBuffer
 	 */
 	public void writeBuffer () {
-		//Exit the function if any of the fields are null
+		// Exit the function if any of the fields are null
 		if (nullCheck()) {
+			System.out.println("Error: Some of the buffer fields are null");
 			return;
 		}
 		
-		//Try to write all the fields to the file
+		// Try to write all the fields to the file
 		try {
 			writer = new BufferedWriter(new FileWriter(accessFile));
 			
@@ -215,7 +216,7 @@ public class OAuthFileManager {
 			
 			writer.close();
 		}
-		//If something goes wrong, close the writer
+		// If something goes wrong, close the writer
 		catch (Exception e) {
 			e.printStackTrace();
 			try {
