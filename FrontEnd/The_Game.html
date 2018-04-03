@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>WebFront for Car Soccer</title>
+        <meta name="viewport" content="width=device-width, initial-scale =1.0">
+        <link rel="stylesheet" href="carStyle.css">
+        
+        <style>
+            body{
+                background-color:#000000;
+            }
+            canvas{
+                border:1px solida #d3d3d3;
+                background-color: #f1f1f1;
+                transform: translate(50%,30%);
+                border: none;
+                position: absolute;
+            }
+            buttonQ{
+                padding: 15px 25px;
+                font-size: 24px;
+                text-align: center;
+                cursor: pointer;
+                outline: none;
+                color: black;
+                background-color:red;
+                border: none;
+                border-radius: 15px;
+                position: absolute;
+                top:60%;
+                left: 45.5%;
+                transform: translate(50%, 230%);
+            }
+            buttonQ :hover {
+                background-color:crimson
+            }
+            buttonQ:active{
+                background-color: red;
+                box-shadow: 0 5px #666;
+                transform: translate3d(4px)
+            }
+        </style>
+        
+    </head>
+    
+    <body onload="startGame()">
+        <buttonQ class = "buttonQ" id ="buttonQ"> QUIT </buttonQ>
+    <script src="The_Game.js"></script>
+    </body>
+</html>

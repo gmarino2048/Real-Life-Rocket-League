@@ -243,7 +243,7 @@
       <label for="psw"><b>Password</b></label>
       <input type="password" placeholder="Enter Password" name="psw" required>
         
-      <button type="submit">Submit</button>
+      <button type="submit" id="direct">Submit</button>
       <label>
         <input type="checkbox" checked="checked" name="remember"> Remember me
       </label>
@@ -275,7 +275,9 @@ onclick="document.getElementById('id02').style.display='block'" style="width:aut
       <input type="text" placeholder="Enter Username" name="uname" required>
       <label for="psw"><b>Password</b></label>
       <input type="password" placeholder="Enter Password" name="psw" required>
-      <sbutton type="submit">Submit</sbutton>
+        
+      <sbutton type="submit" id="direct">Submit</sbutton>
+        
       <label>
         <input type="checkbox" checked="checked" name="remember"> Remember me
       </label>
@@ -286,26 +288,7 @@ onclick="document.getElementById('id02').style.display='block'" style="width:aut
     </div>
   </form>
 </div>
-<button3 style="width:auto"> Guest </button3>
-
-<script>
-// Get the modal
-var modal = document.getElementById('id01');
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-var modal = document.getElementById('id02');
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-</script>
+<button3 style="width:auto" id="direct1"> Guest </button3>
+<script src="Welcome_Page.js"></script>
     </body>
 </html>

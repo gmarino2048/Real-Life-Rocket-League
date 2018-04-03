@@ -1,3 +1,5 @@
+package tcp;
+
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
 import java.net.InetAddress;
@@ -16,7 +18,7 @@ public class RequestResponse extends Thread {
 	private Socket clientSocket = null;
 	private Socket serverSocket = null;
 	
-	/* CONSTRUCTOR FOR INITIALIZING CLIENT SOCKET */
+	/** CONSTRUCTOR FOR INITIALIZING CLIENT SOCKET */
 	public RequestResponse(Socket socket){
 		clientSocket = socket;
 	}

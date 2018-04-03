@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.*;
 
 public class UDPClient {
+	
+	private static final int carPortNo = 1234;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -18,7 +20,7 @@ public class UDPClient {
 			System.in.read(buff);
 			
 			
-			DatagramPacket pack = new DatagramPacket(buff, buff.length, add, 3006);
+			DatagramPacket pack = new DatagramPacket(buff, buff.length, add, carPortNo);
 			sock.send(pack);
 			
 			

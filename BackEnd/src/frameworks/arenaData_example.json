@@ -1,0 +1,5 @@
+{
+	"messageType": "arenaData", // standard messageType
+	"car1_goals": 4,   // goal counts for each car
+	"car2_goals": 3 
+}

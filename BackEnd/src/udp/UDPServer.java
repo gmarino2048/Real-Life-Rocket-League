@@ -5,36 +5,37 @@ import java.net.*;
 
 public class UDPServer {
 
-	
+	private static final int serverPortNo = 3006;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		DatagramSocket serv;
-		byte[] buff = new byte[256];
-		boolean alive = true;
-		DatagramPacket pack;
+		DatagramSocket udpServer;
+		byte[] buffer = new byte[256];
+		boolean running = true;
+		DatagramPacket packet;
 		
 		try {
-			serv = new DatagramSocket(3006);
-			while(alive) {
-				pack = new DatagramPacket(buff, buff.length);
-				serv.receive(pack);
-				InetAddress add = pack.getAddress();
-				int port = pack.getPort();
-				pack = new DatagramPacket(buff, buff.length, add, port);
-				String received = new String(pack.getData(),0,pack.getLength());
-				System.out.println(received);
-				if(received.contains("end"))
-					alive = false;
+			
+			udpServer = new DatagramSocket(serverPortNo);
+			while(running) {
+				
+				packet = new DatagramPacket(buffer, buffer.length);
+				udpServer.receive(packet);
+				new Thread(new DataMessage(new DatagramPacket(buffer, buffer.length, packet.getAddress(), packet.getPort()))).start();
+				
 			}
-			serv.close();
+			
+			udpServer.close();
+			
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			UDPServer.main(null);
 		}
 
 		

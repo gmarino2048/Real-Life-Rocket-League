@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body{
+                background-color:#000000
+            }
+        buttonSet {
+            background-color: red;
+            color: white;
+            padding: 20px 26px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-size: 24px;
+            text-align: center;
+            border: none;
+            border-radius: 15px;
+            position: absolute;
+            top:60%;
+            left: 45%;
+            position: absolute;
+            transform: translate(-200%,80%);
+            margin-top: 450px;
+        }
+        buttonSet:hover {
+            opacity: 0.8;
+        }
+        buttonGame {
+            background-color: red;
+            color: white;
+            padding: 20px 26px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-size: 24px;
+            text-align: center;
+            border: none;
+            border-radius: 15px;
+            position: absolute;
+            top:60%;
+            left: 48%;
+            position: absolute;
+            transform: translate(-30%,80%);
+            margin-top: 450px;
+        }
+        buttonGame:hover {
+            opacity: 0.8;
+        }
+         buttonStat {
+            background-color: red;
+            color: white;
+            padding: 20px 26px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-size: 24px;
+            text-align: center;
+            border: none;
+            border-radius: 15px;
+            position: absolute;
+            top:60%;
+            left: 50%;
+            position: absolute;
+            transform: translate(150%,80%);
+            margin-top: 450px;
+        }
+        buttonStat:hover {
+            opacity: 0.8;
+        }
+            
+                .topPage{
+                    color:white;
+                    font-size: 150px;
+                    font-family: "Bookman", "URW Bookman L", serif;
+                    position: absolute;
+                    width: 100%;
+                    left:0;
+                    line-height: 200px;
+                    transform: translate(-0%,130%);
+            }
+            
+           
+        </style>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>WebFront for Car Soccer</title>
+        <meta name="description" content="User Interface">
+        <link rel="stylesheet" href="carStyle.css">
+        
+    </head>
+    <body>
+        <div class="bgimg"></div>
+        <div class="container">
+            <div class="topPage">Main Page</div>
+            <buttonSet id="settings" style="width:auto;"> Settings</buttonSet>
+            <buttonGame id="game" style="width:auto;" style="width:auto"> Play Game</buttonGame>
+            <buttonStat style="width:auto" id="stats"> Statistics </buttonStat>
+        </div>
+        <script src="Game_Lobby.js"></script>
+    </body>
+</html>
