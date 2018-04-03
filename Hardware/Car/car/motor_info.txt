@@ -1,0 +1,3 @@
+DC Motor w/ max start current of 2Amps
+
+lead-acid battery, agm - 6v ~2amp/hour lead-acid battery
