@@ -157,7 +157,7 @@ public class OAuthFileManager {
 		String cwd = getCWD();
 		
 		//Initialize the file to the cwd with the file extension
-		File information = new File(cwd + dir + "FILENAME");
+		File information = new File(cwd + dir + FILENAME);
 		
 		//Try to create/open the file
 		try {
