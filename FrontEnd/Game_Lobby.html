@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
     <head>
         <style>
@@ -93,25 +93,13 @@
         
     </head>
     <body>
-        <div class= "bgimg"></div>
-            <div class="container">
+        <div class="bgimg"></div>
+        <div class="container">
             <div class="topPage">Main Page</div>
-                <buttonSet id = "settings" style="width:auto;"> Settings</buttonSet>
-                <buttonGame id ="game" style="width:auto;" style="width:auto"> Play Game</buttonGame>
-                <buttonStat style="width:auto" id="stats"> Statistics </buttonStat>
-        </div> 
+            <buttonSet id="settings" style="width:auto;"> Settings</buttonSet>
+            <buttonGame id="game" style="width:auto;" style="width:auto"> Play Game</buttonGame>
+            <buttonStat style="width:auto" id="stats"> Statistics </buttonStat>
+        </div>
+        <script src="Game_Lobby.js"></script>
     </body>
-    <script type= "text/javascript">
-            document.getElementById("game").onclick = function(){
-                location.href = "Login_Page.html";
-            }
-            
-            document.getElementById("settings").onclick = function(){
-                location.href = "Settings.html";
-            }
-            document.getElementById("stats").onclick = function(){
-                location.href = "Analytics.html";
-            }
-    </script>
-    
 </html>
