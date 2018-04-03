@@ -68,6 +68,7 @@ int main(int argc, char **argv) {
   msglen = -1;
   //indexing variable
   int i = 0;
+  int count = 0;
   fprintf(stderr, "Starting test sequence: \n");
   //starts sending data
   while (1) {
@@ -78,13 +79,15 @@ int main(int argc, char **argv) {
 	      (struct sockaddr *)&client, clientlen)) < 0){
       error("ERROR in sendto");
     }
+    i++;
     //checks for end game state
     if(states[i] == -1){
+      i = 0;
+    }
+    if(count == 100){
       break;
     }
-    //waits between sending states
-    sleep(2);
-    i++;
+    count++;
   }
   close(sockfd);
   return 1;
