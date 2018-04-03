@@ -1,3 +1,4 @@
+
 package sql;
 
 import java.io.IOException;
@@ -56,8 +57,10 @@ public class SQL_Tester {
 		}
 	}
 
-	public void printGameData() {
-
-	}
+//	public void getUserTest(String user) {
+//		String g = c.get
+//	}
+	
+	
 
 }

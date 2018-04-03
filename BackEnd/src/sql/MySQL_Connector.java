@@ -75,18 +75,24 @@ public class MySQL_Connector {
 	 * @param player1
 	 * @param player2
 	 */
-	public void createGame(String player1, String player2) {
-
+	public String createGame(String player1, String player2) {
+		LocalDateTime now = LocalDateTime.now();
 		String query = "insert into " + gameTable + " (gameID, p1_username, p2_username, isActive) values ('"
-				+ LocalDateTime.now().toString() + "', '" + player1 + "', '" + player2 + "', 1)";
+				+ now.toString() + "', '" + player1 + "', '" + player2 + "', 1)";
 		try {
 			this.statement.executeUpdate(query);
+			return now.toString();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return "";
 		}
 	}
 
+	public Statement getStatement() {
+		return this.statement;
+	}
+	
 	/**
 	 * Get's all the data in a result set for a certain game
 	 * 
@@ -95,7 +101,7 @@ public class MySQL_Connector {
 	 * @return ResultSet, also the same as this.result
 	 */
 	public ResultSet getGameData(String gameID) {
-		String query = "select * from " + gameTable + " where gameID=" + gameID;
+		String query = "select * from " + gameTable + " where gameID='" + gameID+"'";
 		try {
 			this.result = this.statement.executeQuery(query);
 			this.result.next();
@@ -280,5 +286,21 @@ public class MySQL_Connector {
 		
 		
 		
+	}
+	
+	
+	public String getActiveGameId() {
+		String query = "select * from "+gameTable+" where isActive = 1";
+		try {
+			this.result = this.statement.executeQuery(query);
+			this.result.next();
+			
+			return this.result.getString("gameID");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			
+			e.printStackTrace();
+			return "";
+		}
 	}
 }
