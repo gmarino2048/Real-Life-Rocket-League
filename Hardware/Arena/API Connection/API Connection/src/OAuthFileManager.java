@@ -1,5 +1,5 @@
 /*
- * Soccar Project
+ * SocCar Project
  * 
  * OAuthFileManager
  * 
@@ -50,7 +50,7 @@ public class OAuthFileManager {
 		//Put all strings in their relative positions inside the buffer
 		informationBuffer[USERNAME] = username;
 		informationBuffer[PASSWORD] = password;
-		informationBuffer[DEVICEID] = 
+		informationBuffer[DEVICEID] = deviceID;
 		informationBuffer[CLIENTID] = clientID;
 		informationBuffer[CLIENTSECRET] = clientSecret;
 	}

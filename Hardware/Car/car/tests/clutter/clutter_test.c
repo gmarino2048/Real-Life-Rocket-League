@@ -4,13 +4,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-
-#define PORT 1234 //port we're communicating on
 
 //****************************perror wrapper****************************
 void error(char *msg) {
@@ -42,7 +35,8 @@ void openSerial(){
 int main(int argc, char **argv) {
   //states to send
   int states[] = {-1, 1, 9, 4, 5, 9, -1};
-  int delays[] = {10, 10, 10, 20, 40, 5, 1};
+  int delay = 1000;
+  double multiplier = 2;
 
   //launches python script
   openSerial();
@@ -61,9 +55,9 @@ int main(int argc, char **argv) {
   }
   char arr1[80];
   bzero(arr1, sizeof(arr1));
-
+  int i = 0;
   //************************start test*************************************
-  for(int i = 0; i < 7; i++){
+  while(i < 7){
     fd = open(myFIFO, O_WRONLY);
     if(states[i] == -1){
       sprintf(arr1, "a");
@@ -76,7 +70,12 @@ int main(int argc, char **argv) {
     close(fd);
     //used for testing
     fprintf(stderr, "sent state: %s\n", arr1);
-    sleep(delays[i]);
+    sleep((int)(delay * multiplier));
+    i++
+    if( (i == 7) && (multiplier != 0.03125) ){
+      i = 0;
+      multiplier = multipler / 2;
+    }
   }
   return 1;
 }

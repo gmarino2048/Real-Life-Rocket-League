@@ -9,6 +9,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <time.h>
+#include <math.h>
 
 #define PORT 1234 //port we're communicating on
 
@@ -19,44 +21,7 @@ void error(char *msg) {
   exit(0);
 }
 
-//**************process to launch serial python script******************
-void openSerial(){
-  pid_t pid = fork();
-  char *args[3];
-  if( pid == 0){
-  }
-  else{
-    args[0] = "python";
-    args[1] = "serialComm.py";
-    args[2] = 0;
-    if(execvp(args[0], args) == -1){
-      error("serial connection failed\n");
-    }
-    else{
-      fprintf(stderr, "serial connection open\n");
-      fflush(stderr);
-    }
-  }
-}
-
 int main(int argc, char **argv) {
-  //launches python script
-  openSerial();
-
-  //**************************named pipe************************************
-  //holds fifo object
-  int fd;
-  //FIFO file path
-  char* myFIFO = "/tmp/myfifo";
-  //create FIFO
-  if(mkfifo(myFIFO, 0666) == -1){
-    error("Named pipe failed.\n");
-  }
-  else{
-    fprintf(stderr, "Pipe is open.\n");
-  }
-  char arr1[80];
-  bzero(arr1, sizeof(arr1));
 
   //*****************************client*************************************
   int sockfd; //socket
@@ -101,56 +66,46 @@ int main(int argc, char **argv) {
   else{
     fprintf(stderr, "socket named.\n");
   }
-  /*
-  //server.sin_addr.s_addr = inet_addr("192.168.1.12");
-  //creates dialogue
-  if((msglen = sendto(sockfd, msg, sizeof(msg), 0,
-     (struct sockaddr *)&server, serverlen)) < 0){
-    error("sendto failed");
-  }
-  else{
-    fprintf(stderr, "handshake sent.\n");
-  }
-  */
   //clears communication buffer
   bzero(msg, strlen(msg));
   msglen = -1;
   //variable to be passed around
   int state = -4; //-4, just because it's not a state value.
+  //variable used to set two cases
+  double i = 0;
+  int entries = 0;
+  double n = -1;
+  time_t start;
+  time_t stop;
+  long int diff;
+  long int totalTime = 0;
   //starts connection monitoring, checks for end game state
-  while(state != -1){
+  while(1){
     //waits for message from server
     if ((msglen = recvfrom(sockfd, msg, sizeof(msg), 0,
         (struct sockaddr *) &server, &serverlen)) < 0){
       error("ERROR in recvfrom");
     }
     else{
-      //updates state
-      uint32_t myInt1 = msg[0] + (msg[1] << 8) + (msg[2] << 16) + (msg[3] << 24);
-      state = (int)myInt1;
-      //passes state into pipe
-      fd = open(myFIFO, O_WRONLY);
-      //for whatever reason, arduino reads '-1' as '1'
-      if(state == -1){
-        sprintf(arr1, "a");
-        write(fd, arr1, sizeof(arr1));
-      }
-      if(state == 10){
-        sprintf(arr1, "b");
-        write(fd, arr1,sizeof(arr1));
+      if(pow(n, i) > 0){
+        start = time(NULL);
       }
       else{
-        sprintf(arr1, "%d", state);
-        write(fd, arr1, sizeof(arr1));
+        stop = time(NULL);
+        diff = stop - start;
+        fprintf(stderr, "time = %ld\n", diff);
+        totalTime += diff;
+        entries++;
       }
-      close(fd);
-      //used for testing
-      fprintf(stderr, "server sent: %s\n", arr1);
-      //clears both buffers
-      bzero(arr1, sizeof(arr1));
       bzero(msg, sizeof(msg));
     }
+    i++;
+    if( i == 100 ){
+      break;
+    }
   }
+  totalTime = totalTime/entries;
+  fprintf(stderr,"average delay: %ld\n", totalTime);
   //closes socket
   close(sockfd);
   return 1;
