@@ -1,3 +1,4 @@
+//Car Code
 var rCar;
 var bCar;
 var myBackground;
@@ -110,3 +111,72 @@ function updateArena() {
 document.getElementById("buttonQ").onclick = function () {
     location.href = "EndGame.html";
 }
+/*
+//Boost Code
+    var fill = true;
+    var percentage = 0;
+    var increase = 10;
+    var max = 100;
+    
+function boost() {
+ //Load Boost
+    if (fill == true && <= max) {
+        percentage += increment
+        if (value == ceiling) {
+            fill = false;
+        }
+//Using boost
+    } else {
+        fill = false;
+        percentage -= increase;
+
+        if (percentage == 0) {
+            fill = true;
+        }
+    }
+    document.getElementById('counter').innerHTML = percentage;
+}
+setInterval(boost, 1000);
+
+//Time Code
+var startTime = -1;
+var animationLength = 2000; // Animation length in milliseconds
+
+function doAnimation(timestamp) {
+    // Calculate animation progress
+    var progress = 0;
+
+    if (startTime < 0) {
+        startTime = timestamp;
+    } else {
+        progress = timestamp - startTime;
+    }
+
+    // Do animation ...
+    if (progress < animationLength) {
+        window.requestAnimationFrame(doAnimation);
+    }
+}
+
+// Start animation
+window.requestAnimationFrame(doAnimation);
+
+function redraw() {
+    drawPending = false;
+    // Do drawing ...
+}
+
+var drawPending = false;
+function requestRedraw() {
+    if (!drawPending) {
+        drawPending = true;
+        window.requestAnimationFrame(redraw);
+    }
+}
+animator.requestAnimationFrame =
+    function (callback) {
+        window.requestAnimationFrame(function (t) {
+            callback(t);
+            redraw();
+        });
+    };*/
