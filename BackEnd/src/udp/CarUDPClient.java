@@ -22,7 +22,7 @@ public class CarUDPClient {
 		stateTable.put("boost", (byte) 10);
 	}
 
-	private static final int carPort = 6900;
+	private static final int carPort = 1234;
 	private static final String carIp = "172.20.42.125";
 	static String ip = "172.20.42.173";
 	static DatagramSocket sock;
@@ -56,11 +56,14 @@ public class CarUDPClient {
 				System.out.println("here");
 				if ((int) stateTable.get(s) > 0) {
 
-					//Thread.sleep(2500);
-					System.out.println("sending");
-					data[0] = stateTable.get(s);
-					sock.send(new DatagramPacket(data,data.length, add, carPort));
 					Thread.sleep(500);
+					
+					data[0] = stateTable.get(s);
+					//System.out.println("sending: "+Arrays.toString(data));
+					sock.send(new DatagramPacket(data,data.length, add, carPort));
+					Thread.sleep(1000);
+					Integer g = 0;
+					
 				}
 			}
 

@@ -1,9 +1,10 @@
+package testing;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
+public class tcp_servertest {
 
 
 	private static int PORT_NUM = 9090;

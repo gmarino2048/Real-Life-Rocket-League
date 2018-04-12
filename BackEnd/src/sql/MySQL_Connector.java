@@ -5,6 +5,8 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MySQL_Connector {
 
@@ -20,27 +22,8 @@ public class MySQL_Connector {
 	private Statement statement;
 	private ResultSet result;
 
-	
 	public ResultSet getResult() {
 		return result;
-	}
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-		MySQL_Connector c = new MySQL_Connector();
-		synchronized (c) {
-			try {
-
-				c.createGame("gjs64", "nsc27");
-				c.wait(2000);
-				
-				c.updateGameScore(1, 6);
-				// c.createUser("nikhil", "loofa");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	public MySQL_Connector() {
@@ -92,7 +75,7 @@ public class MySQL_Connector {
 	public Statement getStatement() {
 		return this.statement;
 	}
-	
+
 	/**
 	 * Get's all the data in a result set for a certain game
 	 * 
@@ -101,7 +84,7 @@ public class MySQL_Connector {
 	 * @return ResultSet, also the same as this.result
 	 */
 	public ResultSet getGameData(String gameID) {
-		String query = "select * from " + gameTable + " where gameID='" + gameID+"'";
+		String query = "select * from " + gameTable + " where gameID='" + gameID + "'";
 		try {
 			this.result = this.statement.executeQuery(query);
 			this.result.next();
@@ -125,14 +108,14 @@ public class MySQL_Connector {
 			this.result.next();
 			String p1username = this.result.getString("p1_username");
 			String p2username = this.result.getString("p2_username");
-			query = "update " + gameTable +" set isActive = 0, winner = '";
+			query = "update " + gameTable + " set isActive = 0, winner = '";
 			if (p1Score > p2Score) {
-				query += p1username+"'";
-				
+				query += p1username + "'";
+
 				updatePlayerInfo(p1username, true, p1Score);
 				updatePlayerInfo(p2username, false, p2Score);
 			} else if (p1Score < p2Score) {
-				query += p2username +"'";
+				query += p2username + "'";
 				updatePlayerInfo(p2username, true, p2Score);
 				updatePlayerInfo(p1username, false, p1Score);
 			} else if (p1Score == p2Score) {
@@ -174,7 +157,7 @@ public class MySQL_Connector {
 						+ (totalGames + 1) + ", totalGoals = " + (totalGoals + score) + " where username = '" + username
 						+ "'";
 			}
-			
+
 			this.statement.executeUpdate(query);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -228,7 +211,7 @@ public class MySQL_Connector {
 	public void getUser(String user) {
 
 		try {
-			this.result = this.statement.executeQuery("select * from " + userTable + " where username='" + user+"'");
+			this.result = this.statement.executeQuery("select * from " + userTable + " where username='" + user + "'");
 			this.result.next();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -254,27 +237,27 @@ public class MySQL_Connector {
 			return false;
 		}
 	}
-	
-	
+
 	public boolean getMostRecentGame(String player1, String player2) {
-		String query = "select * from "+gameTable+" where p1_username ='"+player1+"' and p2_username='"+player2+"'";
+		String query = "select * from " + gameTable + " where p1_username ='" + player1 + "' and p2_username='"
+				+ player2 + "'";
 		try {
-			//System.out.println(query);
+			// System.out.println(query);
 			this.result = this.statement.executeQuery(query);
-			LocalDateTime d,earliest;
+			LocalDateTime d, earliest;
 			earliest = LocalDateTime.now().minusYears(5);
 			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
-			while(this.result.next()) {
-				//System.out.println(this.result);
+			while (this.result.next()) {
+				// System.out.println(this.result);
 				d = LocalDateTime.parse(result.getString("gameID"), format);
-				if(d.isAfter(earliest)) {
+				if (d.isAfter(earliest)) {
 					earliest = d;
 				}
 			}
 			result.previous();
-			//System.out.println(result.getString("gameID"));
-			query = "select * from "+gameTable+" where gameID = '"+earliest.toString().replace("T", " ")+"'";
-			//System.out.println(earliest.toString());
+			// System.out.println(result.getString("gameID"));
+			query = "select * from " + gameTable + " where gameID = '" + earliest.toString().replace("T", " ") + "'";
+			// System.out.println(earliest.toString());
 			this.result = this.statement.executeQuery(query);
 			this.result.next();
 			return true;
@@ -283,24 +266,50 @@ public class MySQL_Connector {
 			e.printStackTrace();
 			return false;
 		}
-		
-		
-		
+
 	}
-	
-	
+
 	public String getActiveGameId() {
-		String query = "select * from "+gameTable+" where isActive = 1";
+		String query = "select * from " + gameTable + " where isActive = 1";
 		try {
 			this.result = this.statement.executeQuery(query);
 			this.result.next();
-			
 			return this.result.getString("gameID");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			
+
 			e.printStackTrace();
 			return "";
 		}
 	}
+
+	public List<String> getGameList(String user) {
+		List<String> list = new ArrayList<String>();
+		String[] querys = { "select * from " + gameTable + " where p1_username = '" + user + "'",
+				"select * from " + gameTable + " where p2_username = '" + user + "'" };
+		try {
+			for (String query : querys) {
+				this.result = this.statement.executeQuery(query);
+				while (this.result.next()) {
+
+					list.add(this.result.getString("gameID"));
+				}
+			}
+			return list;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("error getting all games for " + user);
+			e.printStackTrace();
+			if (list.size() > 0) {
+				System.out.println("returning " + list.size() + " of " + user + "'s games");
+				return list;
+			}
+
+			System.out.println("no games");
+			return null;
+
+		}
+
+	}
+
 }
