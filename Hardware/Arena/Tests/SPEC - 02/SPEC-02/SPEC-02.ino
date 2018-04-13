@@ -61,13 +61,13 @@ void setup() {
   score1 = 0;
   score2 = 0;
 
+  // For some reason it doesn't work if you remove this...
   Serial.begin(9600);
 }
 
 void loop() {
   // Decrement the current time and get the min:sec representation
   if (currentTime != 0L){
-    long temp = currentTime;
     currentTime = startTime - ((millis() - lastReset) / 1000);
 
     // Increment the scores in an alternating fashion
