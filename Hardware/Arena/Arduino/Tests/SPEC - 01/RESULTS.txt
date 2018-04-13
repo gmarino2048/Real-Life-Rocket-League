@@ -1,0 +1,19 @@
+SPEC - 01
+
+Soccar Project
+
+SPEC 01 was a resounding success as well. The time
+clearly counts down steadily on the LCD display. There
+was also some additional functionality included in the
+test, which allowed the countdown to be reset, although
+the only capacity in which this was tested was in the sense
+that it did not hinder any of the normal countdown
+functionality.
+
+There was an issue with getting the countdown time to go one
+second at a time, but it turned out to be an issue with subtracting
+the counter's value from itself once per loop, leading to an exponentially
+decreasing time cycle.
+
+The video shows the clear functionality of the counter, and the photo
+shows that the counter stops when it reaches 00:00.
