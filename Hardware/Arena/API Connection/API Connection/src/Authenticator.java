@@ -18,6 +18,7 @@ import java.util.Scanner;
 
 import javax.crypto.*;
 import javax.crypto.spec.*;
+
 public class Authenticator {
 	
 	// The username to log into the particle cloud
