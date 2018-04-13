@@ -43,6 +43,9 @@
  // Create the ints to store scores
  int score1;
  int score2;
+
+ // Temporary value to increment scores
+ bool scorebool;
  
 
 void setup() {
@@ -54,9 +57,9 @@ void setup() {
   currentTime = startTime;
   lastReset = millis();
 
-  // Spoof the scores (One single digit, one double digit)
-  score1 = 3;
-  score2 = 45;
+  // Instantiate the scores
+  score1 = 0;
+  score2 = 0;
 
   Serial.begin(9600);
 }
@@ -64,7 +67,12 @@ void setup() {
 void loop() {
   // Decrement the current time and get the min:sec representation
   if (currentTime != 0L){
+    long temp = currentTime;
     currentTime = startTime - ((millis() - lastReset) / 1000);
+
+    // Increment the scores in an alternating fashion
+    score1 = millis() / 2000;
+    score2 = (millis()+1000) / 2000;
   }
   
   format();
@@ -119,7 +127,6 @@ void format () {
 
   // Format the first line
   sprintf(line1, "%.6s:%02d%s  TIME", uname1, score1, temp1);
-  Serial.println(line1);
 
   // Get the current time in mins and secs
   int minutes = getMinutes(currentTime);
