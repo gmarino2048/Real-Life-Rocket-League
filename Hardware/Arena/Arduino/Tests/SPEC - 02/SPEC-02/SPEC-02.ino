@@ -71,8 +71,10 @@ void loop() {
     currentTime = startTime - ((millis() - lastReset) / 1000);
 
     // Increment the scores in an alternating fashion
-    score1 = millis() / 2000;
-    score2 = (millis()+1000) / 2000;
+    if (score1 < 100 && score2 < 99){
+      score1 = millis() / 2000;
+      score2 = (millis()+1000) / 2000;
+    }
   }
   
   format();
@@ -126,13 +128,13 @@ void format () {
   }
 
   // Format the first line
-  sprintf(line1, "%.6s:%02d%s  TIME", uname1, score1, temp1);
+  sprintf(line1, "%.6s:%.02d%s  TIME", uname1, score1, temp1);
 
   // Get the current time in mins and secs
   int minutes = getMinutes(currentTime);
   int seconds = getSeconds(currentTime);
 
   // Format the second line
-  sprintf(line2, "%.6s:%02d%s  %02d:%02d", uname2, score2, temp2, minutes, seconds);
+  sprintf(line2, "%.6s:%.02d%s  %02d:%02d", uname2, score2, temp2, minutes, seconds);
 }
 
