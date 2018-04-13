@@ -1,0 +1,15 @@
+Soccar Project
+
+SPEC - 03
+
+RESULTS
+
+
+Overall the results of the test were very good. The API allowed
+the variable to be monitored, and allowed a rapid reset of the 
+variable with the function call.
+
+The subscribed event failed because the console would not allow
+me to publish events in such a way that I would be able to easily see 
+them, although this can be worked around by using the function call
+command.
