@@ -1,0 +1,15 @@
+SPEC - 02
+
+Soccar Project
+
+SPEC 02 was also a success, although some compromises
+had to be made in order to get the display functioning
+correctly. The second line had to be written first in order
+to correctly display the time, and although the time was supposed
+to be right justified, the writing to the LCD display would go blank
+if there was not a gap between the word TIME and the end of the
+display.
+
+However, the display is still readable and looks good, so this test
+was a pass. The string concatenation and formatting work 
+wonderfully.

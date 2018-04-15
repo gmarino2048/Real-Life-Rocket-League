@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>WebFront for Car Soccer</title>
+        <meta name="description" content="User Interface">
+        <link rel="stylesheet" href="carStyle.css">
+    </head>
+     <body>
+         <h1>Welcome To SocCar</h1>
+
+<buttonL onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</buttonL>
+
+<div id="id01" class="modal">
+  
+  <form class="modal-content animate" action="/action_page.php">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+      <img src="red_car.png" alt="car" class="car">
+    </div>
+
+    <div class="container">
+      <label for="uname"><b>Username</b></label>
+      <input type="text" placeholder="Enter Username" name="uname" required>
+
+      <label for="psw"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="psw" required>
+        
+      <buttonW type="submit" id="direct">Submit</buttonW>
+      <label>
+        <input type="checkbox" checked="checked" name="remember"> Remember me
+      </label>
+    </div>
+
+    <div class="container" style= "background-color:">
+      <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+      <span class="psw">Forgot <a href="#">password?</a></span>
+    </div>
+  </form>
+</div>
+         
+<button1
+onclick="document.getElementById('id02').style.display='block'" style="width:auto;"> New User</button1>
+         
+<div id="id02" class="modal">
+  <form class="modal-content animate" action="/action_page.php">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+      <img src="user-group-new.png" alt="players" class="players">
+    </div>
+
+    <div class="container">
+        <label for="uname"><b>Username</b></label>
+      <input type="text" placeholder="Enter Username" name="uname" required>
+      <label for="psw"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="psw" required>
+        
+      <buttonW type="submit" id="direct">Submit</buttonW>
+    </div>
+
+    <div class="container" style="background-color">
+      <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn2">Cancel</button>
+    </div>
+  </form>
+</div>
+<button3 style="width:auto" id="direct1"> Guest </button3>
+<script src="Welcome_Page.js"></script>
+    </body>
+</html>

@@ -1,0 +1,553 @@
+/*Overall*/
+body {
+    background-color: #000000;
+    /*font-family: Arial, Helvetica, sans-serif;*/
+}
+/* Account_Info */
+
+/*Analytics*/
+
+/*CarSoccer*/
+.bgimg {
+    background-color: black;
+    min-height: 100%;
+    background-position: center;
+    background-size: cover;
+}
+
+.button{
+    padding: 15px 25px;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: black;
+    background-color:red;
+    border: none;
+    border-radius: 15px;
+    position: absolute;
+    top:60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    transform: translate(-50%,700%)
+}
+
+.button:hover {background-color:crimson}
+
+.button:active{
+    background-color: red;
+    box-shadow: 0 5px #666;
+    transform: translate3d(4px)
+}
+
+.button1{
+    padding: 15px 25px;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: black;
+    border: none;
+    border-radius: 15px;
+    position: absolute;
+    top:60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    transform: translate(-50%,700%)
+}
+
+.container{
+    position:relative;
+    text-align: center;
+    color: white;
+}
+
+.centered{
+    color:white;
+    font-size: 300px;
+    font-family: "Bookman", "URW Bookman L", serif;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    left:0;
+    line-height: 200px;
+    margin-top:-100px;
+    transform: translate(-0%,130%);
+}
+
+/*EndGame*/
+
+/*Game_Lobby*/
+buttonSet {
+    background-color: red;
+    color: white;
+    padding: 20px 26px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-size: 24px;
+    text-align: center;
+    border: none;
+    border-radius: 15px;
+    position: absolute;
+    top: 60%;
+    left: 45%;
+    position: absolute;
+    transform: translate(-200%,80%);
+    margin-top: 450px;
+}
+
+    buttonSet:hover {
+        opacity: 0.8;
+    }
+
+buttonGame {
+    background-color: red;
+    color: white;
+    padding: 20px 26px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-size: 24px;
+    text-align: center;
+    border: none;
+    border-radius: 15px;
+    position: absolute;
+    top: 60%;
+    left: 48%;
+    position: absolute;
+    transform: translate(-30%,80%);
+    margin-top: 450px;
+}
+
+    buttonGame:hover {
+        opacity: 0.8;
+    }
+
+buttonStat {
+    background-color: red;
+    color: white;
+    padding: 20px 26px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-size: 24px;
+    text-align: center;
+    border: none;
+    border-radius: 15px;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    position: absolute;
+    transform: translate(150%,80%);
+    margin-top: 450px;
+}
+
+    buttonStat:hover {
+        opacity: 0.8;
+    }
+
+.topPage {
+    background: black;
+    color: white;
+    font-size: 150px;
+    font-family: "Bookman", "URW Bookman L", serif;
+    position: absolute;
+    width: 100%;
+    left: 50px;
+    line-height: 200px;
+    /*transform: translate(-0%,200%);*/
+}
+
+/*Login_Page*/
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    width: 100%;
+    background-color: red;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    input[type=submit]:hover {
+        background-color: red;
+    }
+/*Logout*/
+.topPage {
+    background: black;
+    color: white;
+    font-size: 150px;
+    font-family: "Bookman", "URW Bookman L", serif;
+    position: absolute;
+    width: 100%;
+    top: 160%;
+    left: 0%;
+    line-height: 200px;
+    margin-top: 200px;
+    /*transform: translate(-0%,130%);*/
+}
+
+.thankyou {
+    color: Red;
+    font-size: 100px;
+    background: black;
+    font-family: "Bookman", "URW Bookman L", serif;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    line-height: 100px;
+    border: black;
+    margin-top: 150px;
+    transform: translate(-0%, 130%)
+}
+/*Settings*/
+
+/*The_Game*/
+p {
+    animation-duration: 3s;
+    animation-name: slidein;
+}
+
+@keyframes slidein {
+    from {
+        margin-left: 100%;
+        width: 300%;
+    }
+
+    to {
+        margin-left: 0%;
+        width: 100%;
+    }
+}
+
+canvas {
+    border: 1px solid #d3d3d3;
+    background-color: #f1f1f1;
+    transform: translate(35%,30%);
+    border: none;
+    position: absolute;
+}
+
+buttonQ {
+    padding: 15px 25px;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: white;
+    background-color: red;
+    border: none;
+    border-radius: 15px;
+    position: absolute;
+    top: 60%;
+    left: 45.5%;
+    transform: translate(3%, 290%);
+}
+
+    buttonQ :hover {
+        background-color: crimson
+    }
+
+    buttonQ:active {
+        background-color: red;
+        box-shadow: 0 5px #666;
+        transform: translate3d(4px)
+    }
+/*Welcome_Page*/
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+buttonW {
+    background-color: red;
+    color: white;
+    padding: 20px 26px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-size: 24px;
+    text-align: center;
+    border: none;
+    border-radius: 15px;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,80%)
+}
+
+    buttonW:hover {
+        opacity: 0.8;
+    }
+
+sbutton {
+    background-color: red;
+    color: white;
+    padding: 20px 26px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-size: 24px;
+    text-align: center;
+    border: none;
+    border-radius: 15px;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,80%)
+}
+
+    sbutton:hover {
+        opacity: 0.8;
+    }
+
+buttonL {
+    background-color: red;
+    color: white;
+    padding: 20px 26px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-size: 24px;
+    text-align: center;
+    border: none;
+    border-radius: 15px;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-200%,80%)
+}
+
+    buttonL:hover {
+        opacity: 0.8;
+    }
+
+button1 {
+    background-color: red;
+    color: white;
+    padding: 20px 26px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-size: 24px;
+    text-align: center;
+    border: none;
+    border-radius: 15px;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-30%,80%)
+}
+
+    button1:hover {
+        opacity: 0.8;
+    }
+
+button3 {
+    background-color: red;
+    color: white;
+    padding: 20px 26px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-size: 24px;
+    text-align: center;
+    border: none;
+    border-radius: 15px;
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    position: absolute;
+    transform: translate(150%,80%)
+}
+
+    button3:hover {
+        opacity: 0.8;
+    }
+
+.cancelbtn {
+    color: white;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 10%;
+    font-size: 15px;
+    text-align: center;
+    border-radius: 15px;
+    top: 150%;
+    left: 45%;
+    padding: 10px 18px;
+    background-color: red;
+    position: absolute;
+    /*transform: translate(-10%,90%)*/
+}
+
+.cancelbtn2 {
+    color: white;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 10%;
+    font-size: 15px;
+    text-align: center;
+    border-radius: 15px;
+    top: 160%;
+    left: 45%;
+    padding: 10px 18px;
+    background-color: red;
+    position: absolute;
+    /*transform: translate(-10%,90%)*/
+}
+
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+    position: relative;
+}
+
+img.car {
+    width: 40%;
+    border-radius: 5%;
+}
+
+.container {
+    padding: 16px;
+}
+
+span.psw {
+    float: right;
+    padding-top: 16px;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.close {
+    position: absolute;
+    right: 25px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+    .close:hover,
+    .close:focus {
+        color: blue;
+        cursor: pointer;
+    }
+
+/* Add Zoom Animation */
+.animate {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+    from {
+        -webkit-transform: scale(0)
+    }
+
+    to {
+        -webkit-transform: scale(1)
+    }
+}
+
+@keyframes animatezoom {
+    from {
+        transform: scale(0)
+    }
+
+    to {
+        transform: scale(1)
+    }
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    span.psw {
+        display: block;
+        float: none;
+    }
+
+    .cancelbtn {
+        width: 100%;
+    }
+}
+
+h1 {
+    color: white;
+    font-size: 100px;
+    font-family: "Bookman", "URW Bookman L", serif;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    left: 0;
+    line-height: 200px;
+    margin-top: -100px;
+    transform: translate(24%,0%);
+}
+
+/* Unknown style */
+.boxed{
+    border: 1px solid white;
+    background-color: white;
+    width: 30%;
+    position: absolute;
+    top: 30%;
+    left: 0;
+    height: 400px;
+    margin-top: -50px;
+    transform: translate(120%, 0%);
+    
+}

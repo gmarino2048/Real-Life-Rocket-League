@@ -1,0 +1,15 @@
+SPEC - 00 RESULTS
+
+Soccar Project
+
+SPEC 00 was a resounding success. The LCD display was visible
+from all angles and clearly displayed the words "Hello World"
+
+The LCD display did not waver and displayed the words clearly
+throughout the duration of the test. This means that the 
+development team can continue to SPEC 01 and also continue
+working with the display.
+
+The folder containing the test also contains several images
+showing the clarity of the display from the front and several
+angles for any interested third parties. 

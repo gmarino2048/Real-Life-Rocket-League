@@ -17,11 +17,7 @@ import java.security.spec.*;
 import java.util.Scanner;
 
 import javax.crypto.*;
-import javax.crypto.spec.*;Web Front End
-Back End Server
-Car
-Arena
-
+import javax.crypto.spec.*;
 
 public class Authenticator {
 	
