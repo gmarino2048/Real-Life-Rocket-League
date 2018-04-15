@@ -71,7 +71,7 @@ void loop() {
     currentTime = startTime - ((millis() - lastReset) / 1000);
 
     // Increment the scores in an alternating fashion
-    if (score1 < 100 && score2 < 99){
+    if (score1 < 99 && score2 < 99){
       score1 = millis() / 2000;
       score2 = (millis()+1000) / 2000;
     }
