@@ -21,3 +21,6 @@ document.getElementById("direct").onclick = function () {
 document.getElementById("direct1").onclick = function () {
     location.href = "Login_Page.html";
 }
+document.getElementById("direct2").onclick = function () {
+    location.href = "Game_Lobby.html";
+}

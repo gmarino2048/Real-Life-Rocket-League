@@ -1,10 +1,30 @@
+/*
+ * State map: 
+ * 0, Neutral - driveState = 0, turnState = 0
+ * 1, Forward (Up) - driveState = 1, turnState = 0
+ * 2, Right - driveState = 0, turnState = 1
+ * 3, Reverse - driveState = -1. turnState = 0
+ * 4, Left - driveState = 0, turnState = -1
+ * 5, Forward+Right - driveState = 1, turnState = 1
+ * 6, Forward+Left - driveState = 1, turnState = -1
+ * 7, Reverse+Right - driveState = -1, turnState = 1
+ * 8, Reverse+Left - driveState = -1, turnState = -1
+ * 9, Brake - driveState = 0, turnState = 0
+ * 10, Boost - boostState = 1
+ */
+
 //Car Code
 var rCar;
 var bCar;
+var turnState;
+var driveState;
+var boostState;
 var myBackground;
 function startGame() {
     /*bCar = new component(40, 40, "new-blue-car-cartoon-transportation-free-sports.png", 300, 120, "image");*/
     rCar = new component(40, 40, "red_car.png", 540, 120, "image");
+    carState = 0; //idleState
+    turnState = 0; //idleState
     myBackground = new component(880, 470, "soccer_field_311115.jpg", 0, 0, "image");
     arena.start();
 }
@@ -73,6 +93,8 @@ function updateArena() {
     //left arrow
     if (arena.key && arena.key == 37) {
         rCar.speedX = -1;
+        turnState = -1;
+        driveState = 0;
     }
     //right arrow
     if (arena.key && arena.key == 39) {
