@@ -1,10 +1,16 @@
 package sqltest;
+/*
+ * This class tests the functionality of MySQL_Connector.java
+ */
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
+import javax.sound.midi.Synthesizer;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -29,6 +35,13 @@ class MySQL_ConnecterTester {
 		System.out.println("initializing SQL connection for testing");
 		conn = new MySQL_Connector();
 		assertEquals(conn.getStatement() != null, true);
+		try {
+			System.out.println("finished test 1,hit enter for next test");
+			System.in.read(new byte[100]);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -47,6 +60,13 @@ class MySQL_ConnecterTester {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			assertEquals(1, 0);
+			e.printStackTrace();
+		}
+		try {
+			System.out.println("finished test 2,hit enter for next test");
+			System.in.read(new byte[100]);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -72,6 +92,13 @@ class MySQL_ConnecterTester {
 			assertEquals(1, 0);
 			e.printStackTrace();
 		}
+		try {
+			System.out.println("finished test 3, hit enter for next test");
+			System.in.read(new byte[100]);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Test
@@ -90,6 +117,13 @@ class MySQL_ConnecterTester {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			assertEquals(1,0);
+			e.printStackTrace();
+		}
+		try {
+			System.out.println("finished test 4,hit enter for next test");
+			System.in.read(new byte[100]);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -114,6 +148,13 @@ class MySQL_ConnecterTester {
 			assertEquals(result, gameIds[i]);
 			i++;
 
+		}
+		try {
+			System.out.println("finished test 5,hit enter for next test");
+			System.in.read(new byte[100]);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
