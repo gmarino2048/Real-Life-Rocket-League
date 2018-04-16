@@ -45,17 +45,21 @@
 
  // Create the int to store the time
  int minutes;
-
- // Temporary value to increment scores
- bool scorebool;
  
 
 void setup() {
   // Begin the LCD Display
   lcd.begin(16, 2);
 
+  // Initialize the values
+  minutes = 0;
+  uname1 = "USER 1";
+  uname2 = "USER 2";
+  score1 = 0;
+  score2 = 0;
+  
   // Initialize the countdown in seconds
-  startTime = 5*60;
+  startTime = minutes*60;
   currentTime = startTime;
   lastReset = millis();
 
@@ -68,20 +72,29 @@ void setup() {
 }
 
 void loop() {
-
   // Decrement the current time and get the min:sec representation
   if (currentTime != 0L){
     currentTime = startTime - ((millis() - lastReset) / 1000);
-
-    // Increment the scores in an alternating fashion
-    if (score1 < 99 && score2 < 99){
-      score1 = millis() / 2000;
-      score2 = (millis()+1000) / 2000;
-    }
   }
   
   formatLCD();
   printToLCD();
+}
+
+void serialEvent(){
+  while (Serial.available()){
+    char c = Serial.read();
+    if (c != '\n'){
+      infoBuffer.concat(String(c));
+    }
+    else {
+      if (verify(infoBuffer)){
+        variableKey = getKey(infoBuffer);
+        variableValue = getValue(infoBuffer);
+        setVals();
+      }
+    }
+  }
 }
 
 void setVals (){
