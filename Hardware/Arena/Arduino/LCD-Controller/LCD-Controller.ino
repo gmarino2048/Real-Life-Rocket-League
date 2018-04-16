@@ -109,7 +109,6 @@ void formatLCD () {
     sprintf(temp2, "%s ", temp2);
     j++;
   }
-
   // Format the first line
   sprintf(line1, "%.6s:%.02d%s  TIME", uname1, score1, temp1);
 

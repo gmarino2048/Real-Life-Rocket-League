@@ -4,11 +4,6 @@
  *  
  *  Arena-Controller
  *  
- * The purpose of this test is to ensure that the particle photon
- * can correctly connect to the arduino due and that the due can
- * correctly decode the string and post the component parts to the
- * serial monitor.
- *  
  *  This script was written for the Arduino DUE
  */
 
@@ -111,6 +106,9 @@ void isr1 () {
   if (millis() - lastInterrupt > 2500){
     score1 ++;
     //Send Score Here
+    String temp = format("score1", String(score1);
+    Serial1.println(temp);
+    
     SerialUSB.println(score1);
     lastInterrupt = millis();
   }
@@ -154,5 +152,15 @@ String getValue (String regex) {
   else {
     return "";
   }
+}
+
+String format (String key, String value){
+    String retVal = "{";
+    retVal.concat(key);
+    retVal.concat(":");
+    retVal.concat(value);
+    retVal.concat("}");
+    
+    return retVal;
 }
 
