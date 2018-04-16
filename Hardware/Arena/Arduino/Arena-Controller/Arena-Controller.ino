@@ -28,6 +28,7 @@ long lastInterrupt;
 void setup() {
   // put your setup code here, to run once:
   Serial1.begin(9600);
+  Serial2.begin(9600);
   SerialUSB.begin(9600);
 
   infoBuffer = "";
@@ -68,26 +69,31 @@ void serialEvent1(){
 void setVals (){
   if (variableKey.equals("score1")){
     score1 = variableValue.toInt();
+    Serial2.println(format(variableKey, String(score1)));
     infoBuffer = "";
   }
 
   else if (variableKey.equals("score2")){
     score2 = variableValue.toInt();
+    Serial2.println(format(variableKey, String(score1)));
     infoBuffer = "";
   }
 
   else if (variableKey.equals("uname1")){
     username1 = variableValue;
+    Serial2.println(format(variableKey, String(score1)));
     infoBuffer = "";
   }
 
   else if (variableKey.equals("uname2")){
     username2 = variableValue;
+    Serial2.println(format(variableKey, String(score1)));
     infoBuffer = "";
   }
 
   else if (variableKey.equals("time")) {
     timeInMinutes = variableValue.toInt();
+    Serial2.println(format(variableKey, String(score1)));
     infoBuffer = "";
   }
 
@@ -106,10 +112,11 @@ void isr1 () {
   if (millis() - lastInterrupt > 2500){
     score1 ++;
     //Send Score Here
-    String temp = format("score1", String(score1);
+    String temp = format("score1", String(score1));
     Serial1.println(temp);
+    Serial2.println(temp);
     
-    SerialUSB.println(score1);
+    SerialUSB.println(temp);
     lastInterrupt = millis();
   }
 }
@@ -118,7 +125,11 @@ void isr2 () {
   if (millis() - lastInterrupt > 2500){
     score2 ++;
     //Send Score Here
-    SerialUSB.println(score2);
+    String temp = format("score1", String(score1));
+    Serial1.println(temp);
+    Serial2.println(temp);
+    
+    SerialUSB.println(temp);
     lastInterrupt = millis();
   }
 }
