@@ -22,8 +22,8 @@
  LiquidCrystal lcd(RS, EN, D0, D1, D2, D3);
 
  // Create the string buffers
- char line1[16];
- char line2[16];
+ String line1;
+ String line2;
 
  // Create the variables used in the time display
  long startTime;
@@ -50,22 +50,22 @@
 void setup() {
   // Begin the LCD Display
   lcd.begin(16, 2);
+  Serial.begin(9600);
 
   // Initialize the values
-  minutes = 0;
-  uname1 = "USER 1";
-  uname2 = "USER 2";
+  minutes = 1;
+  uname1 = "USER1";
+  uname2 = "USER2";
   score1 = 0;
   score2 = 0;
+
+  variableKey = "";
+  variableValue = "";
   
   // Initialize the countdown in seconds
   startTime = minutes*60;
   currentTime = startTime;
   lastReset = millis();
-
-  // Instantiate the scores
-  score1 = 0;
-  score2 = 0;
 
   // For some reason it doesn't work if you remove this...
   Serial.begin(9600);
@@ -79,19 +79,21 @@ void loop() {
   
   formatLCD();
   printToLCD();
-}
 
-void serialEvent(){
   while (Serial.available()){
     char c = Serial.read();
     if (c != '\n'){
       infoBuffer.concat(String(c));
     }
     else {
+      Serial.println(infoBuffer);
       if (verify(infoBuffer)){
         variableKey = getKey(infoBuffer);
         variableValue = getValue(infoBuffer);
         setVals();
+      }
+      else {
+        infoBuffer = "";
       }
     }
   }
@@ -110,6 +112,7 @@ void setVals (){
 
   else if (variableKey.equals("uname1")){
     uname1 = variableValue;
+    Serial.println(uname1);
     infoBuffer = "";
   }
 
@@ -142,62 +145,38 @@ int getSeconds (long timeInSeconds) {
 
 // Formats both lines of the arena display
 void formatLCD () {
-  // Create two buffers to pad username space
-  char temp1[] = "";
-  char temp2[] = "";
+  line1 = uname1.substring(0, 6);
+  line2 = uname2.substring(0, 6);
 
-  char *username1;
-  char *username2;
+  line1.concat(":");
+  line2.concat(":");
 
-  // Fill in the padding arrays
-  int i = uname1.length();
-  while (i < 6) {
-    sprintf(temp1, "%s ", temp1);
-    i++;
+  line1.concat(String(score1));
+  line2.concat(String(score2));
+
+  while(line1.length() < 11){
+    line1.concat(" ");
   }
 
-  int j = uname2.length();
-  while (j < 6) {
-    sprintf(temp2, "%s ", temp2);
-    j++;
+  while(line2.length() <= 10){
+    line2.concat(" ");
   }
 
-  i = uname1.length();
-  j = uname2.length();
+  line1.concat(" TIME");
 
-  if (i > 6){
-    uname1.substring(0, 6).toCharArray(username1, 6);
-  }
-  else {
-    uname1.toCharArray(username1, uname1.length());
-  }
-
-  if (i > 6){
-    uname2.substring(0, 6).toCharArray(username2, 6);
-  }
-  else {
-    uname2.toCharArray(username2, uname2.length());
-  }
-  
-  // Format the first line
-  sprintf(line1, "%s:%.02d%s  TIME", username1, score1, temp1);
-
-  // Get the current time in mins and secs
-  int minutes = getMinutes(currentTime);
-  int seconds = getSeconds(currentTime);
-
-  // Format the second line
-  sprintf(line2, "%.6s:%.02d%s  %02d:%02d", username2, score2, temp2, minutes, seconds);
+  char timeBuffer[5];
+  sprintf(timeBuffer, "%.02d:%.02d", getMinutes(currentTime), getSeconds(currentTime));
+  line2.concat(String(timeBuffer));
 }
 
 void printToLCD () {
   // Print the second line
   lcd.setCursor(0,1);
-  lcd.write(line2);
+  lcd.print(line2);
 
   // Print the first line
   lcd.setCursor(0,0);
-  lcd.write(line1);
+  lcd.print(line1);
 }
 
 // Verify the syntax of the incoming string
