@@ -4,11 +4,6 @@
  *  
  *  Arena-Controller
  *  
- * The purpose of this test is to ensure that the particle photon
- * can correctly connect to the arduino due and that the due can
- * correctly decode the string and post the component parts to the
- * serial monitor.
- *  
  *  This script was written for the Arduino DUE
  */
 
@@ -33,6 +28,7 @@ long lastInterrupt;
 void setup() {
   // put your setup code here, to run once:
   Serial1.begin(9600);
+  Serial2.begin(9600);
   SerialUSB.begin(9600);
 
   infoBuffer = "";
@@ -44,12 +40,6 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  if (digitalRead(52)){
-    digitalWrite(13, HIGH);
-  }
-  else{
-    digitalWrite(13, LOW);
-  }
 }
 
 void serialEvent1(){
@@ -66,6 +56,9 @@ void serialEvent1(){
         SerialUSB.println(variableValue);
         setVals();
       }
+      else {
+        infoBuffer = "";
+      }
     }
   }
 }
@@ -73,26 +66,32 @@ void serialEvent1(){
 void setVals (){
   if (variableKey.equals("score1")){
     score1 = variableValue.toInt();
+    Serial2.println(format(variableKey, variableValue));
+    SerialUSB.println(format(variableKey, variableValue));
     infoBuffer = "";
   }
 
   else if (variableKey.equals("score2")){
     score2 = variableValue.toInt();
+    Serial2.println(format(variableKey, variableValue ));
     infoBuffer = "";
   }
 
   else if (variableKey.equals("uname1")){
     username1 = variableValue;
+    Serial2.println(format(variableKey, variableValue));
     infoBuffer = "";
   }
 
   else if (variableKey.equals("uname2")){
     username2 = variableValue;
+    Serial2.println(format(variableKey, variableValue));
     infoBuffer = "";
   }
 
   else if (variableKey.equals("time")) {
     timeInMinutes = variableValue.toInt();
+    Serial2.println(format(variableKey, variableValue));
     infoBuffer = "";
   }
 
@@ -111,7 +110,11 @@ void isr1 () {
   if (millis() - lastInterrupt > 2500){
     score1 ++;
     //Send Score Here
-    SerialUSB.println(score1);
+    String temp = format("score1", String(score1));
+    Serial1.println(temp);
+    Serial2.println(temp);
+    
+    SerialUSB.println(temp);
     lastInterrupt = millis();
   }
 }
@@ -120,7 +123,11 @@ void isr2 () {
   if (millis() - lastInterrupt > 2500){
     score2 ++;
     //Send Score Here
-    SerialUSB.println(score2);
+    String temp = format("score2", String(score2));
+    Serial1.println(temp);
+    Serial2.println(temp);
+    
+    SerialUSB.println(temp);
     lastInterrupt = millis();
   }
 }
@@ -154,5 +161,15 @@ String getValue (String regex) {
   else {
     return "";
   }
+}
+
+String format (String key, String value){
+    String retVal = "{";
+    retVal.concat(key);
+    retVal.concat(":");
+    retVal.concat(value);
+    retVal.concat("}");
+    
+    return retVal;
 }
 
