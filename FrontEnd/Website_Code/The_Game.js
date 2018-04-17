@@ -21,12 +21,12 @@ var driveState;
 var state;
 var boostState;
 var myBackground;
-//var stateMap[][];
+var stateMap[][];
 function startGame() {
     /*bCar = new component(40, 40, "new-blue-car-cartoon-transportation-free-sports.png", 300, 120, "image");*/
     rCar = new component(40, 40, "red_car.png", 540, 120, "image");
-    //carState = 0; //idleState
-    //turnState = 0; //idleState
+    carState = 0; //idleState
+    turnState = 0; //idleState
     myBackground = new component(880, 470, "soccer_field_311115.jpg", 0, 0, "image");
     arena.start();
 }
@@ -97,50 +97,50 @@ function updateArena() {
     //left arrow
     if (arena.key && arena.key == 37) {
         rCar.speedX = -1;
-        //turnState = -1;
-        //driveState = 0;
+        turnState = -1;
+        driveState = 0;
     }
     //right arrow
     if (arena.key && arena.key == 39) {
         rCar.speedX = 1;
-        //turnState = 1;
-        //driveState = 0;
+        turnState = 1;
+        driveState = 0;
     }
     //up arrow
     if (arena.key && arena.key == 38) {
         rCar.speedY = -1;
-        //turnState = 0;
-        //driveState = 1;
+        turnState = 0;
+        driveState = 1;
     }
     //down arrow
     if (arena.key && arena.key == 40) {
         rCar.speedY = 1;
-        //turnState = 0;
-        //driveState = -1;
+        turnState = 0;
+        driveState = -1;
     }
     //left (a)
     if (arena.key && arena.key == 65) {
         rCar.speedX = -1;
-        //turnState = -1;
-        //driveState = 0;
+        turnState = -1;
+        driveState = 0;
     }
     //right (d)
     if (arena.key && arena.key == 68) {
         rCar.speedX = 1;
-        //turnState = 1;
-        //driveState = 0;
+        turnState = 1;
+        driveState = 0;
     }
     //up (w)
     if (arena.key && arena.key == 87) {
         rCar.speedY = -1;
-        //turnState = 0;
-        //driveState = 1;
+        turnState = 0;
+        driveState = 1;
     }
     //down (s)
     if (arena.key && arena.key == 83) {
         rCar.speedY = 1;
-       //turnState = 0;
-       //driveState = -1;
+       turnState = 0;
+       driveState = -1;
     }
     rCar.newPos();
     rCar.update();
@@ -151,7 +151,7 @@ function updateArena() {
 document.getElementById("buttonQ").onclick = function () {
     location.href = "EndGame.html";
 }
-/*Send the state to the backend
+//Send the state to the backend
 function stateMap() {
     stateMap[0][0] = 9;
     stateMap[1][0] = 1;
@@ -171,7 +171,7 @@ function updateState() {
     else {
         state = stateMap[driveState][turnState];
     }
-}*/
+}
 
 /*
 //Boost Code
