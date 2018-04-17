@@ -538,6 +538,10 @@ h1 {
     transform: translate(24%,0%);
 }
 
+h2 {
+    color: #E8E8E8;
+}
+
 /* Unknown style */
 .boxed{
     border: 1px solid white;
