@@ -13,6 +13,9 @@
  * 10, Boost - boostState = 1
  */
 
+
+var socket = io.connect("127.0.0.1:9000");
+
 //Car Code
 var rCar;
 var bCar;
@@ -94,53 +97,95 @@ function updateArena() {
 
     //If key is released or no key is pressed return to neutral state
 
+
+
     //left arrow
     if (arena.key && arena.key == 37) {
         rCar.speedX = -1;
         turnState = -1;
         driveState = 0;
+        socket.emit('update', {
+            turnState: turnState,
+            rCarSpeedX: rCar.speedX,
+            driveState: driveState
+        });
     }
     //right arrow
     if (arena.key && arena.key == 39) {
         rCar.speedX = 1;
         turnState = 1;
         driveState = 0;
+        socket.emit('update', {
+            turnState: turnState,
+            rCarSpeedX: rCar.speedX,
+            driveState: driveState
+        });
     }
     //up arrow
     if (arena.key && arena.key == 38) {
         rCar.speedY = -1;
         turnState = 0;
         driveState = 1;
+        socket.emit('update', {
+            turnState: turnState,
+            rCarSpeedX: rCar.speedX,
+            driveState: driveState
+        });
     }
     //down arrow
     if (arena.key && arena.key == 40) {
         rCar.speedY = 1;
         turnState = 0;
         driveState = -1;
+        socket.emit('update', {
+            turnState: turnState,
+            rCarSpeedX: rCar.speedX,
+            driveState: driveState
+        });
     }
     //left (a)
     if (arena.key && arena.key == 65) {
         rCar.speedX = -1;
         turnState = -1;
         driveState = 0;
+        socket.emit('update', {
+            turnState: turnState,
+            rCarSpeedX: rCar.speedX,
+            driveState: driveState
+        });
     }
     //right (d)
     if (arena.key && arena.key == 68) {
         rCar.speedX = 1;
         turnState = 1;
         driveState = 0;
+        socket.emit('update', {
+            turnState: turnState,
+            rCarSpeedX: rCar.speedX,
+            driveState: driveState
+        });
     }
     //up (w)
     if (arena.key && arena.key == 87) {
         rCar.speedY = -1;
         turnState = 0;
         driveState = 1;
+        socket.emit('update', {
+            turnState: turnState,
+            rCarSpeedX: rCar.speedX,
+            driveState: driveState
+        });
     }
     //down (s)
     if (arena.key && arena.key == 83) {
         rCar.speedY = 1;
        turnState = 0;
        driveState = -1;
+        socket.emit('update', {
+            turnState: turnState,
+            rCarSpeedX: rCar.speedX,
+            driveState: driveState
+        });
     }
     rCar.newPos();
     rCar.update();
