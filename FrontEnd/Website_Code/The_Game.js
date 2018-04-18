@@ -16,6 +16,9 @@
 
 var socket = io.connect("127.0.0.1:9000");
 
+const newLocal = document.getElementById("buttonQ").onclick = function () {
+    location.href = "EndGame.html";
+};
 //Car Code
 var car;
 var turnState;
@@ -23,13 +26,17 @@ var driveState;
 var state;
 var boostState;
 var myBackground;
-var stateMap= new Array(3)(3);
+var stateMap= new Array()();
 function startGame() {
     car = new component(40, 40, "red_car.png", 540, 120, "image");
     myBackground = new component(880, 470, "soccer_field_311115.jpg", 0, 0, "image");
-    carState = 0; //idleState
-    turnState = 0; //idleState
+    states(); //idleState
     arena.start();
+
+    function states() {
+        driveState = 0; //idleState
+        turnState = 0;//idleStates
+    }
 }
 var arena = {
     canvas: document.createElement("canvas"), start: function () {
@@ -78,9 +85,7 @@ function component(width, height, color, x, y, type) {
         this.y += this.speedY;
     }
 }
-document.getElementById("buttonQ").onclick = function () {
-    location.href = "EndGame.html";
-}
+
 /*Key Pressed*/
 function updateArena() {
     arena.clear();
@@ -98,6 +103,46 @@ function updateArena() {
     //left arrow
     if (arena.key && arena.key == 37) {
         car.speedX = -1;
+    }
+    //right arrow
+    if (arena.key && arena.key == 39) {
+        car.speedX = 1;
+    }
+    //up arrow
+    if (arena.key && arena.key == 38) {
+        car.speedY = -1;
+    }
+    //down arrow
+    if (arena.key && arena.key == 40) {
+        car.speedY = 1;
+    }
+    //left (a)
+    if (arena.key && arena.key == 65) {
+        car.speedX = -1;
+    }
+    //right (d)
+    if (arena.key && arena.key == 68) {
+        car.speedX = 1;
+    }
+    //up (w)
+    if (arena.key && arena.key == 87) {
+        car.speedY = -1;
+    }
+    //down (s)
+    if (arena.key && arena.key == 83) {
+       car.speedY = 1;
+    }
+    car.newPos();
+    car.update();
+
+    car.newPos();
+    car.update();
+}
+
+//States
+function sendStates() {
+    //left arrow
+    if (arena.key && arena.key == 37) {
         turnState = -1;
         driveState = 0;
         socket.emit('update', {
@@ -108,7 +153,6 @@ function updateArena() {
     }
     //right arrow
     if (arena.key && arena.key == 39) {
-        car.speedX = 1;
         turnState = 1;
         driveState = 0;
         socket.emit('update', {
@@ -119,7 +163,6 @@ function updateArena() {
     }
     //up arrow
     if (arena.key && arena.key == 38) {
-        car.speedY = -1;
         turnState = 0;
         driveState = 1;
         socket.emit('update', {
@@ -130,7 +173,6 @@ function updateArena() {
     }
     //down arrow
     if (arena.key && arena.key == 40) {
-        car.speedY = 1;
         turnState = 0;
         driveState = -1;
         socket.emit('update', {
@@ -141,7 +183,6 @@ function updateArena() {
     }
     //left (a)
     if (arena.key && arena.key == 65) {
-        car.speedX = -1;
         turnState = -1;
         driveState = 0;
         socket.emit('update', {
@@ -152,7 +193,6 @@ function updateArena() {
     }
     //right (d)
     if (arena.key && arena.key == 68) {
-        car.speedX = 1;
         turnState = 1;
         driveState = 0;
         socket.emit('update', {
@@ -163,7 +203,6 @@ function updateArena() {
     }
     //up (w)
     if (arena.key && arena.key == 87) {
-        rCar.speedY = -1;
         turnState = 0;
         driveState = 1;
         socket.emit('update', {
@@ -174,20 +213,14 @@ function updateArena() {
     }
     //down (s)
     if (arena.key && arena.key == 83) {
-        rCar.speedY = 1;
-       turnState = 0;
-       driveState = -1;
+        turnState = 0;
+        driveState = -1;
         socket.emit('update', {
             turnState: turnState,
             rCarSpeedX: car.speedX,
             driveState: driveState
         });
     }
-    car.newPos();
-    car.update();
-
-    car.newPos();
-    car.update();
 }
 
 //Send the state to the backend

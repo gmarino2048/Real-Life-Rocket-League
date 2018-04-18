@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
 
@@ -8,41 +8,10 @@
     <link rel="stylesheet" href="carStyle.css">
 
 </head>
+<body>
 <meta charset="utf-8">
 <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script>
-    $(document).ready(function(){
-        var firstThing = $.ajax({
-            type: 'GET',
-            url: "/request/firstThing",
-            data: {},
-            async: false
-        });
 
-        var secondThing = $.ajax({
-            type: 'GET',
-            url: "/request/secondThing",
-            data: {},
-            async: false
-        });
-
-        var parsedFirstThing = JSON.parse(firstThing.responseText);
-        var parsedSecondThing = JSON.parse(secondThing.responseText);
-
-        for (var i=0; i<parsedFirstThing.length; i++){
-            var object = parsedFirstThing[i];
-
-
-        }
-		
-		for (var i=0; i<parsedSecondThing.length; i++){
-			var object = parsedSecondThing[i];
-		}
-    });
-
-</script>
-
-<body>
     <div id = "1" align = "center">
         <h2>Past Games</h2>
     </div>
