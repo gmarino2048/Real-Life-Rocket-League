@@ -2,8 +2,13 @@ var express = require('express');
 var http = require('http');
 var fs = require('fs');
 var app = express();
-var server = http.Server(app);
-var io = require('socket.io').listen(server);
+//var server = http.Server(app);
+
+var server = app.listen(9000, function(){
+    console.log("CONNECTED TO SERVER...")
+});
+
+
 const datagram = require('dgram');
 var net = require('net');
 var client = net.Socket();
@@ -25,10 +30,24 @@ var stdin = process.openStdin();
 
 var db = mongoose.connection;
 
+var socket = require('socket.io');
+
+//waits for client to make connection
+var io = socket(server);
+io.on('connection', function(socket){
+   console.log('connection made');
+
+   socket.on('update', function(data){
+       console.log('keypress logged');
+   });
+});
+
 var tcpIP = '172.20.12.100';
 var tcpPort = 9000;
 
 var results;
+
+
 
 /* ROUTERS
 var indexRouter = require('./routes/index');
@@ -61,13 +80,11 @@ app.get('/CarSoccer', function(request, response){
     response.sendFile(__dirname + '/Website_Code/CarSoccer.html');
 });
 
-app.use('/Website_Code', express.static(__dirname + '/Website_Code'));
+//app.use('/Website_Code', express.static(__dirname + '/Website_Code'));
+
+app.use(express.static('Website_Code'));
 
 app.use(express.static(path.join(__dirname + '/Website_Code')));
-server.listen(9000, 'localhost', function(){
-    console.log("Server2");
-
-});
 
 /* Route pages*/
 //app.use('/Welcome_Page', indexRouter);
@@ -76,6 +93,7 @@ server.listen(9000, 'localhost', function(){
 var urlencodedParser = bodyParser.urlencoded({extended: false});
 
 /** WELCOME PAGE GET & POST **/
+
 app.get('/Welcome_Page', function(request, response){
     response.sendFile(__dirname + '/Website_Code/Welcome_Page.html');
 });
@@ -120,15 +138,18 @@ app.post('/Welcome_Page', urlencodedParser, function(req, res){
 });
 
 /** THE GAME GET & POST REQUESTS **/
+
 app.get('/The_Game', function(request, response){
     response.sendFile(__dirname + '/Website_Code/The_Game.html');
 });
+
 
 app.post('/The_Game', function(request, response){
 
 
 });
 
+/** ANALYTICS GET & POST REQUESTS **/
 app.get('/Analytics', function(request, response){
     response.sendFile(__dirname + '/Website_Code/Analytics.html');
 });
@@ -161,7 +182,6 @@ app.use(expressValidator({
         };
     }
 }));
-
 
 // Express messages
 app.use(require('connect-flash')());
