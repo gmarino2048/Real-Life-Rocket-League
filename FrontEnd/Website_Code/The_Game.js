@@ -77,6 +77,9 @@ function component(width, height, color, x, y, type) {
         this.y += this.speedY;
     }
 }
+document.getElementById("buttonQ").onclick = function () {
+    location.href = "EndGame.html";
+}
 /*Key Pressed*/
 function updateArena() {
     arena.clear();
@@ -148,9 +151,7 @@ function updateArena() {
     rCar.newPos();
     rCar.update();
 }
-document.getElementById("buttonQ").onclick = function () {
-    location.href = "EndGame.html";
-}
+
 //Send the state to the backend
 function stateMap() {
     stateMap[0][0] = 9;
