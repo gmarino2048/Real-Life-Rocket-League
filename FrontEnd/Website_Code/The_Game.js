@@ -17,20 +17,18 @@
 var socket = io.connect("127.0.0.1:9000");
 
 //Car Code
-var rCar;
-var bCar;
+var car;
 var turnState;
 var driveState;
 var state;
 var boostState;
 var myBackground;
-var stateMap[][];
+var stateMap= new Array(3)(3);
 function startGame() {
-    /*bCar = new component(40, 40, "new-blue-car-cartoon-transportation-free-sports.png", 300, 120, "image");*/
-    rCar = new component(40, 40, "red_car.png", 540, 120, "image");
+    car = new component(40, 40, "red_car.png", 540, 120, "image");
+    myBackground = new component(880, 470, "soccer_field_311115.jpg", 0, 0, "image");
     carState = 0; //idleState
     turnState = 0; //idleState
-    myBackground = new component(880, 470, "soccer_field_311115.jpg", 0, 0, "image");
     arena.start();
 }
 var arena = {
@@ -88,15 +86,10 @@ function updateArena() {
     arena.clear();
     myBackground.newPos();
     myBackground.update();
-    rCar.newPos();
-    rCar.update();
-    rCar.speedX = 0;
-    rCar.speedY = 0;
-
-    /*bCar.newPos();
-    bCar.update();
-    bCar.speedX = 0;
-    bCar.speedY = 0;*/
+    car.newPos();
+    car.update();
+    car.speedX = 0;
+    car.speedY = 0;
 
     //If key is released or no key is pressed return to neutral state
 
@@ -104,67 +97,67 @@ function updateArena() {
 
     //left arrow
     if (arena.key && arena.key == 37) {
-        rCar.speedX = -1;
+        car.speedX = -1;
         turnState = -1;
         driveState = 0;
         socket.emit('update', {
             turnState: turnState,
-            rCarSpeedX: rCar.speedX,
+            carSpeedX: car.speedX,
             driveState: driveState
         });
     }
     //right arrow
     if (arena.key && arena.key == 39) {
-        rCar.speedX = 1;
+        car.speedX = 1;
         turnState = 1;
         driveState = 0;
         socket.emit('update', {
             turnState: turnState,
-            rCarSpeedX: rCar.speedX,
+            carSpeedX: car.speedX,
             driveState: driveState
         });
     }
     //up arrow
     if (arena.key && arena.key == 38) {
-        rCar.speedY = -1;
+        car.speedY = -1;
         turnState = 0;
         driveState = 1;
         socket.emit('update', {
             turnState: turnState,
-            rCarSpeedX: rCar.speedX,
+            carSpeedX: car.speedX,
             driveState: driveState
         });
     }
     //down arrow
     if (arena.key && arena.key == 40) {
-        rCar.speedY = 1;
+        car.speedY = 1;
         turnState = 0;
         driveState = -1;
         socket.emit('update', {
             turnState: turnState,
-            rCarSpeedX: rCar.speedX,
+            carSpeedX: car.speedX,
             driveState: driveState
         });
     }
     //left (a)
     if (arena.key && arena.key == 65) {
-        rCar.speedX = -1;
+        car.speedX = -1;
         turnState = -1;
         driveState = 0;
         socket.emit('update', {
             turnState: turnState,
-            rCarSpeedX: rCar.speedX,
+            carSpeedX: car.speedX,
             driveState: driveState
         });
     }
     //right (d)
     if (arena.key && arena.key == 68) {
-        rCar.speedX = 1;
+        car.speedX = 1;
         turnState = 1;
         driveState = 0;
         socket.emit('update', {
             turnState: turnState,
-            rCarSpeedX: rCar.speedX,
+            carSpeedX: car.speedX,
             driveState: driveState
         });
     }
@@ -175,7 +168,7 @@ function updateArena() {
         driveState = 1;
         socket.emit('update', {
             turnState: turnState,
-            rCarSpeedX: rCar.speedX,
+            carSpeedX: car.speedX,
             driveState: driveState
         });
     }
@@ -186,15 +179,15 @@ function updateArena() {
        driveState = -1;
         socket.emit('update', {
             turnState: turnState,
-            rCarSpeedX: rCar.speedX,
+            rCarSpeedX: car.speedX,
             driveState: driveState
         });
     }
-    rCar.newPos();
-    rCar.update();
+    car.newPos();
+    car.update();
 
-    rCar.newPos();
-    rCar.update();
+    car.newPos();
+    car.update();
 }
 
 //Send the state to the backend
