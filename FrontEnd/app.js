@@ -8,6 +8,7 @@ var server = app.listen(9000, function(){
     console.log("CONNECTED TO SERVER...")
 });
 
+//postman
 
 const datagram = require('dgram');
 var net = require('net');
@@ -32,21 +33,39 @@ var db = mongoose.connection;
 
 var socket = require('socket.io');
 
+
+var tcpIP = '172.20.12.100';
+var dbPort = 9000;
+var bytePort = 9000;
+
 //waits for client to make connection
 var io = socket(server);
 io.on('connection', function(socket){
    console.log('connection made');
 
-   socket.on('update', function(data){
-       console.log('keypress logged');
-   });
+   socket.on('update', function(data) {
+       console.log(data);
+
+       /**
+       client.connect(bytePort, tcpIP, function() {
+           console.log(JSON.stringify(req.body));
+           client.write(JSON.stringify(req.body));
+       });
+
+       client.on('data', function(data) {
+           var info = data;
+           console.log('Received: ' + data);
+           client.destroy(); // kill client after server's response
+       });
+
+       client.on('close', function() {
+           console.log('Connection closed');
+       });
+       console.log(JSON.stringify(req.body));
+
+        **/
+       });
 });
-
-var tcpIP = '172.20.12.100';
-var tcpPort = 9000;
-
-var results;
-
 
 
 /* ROUTERS
@@ -62,7 +81,6 @@ var usersRouter = require('./routes/users');
 app.get('/', function(request, response){
   response.sendFile(__dirname + '/Website_Code/index.html');
 });
-
 
 
 /* Key presses */
@@ -100,7 +118,7 @@ app.get('/Welcome_Page', function(request, response){
 
 // Gets info from LOGIN, SEND TO BACKEND TO VERIFY CREDENTIALS
 app.post('/Welcome_Page', urlencodedParser, function(req, res){
-    console.log("hello");
+
     client.connect(tcpPort, tcpIP, function() {
         console.log(JSON.stringify(req.body));
         client.write(JSON.stringify(req.body));
@@ -121,19 +139,25 @@ app.post('/Welcome_Page', urlencodedParser, function(req, res){
     var myObj = {
         name: "savi",
         job: 'student',
-        address: '234D'
-
+        address: '234D',
+        token: 'token'
     };
 
+    //token should be part of the JSON
+
     //send JSON to web
-    if (false){
-        res.redirect('/Game_Lobby');
-        res.end(JSON.stringify(myObj));
+    if (true){
+        res.redirect('/Game_Lobby?token=' + myObj.token);
     }
     else{
         res.end("Login failure. Please try again.");
     }
+    //send request to database server
 
+});
+
+//
+app.get('/data', function (req, res){
 
 });
 
@@ -146,46 +170,43 @@ app.get('/The_Game', function(request, response){
 
 app.post('/The_Game', function(request, response){
 
-
 });
 
 /** ANALYTICS GET & POST REQUESTS **/
 app.get('/Analytics', function(request, response){
     response.sendFile(__dirname + '/Website_Code/Analytics.html');
+
 });
 
-//Handle Sessions
-app.use(session({
-    secret: 'secret',
-    saveUninitialized: true,
-    resave: true
-}));
+//get for /data
+app.get('/data', function(request, response){
+   var token = request.query.token;
 
-//Passport
-app.use(passport.initialize());
-app.use(passport.session());
+    /**
+     client.connect(dbPort, tcpIP, function() {
+           console.log(token);
+           client.write(token);
+       });
 
-//Validator
-app.use(expressValidator({
-    errorFormatter: function(param, msg, value){
-        var namespace = param.split('.'),
-            root = namespace.shift(),
-            formParam = root;
+     client.on('data', function(data) {
+           var info = data;
+           console.log('Received: ' + data);
+           client.destroy(); // kill client after server's response
+       });
 
-        while(namespace.length){
-            formParam += '[' + namespace.shift() + ']';
-        }
-        return {
-            param: formParam,
-            msg: msg,
-            value: value
-        };
-    }
-}));
+     client.on('close', function() {
+           console.log('Connection closed');
+       });
+     console.log(JSON.stringify(req.body));
 
-// Express messages
-app.use(require('connect-flash')());
-app.use(function (req, res, next) {
-    res.locals.messages = require('express-messages')(req, res);
-    next();
+     **/
+
+   //send token to backend to get user data, get json back
+
+    response.json("insert json file");
+
+});
+
+app.get('End_Game', function (request, response){
+
 });

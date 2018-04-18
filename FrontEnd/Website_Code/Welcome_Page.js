@@ -9,6 +9,15 @@ window.onclick = function (event) {
 }
 var modal = document.getElementById('id02');
 
+window.onload = function(){
+  var userRequest = new Request('<url> authorize');
+  fetch (userRequest).then(function(response){
+     window.store = response.json();
+
+     getElementByID('name')
+  });
+};
+
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function (event) {
     if (event.target == modal) {

@@ -39,8 +39,17 @@ var arena = {
 
         window.addEventListener('keydown', function (e) {
             arena.key = e.keyCode;
-        })
+            socket.emit('update', JSON.stringify({
+                driveState: '2',
+                turnState: '0'
+            }));
+
+        });
         window.addEventListener('keyup', function (e) {
+            socket.emit('update', JSON.stringify({
+                driveState: '1',
+                turnState: '0'
+            }));
             arena.key = false;
         })
     },
