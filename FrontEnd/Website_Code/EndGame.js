@@ -10,18 +10,18 @@ $(document).ready(function () {
             console.log(data);
 
             var score = {
-                TeamA: [],
-                TeamB: []
+                RedCar: [],
+                BlueCar: []
             };
 
             var len = data.length;
 
             for (var i = 0; i < len; i++) {
-                if (data[i].team == "TeamA") {
-                    score.TeamA.push(data[i].score);
+                if (data[i].team == "RedCar") {
+                    score.RedCar.push(data[i].score);
                 }
-                else if (data[i].team == "TeamB") {
-                    score.TeamB.push(data[i].score);
+                else if (data[i].team == "BlueCar") {
+                    score.BlueCar.push(data[i].score);
                 }
             }
 
@@ -29,11 +29,11 @@ $(document).ready(function () {
             var ctx = $("#line-chartcanvas");
 
             var data = {
-                labels: ["match1", "match2", "match3", "match4", "match5"],
+                labels: ["Game1", "Game2", "Game3", "Game4", "Game5"],
                 datasets: [
                     {
-                        label: "TeamA score",
-                        data: score.TeamA,
+                        label: " Red score",
+                        data: score.RedCar,
                         backgroundColor: "blue",
                         borderColor: "lightblue",
                         fill: false,
@@ -41,8 +41,8 @@ $(document).ready(function () {
                         pointRadius: 5
                     },
                     {
-                        label: "TeamB score",
-                        data: score.TeamB,
+                        label: "Blue score",
+                        data: score.BlueCar,
                         backgroundColor: "green",
                         borderColor: "lightgreen",
                         fill: false,
