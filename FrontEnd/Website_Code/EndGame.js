@@ -32,7 +32,7 @@ $(document).ready(function () {
                 labels: ["Game1", "Game2", "Game3", "Game4", "Game5"],
                 datasets: [
                     {
-                        label: " Red score",
+                        label: "Red score",
                         data: score.RedCar,
                         backgroundColor: "blue",
                         borderColor: "lightblue",

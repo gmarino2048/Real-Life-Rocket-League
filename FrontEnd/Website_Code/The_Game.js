@@ -110,6 +110,7 @@ function startTimer() {
     }
     if (minute == 0 && second == 0) {
         document.getElementById('timer').innerHTML = minute + ":" + second;
+        window.location.href = 'EndGame.html';
         return;
     }
     document.getElementById('timer').innerHTML = minute + ":" + second;
