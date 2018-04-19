@@ -8,6 +8,7 @@ var server = app.listen(9000, function(){
     console.log("CONNECTED TO SERVER...")
 });
 
+//postman for testing
 
 const datagram = require('dgram');
 var net = require('net');
@@ -32,21 +33,28 @@ var db = mongoose.connection;
 
 var socket = require('socket.io');
 
+
+var IP = '172.19.38.180';
+var dbPort = 9009;
+var bytePort = 8001;
+
 //waits for client to make connection
 var io = socket(server);
 io.on('connection', function(socket){
    console.log('connection made');
 
-   socket.on('update', function(data){
-       console.log('keypress logged');
+   socket.on('update', function(data) {
+       console.log(data);
+       const dgram = require('dgram');
+       const message = new Buffer(data);
+       //const message = JSON.stringify(data);
+       const client = dgram.createSocket('udp4');
+       client.send(message, bytePort, IP, (err) => {
+           client.close();
+       });
+
    });
 });
-
-var tcpIP = '172.20.12.100';
-var tcpPort = 9000;
-
-var results;
-
 
 
 /* ROUTERS
@@ -62,7 +70,6 @@ var usersRouter = require('./routes/users');
 app.get('/', function(request, response){
   response.sendFile(__dirname + '/Website_Code/index.html');
 });
-
 
 
 /* Key presses */
@@ -100,15 +107,23 @@ app.get('/Welcome_Page', function(request, response){
 
 // Gets info from LOGIN, SEND TO BACKEND TO VERIFY CREDENTIALS
 app.post('/Welcome_Page', urlencodedParser, function(req, res){
-    console.log("hello");
-    client.connect(tcpPort, tcpIP, function() {
+
+    client.connect(dbPort, IP, function() {
         console.log(JSON.stringify(req.body));
         client.write(JSON.stringify(req.body));
     });
 
     client.on('data', function(data) {
-        var info = data;
-        console.log('Received: ' + data);
+        var info = JSON.parse(data);
+        console.log('Received: ' + JSON.stringify(info));
+
+        //if login success, send data to the web
+        if (info.queryResult == 'success'){
+            res.redirect('/Game_Lobby?token=' + info.username);
+        }
+        //else send an error page
+        else
+            res.end('Login failure. Please try again.');
         client.destroy(); // kill client after server's response
     });
 
@@ -117,23 +132,14 @@ app.post('/Welcome_Page', urlencodedParser, function(req, res){
     });
     console.log(JSON.stringify(req.body));
 
-    //sample JSON data
-    var myObj = {
-        name: "savi",
-        job: 'student',
-        address: '234D'
+    //token should be part of the JSON
 
-    };
+    //send request to database server
 
-    //send JSON to web
-    if (false){
-        res.redirect('/Game_Lobby');
-        res.end(JSON.stringify(myObj));
-    }
-    else{
-        res.end("Login failure. Please try again.");
-    }
+});
 
+//
+app.get('/data', function (req, res){
 
 });
 
@@ -146,46 +152,45 @@ app.get('/The_Game', function(request, response){
 
 app.post('/The_Game', function(request, response){
 
-
 });
 
 /** ANALYTICS GET & POST REQUESTS **/
 app.get('/Analytics', function(request, response){
     response.sendFile(__dirname + '/Website_Code/Analytics.html');
+
 });
 
-//Handle Sessions
-app.use(session({
-    secret: 'secret',
-    saveUninitialized: true,
-    resave: true
-}));
+//get for /data
+app.get('/data', function(request, response){
+   var token = request.query.token;
+   //query to get the information for specific user
 
-//Passport
-app.use(passport.initialize());
-app.use(passport.session());
+     client.connect(dbPort, IP, function() {
+           console.log(token);
+           client.write(token);
+       });
 
-//Validator
-app.use(expressValidator({
-    errorFormatter: function(param, msg, value){
-        var namespace = param.split('.'),
-            root = namespace.shift(),
-            formParam = root;
+     client.on('data', function(data) {
+           var info = data;
+           console.log('Received: ' + data);
+           client.destroy(); // kill client after server's response
+       });
 
-        while(namespace.length){
-            formParam += '[' + namespace.shift() + ']';
-        }
-        return {
-            param: formParam,
-            msg: msg,
-            value: value
-        };
-    }
-}));
+     client.on('close', function() {
+           console.log('Connection closed');
+       });
+     console.log(JSON.stringify(req.body));
 
-// Express messages
-app.use(require('connect-flash')());
-app.use(function (req, res, next) {
-    res.locals.messages = require('express-messages')(req, res);
-    next();
+
+
+   //send token to backend to get user data, get json back
+
+
+    response.json("insert json file");
+
+});
+
+
+app.get('End_Game', function (request, response){
+
 });
