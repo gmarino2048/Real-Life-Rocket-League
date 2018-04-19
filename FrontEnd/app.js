@@ -146,10 +146,10 @@ app.post('/Welcome_Page', urlencodedParser, function(req, res){
         console.log('Received: ' + JSON.stringify(info));
 
         //if login success, send data to the web
-        if (info.queryResult == 'success'){
+        if (info.queryResult == 'success') {
+            //res.redirect('/Game_Lobby');
             res.redirect('/Game_Lobby?token=' + info.username);
         }
-        //else send an error page
         else
             res.end('Login failure. Please try again.');
         client.destroy(); // kill client after server's response
