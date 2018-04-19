@@ -101,7 +101,7 @@ var usersRouter = require('./routes/users');
 /* Connect Welcome page to index */
 
 app.get('/', function (request, response) {
-    response.sendFile(__dirname + '/Website_Code/index.html');
+    response.sendFile(__dirname + '/index.html');
 });
 
 
@@ -109,22 +109,22 @@ app.get('/', function (request, response) {
 
 
 app.get('/Login_Page', function (request, response) {
-    response.sendFile(__dirname + '/Website_Code/Login_Page.html');
+    response.sendFile(__dirname + '/Login_Page.html');
 });
 
 app.get('/Game_Lobby', function (request, response) {
-    response.sendFile(__dirname + '/Website_Code/Game_Lobby.html');
+    response.sendFile(__dirname + '/Game_Lobby.html');
 });
 
 app.get('/CarSoccer', function (request, response) {
-    response.sendFile(__dirname + '/Website_Code/CarSoccer.html');
+    response.sendFile(__dirname + '/CarSoccer.html');
 });
 
 //app.use('/Website_Code', express.static(__dirname + '/Website_Code'));
 
-app.use(express.static('Website_Code'));
+app.use(express.static(''));
 
-app.use(express.static(path.join(__dirname + '/Website_Code')));
+app.use(express.static(path.join(__dirname + '')));
 
 /* Route pages*/
 //app.use('/Welcome_Page', indexRouter);
@@ -135,7 +135,7 @@ var urlencodedParser = bodyParser.urlencoded({extended: false});
 /** WELCOME PAGE GET & POST **/
 
 app.get('/Welcome_Page', function (request, response) {
-    response.sendFile(__dirname + '/Website_Code/Welcome_Page.html');
+    response.sendFile(__dirname + '/Welcome_Page.html');
 });
 
 // Gets info from LOGIN, SEND TO BACKEND TO VERIFY CREDENTIALS
@@ -173,13 +173,13 @@ app.post('/Welcome_Page', urlencodedParser, function (req, res) {
 /** THE GAME GET & POST REQUESTS **/
 
 app.get('/The_Game', function (request, response) {
-    response.sendFile(__dirname + '/Website_Code/The_Game.html');
+    response.sendFile(__dirname + '/The_Game.html');
 });
 
 
 /** ANALYTICS GET & POST REQUESTS **/
 app.get('/Analytics', function (request, response) {
-    response.sendFile(__dirname + '/Website_Code/Analytics.html');
+    response.sendFile(__dirname + '/Analytics.html');
 
 });
 
@@ -225,6 +225,7 @@ app.get('/EndGame', function (request, response) {
 
 app.get('/Final_Game_Stats', function (req, res){
 
+
     var json = {
         queryType: 'recentGame',
         player1: '123',
@@ -242,7 +243,15 @@ app.get('/Final_Game_Stats', function (req, res){
         var info = JSON.parse(data);
 
         console.log('Received: ' + JSON.stringify(info));
-        res.end(JSON.stringify(info));
+
+        var html = '<!DOCTYPE html>'
+            + '<html>' + '<head>' +         '<link rel="stylesheet" href="carStyle.css">' + '</head>' +
+
+            '<header>' + '<h1>' + 'Winner: ' + info.winner + '!!!!<h1>' +
+            '</header><body><h1><br />' + '\n' + info.player1 + ' score: ' +
+            info.player1Score + '<br />' + info.player2 +
+            ' score: ' + info.player2Score + '</h1></body></html>';
+        res.end(html);
     });
 
     client.on('close', function () {
