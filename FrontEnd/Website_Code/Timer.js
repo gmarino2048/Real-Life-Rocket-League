@@ -7,8 +7,13 @@ function doAnimation(timestamp) {
     // Calculate animation progress
     var progress = 0;
 
-    if (startTime < 0) {
+    if (startTime == 0) {
         startTime = timestamp;
+        socket.emit('endGame', {
+           queryType: 'endGame',
+           player1: 'P1',
+           player2: 'P2'
+        });
     } else {
         progress = timestamp - startTime;
     }
