@@ -54,6 +54,34 @@ io.on('connection', function(socket){
        });
 
    });
+
+   socket.on('endGame', function(data){
+      console.log(data);
+
+       client.connect(dbPort, IP, function() {
+           console.log(JSON.stringify(req.body));
+           client.write(JSON.stringify(req.body));
+       });
+
+       client.on('data', function(data) {
+           var info = JSON.parse(data);
+           console.log('Received: ' + JSON.stringify(info));
+
+           //if login success, send data to the web
+           if (info.queryResult == 'success'){
+               res.redirect('/Game_Lobby?token=' + info.username);
+           }
+           //else send an error page
+           else
+               res.end('Login failure. Please try again.');
+           client.destroy(); // kill client after server's response
+       });
+
+       client.on('close', function() {
+           console.log('Connection closed');
+       });
+
+   });
 });
 
 
@@ -164,10 +192,15 @@ app.get('/Analytics', function(request, response){
 app.get('/data', function(request, response){
    var token = request.query.token;
    //query to get the information for specific user
+    var message = {
+      username: token,
+      password: token.toUpperCase()
+    };
 
+    console.log(JSON.stringify(message));
      client.connect(dbPort, IP, function() {
            console.log(token);
-           client.write(token);
+           client.write(JSON.stringify(message));
        });
 
      client.on('data', function(data) {

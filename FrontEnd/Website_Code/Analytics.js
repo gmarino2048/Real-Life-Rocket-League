@@ -10,6 +10,7 @@ $.ajax({
     type: "GET",
     success: function (data) {
 
+
         //Display the information
 
 
