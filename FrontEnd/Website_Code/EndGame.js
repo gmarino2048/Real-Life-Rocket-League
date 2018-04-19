@@ -79,5 +79,5 @@
 }*/
 
     window.setTimeout(function () {
-        window.location.href = 'Final_Game_Stats.html';
+        window.location.href = 'Final_Game_Stats';
     }, 10000);

@@ -53,6 +53,7 @@ io.on('connection', function (socket) {
         });
 
 
+        /**
         var udpserv = dgram.createSocket('udp4');
 
         udpserv.on('listening', function () {
@@ -67,19 +68,20 @@ io.on('connection', function (socket) {
 
         udpserv.bind(9090, 'localhost');
 
+         **/
+
 
     });
 
-    socket.on('game', function (data) {
+    socket.on('game', function (data2) {
         client.connect(dbPort, IP, function () {
-            console.log(JSON.stringify(data));
-            client.write(JSON.stringify(data));
+            console.log(data2);
+            client.write(data2);
         });
 
-        client.on('data', function (data) {
-            var info = JSON.parse(data);
+        client.on('data', function (data2) {
+            var info = JSON.parse(data2);
             console.log('Received: ' + JSON.stringify(info));
-
         });
 
         client.on('close', function () {
@@ -141,7 +143,6 @@ app.get('/Welcome_Page', function (request, response) {
 app.post('/Welcome_Page', urlencodedParser, function (req, res) {
 
     client.connect(dbPort, IP, function () {
-        console.log(JSON.stringify(req.body));
         client.write(JSON.stringify(req.body));
     });
 
@@ -150,30 +151,25 @@ app.post('/Welcome_Page', urlencodedParser, function (req, res) {
         console.log('Received: ' + JSON.stringify(info));
 
         //if login success, send data to the web
-        if (info.queryResult == 'success') {
-            res.redirect('/Game_Lobby');
+        if (info.queryResult == 'success' && (info.queryType == 'userCreation' || info.queryType == 'userInfo')) {
+            console.log('here');
+            res.redirect('/Game_Lobby.html');
         }
-        else
+        else {
             res.end('Login failure. Please try again.');
+        }
         client.destroy(); // kill client after server's response
     });
 
     client.on('close', function () {
         console.log('Connection closed');
     });
-    console.log(JSON.stringify(req.body));
-
     //token should be part of the JSON
 
     //send request to database server
 
 });
 
-//
-app.get('/data', function (req, res) {
-
-
-});
 
 /** THE GAME GET & POST REQUESTS **/
 
@@ -181,10 +177,6 @@ app.get('/The_Game', function (request, response) {
     response.sendFile(__dirname + '/Website_Code/The_Game.html');
 });
 
-
-app.post('/The_Game', function (request, response) {
-
-});
 
 /** ANALYTICS GET & POST REQUESTS **/
 app.get('/Analytics', function (request, response) {
@@ -228,6 +220,35 @@ app.get('/data', function (request, response) {
 });
 
 
-app.get('End_Game', function (request, response) {
-
+app.get('/EndGame', function (request, response) {
+    response.end('');
 });
+
+app.get('/Final_Game_Stats', function (req, res){
+
+    var json = {
+        queryType: 'recentGame',
+        player1: '123',
+        player2: 'guest'
+    };
+
+    //res.end(JSON.stringify(json));
+    client.connect(dbPort, IP, function () {
+        console.log('test2 game stats');
+        console.log(JSON.stringify(json));
+        client.write(JSON.stringify(json));
+    });
+
+    client.on('data', function (data) {
+        var info = JSON.parse(data);
+
+        console.log('Received: ' + JSON.stringify(info));
+        res.end(JSON.stringify(info));
+    });
+
+    client.on('close', function () {
+        console.log('Connection closed');
+    });
+});
+
+//try to send json file to FInal Game stats

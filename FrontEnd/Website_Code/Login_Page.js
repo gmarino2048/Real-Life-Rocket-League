@@ -1,14 +1,5 @@
 newFunction();
 
-/**
- *        socket.emit('game', JSON.stringify({
-            queryType: 'gameCreation',
-            player1: '1',
-            player2: 'guest'
-        }));
- */
-
-var socket = io.connect("127.0.0.1:9000");
 
 function newFunction() {
     document.getElementById("playGame").onclick = function () {

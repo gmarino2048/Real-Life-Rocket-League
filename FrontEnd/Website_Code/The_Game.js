@@ -29,15 +29,19 @@
 
 
 var socket = io.connect("127.0.0.1:9000");
+
 socket.emit('game',  JSON.stringify({
-    queryType: 'gameCreation'
+    queryType: 'gameCreation',
+    player1: '123',
+    player2: 'guest'
 }));
+
 
 const newLocal = document.getElementById("buttonQ").onclick = function () {
     location.href = "EndGame.html";
     socket.emit('update', JSON.stringify({
         player: 1,
-        command: -1
+        command: 11
     }));
 };
 
