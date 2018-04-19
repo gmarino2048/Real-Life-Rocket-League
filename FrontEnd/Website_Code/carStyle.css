@@ -93,29 +93,6 @@ body {
 /*EndGame*/
 
 /*Game_Lobby*/
-buttonSet {
-    background-color: red;
-    color: white;
-    padding: 20px 26px;
-    margin: 8px 0;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    font-size: 24px;
-    text-align: center;
-    border: none;
-    border-radius: 15px;
-    position: absolute;
-    top: 60%;
-    left: 45%;
-    position: absolute;
-    transform: translate(-200%,80%);
-    margin-top: 450px;
-}
-
-    buttonSet:hover {
-        opacity: 0.8;
-    }
 
 buttonGame {
     background-color: red;
@@ -133,7 +110,7 @@ buttonGame {
     top: 60%;
     left: 48%;
     position: absolute;
-    transform: translate(-30%,80%);
+    transform: translate(-80%,80%);
     margin-top: 450px;
 }
 
@@ -157,7 +134,7 @@ buttonStat {
     top: 60%;
     left: 50%;
     position: absolute;
-    transform: translate(150%,80%);
+    transform: translate(130%,80%);
     margin-top: 450px;
 }
 
