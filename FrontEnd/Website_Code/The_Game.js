@@ -46,7 +46,7 @@ function startGame() {
     car = new component(40, 40, "red_car.png", 540, 120, "image");
     myBackground = new component(880, 470, "soccer_field_311115.jpg", 0, 0, "image");
     arena.start();
-    document.getElementById('timer').innerHTML = 00 + ": " + 10;
+    document.getElementById('timer').innerHTML = 01 + ": " + 01;
     startTimer();
 }
 
