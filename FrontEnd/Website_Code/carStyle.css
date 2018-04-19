@@ -91,11 +91,28 @@ body {
 }
 
 /*EndGame*/
+.bgimg1 {
+    background-color: black;
+    min-height: 100%;
+    background-position: center;
+    background-size: cover;
+}
 .container1 {
     position: relative;
     text-align: center;
     color: white;
-    top: 30%;
+}
+.centered1 {
+    color: Red;
+    font-size: 300px;
+    font-family: "Bookman", "URW Bookman L", serif;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    left: 0;
+    line-height: 200px;
+    margin-top: -100px;
+    transform: translate(-0%,-125%);
 }
 /*Game_Lobby*/
 
