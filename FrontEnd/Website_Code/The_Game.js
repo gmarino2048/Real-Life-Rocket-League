@@ -110,7 +110,11 @@ function startTimer() {
     var minute = timeArray[0];
     var second = checkSecond((timeArray[1] - 1));
     if (second == 59) {
-        minute = minute - 1
+        minute = minute - 1;
+    }
+    if (minute == 0 && second == 0) {
+        document.getElementById('timer').innerHTML = minute + ":" + second;
+        return;
     }
     document.getElementById('timer').innerHTML = minute + ":" + second;
     setTimeout(startTimer, 1000);
@@ -125,7 +129,7 @@ function checkSecond(sec) {
             player1: '',
             player2: ''
         });
-    if (sec< 0) {
+    if (sec < 0) {
         sec = "59"
     };
     return sec;
