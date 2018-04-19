@@ -32,7 +32,7 @@ var socket = io.connect("127.0.0.1:9000");
 
 socket.emit('game',  JSON.stringify({
     queryType: 'gameCreation',
-    player1: '123/',
+    player1: '123',
     player2: 'guest'
 }));
 

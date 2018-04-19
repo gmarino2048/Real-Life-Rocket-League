@@ -34,7 +34,7 @@ var db = mongoose.connection;
 var socket = require('socket.io');
 
 
-var IP = '172.19.38.180';
+var IP = '172.19.35.166';
 var dbPort = 9009;
 var bytePort = 8001;
 
@@ -149,6 +149,7 @@ app.post('/Welcome_Page', urlencodedParser, function (req, res) {
         var info = JSON.parse(data);
         console.log('Received: ' + JSON.stringify(info));
 
+	//res.redirect('/Game_Lobby.html');
         //if login success, send data to the web
         if (info.queryResult == 'success' && (info.queryType == 'userCreation' || info.queryType == 'userInfo')) {
             console.log('here');
