@@ -36,7 +36,6 @@ const newLocal = document.getElementById("buttonQ").onclick = function () {
 
 //Car Code
 var car;
-var state;
 var myBackground;
 
 function startGame() {
@@ -104,39 +103,28 @@ function startTimer() {
 
     var presentTime = document.getElementById('timer').innerHTML;
     var timeArray = presentTime.split(/[:]+/);
-    var min = timeArray[0];
-    var sec = checkSecond((timeArray[1] - 1));
-    if (sec == 59) { min = min - 1 }
-
-   
-
-    document.getElementById('timer').innerHTML = m + ":" + s;
+    var minute = timeArray[0];
+    var second = checkSecond((timeArray[1] - 1));
+    if (second == 59) {
+        minute = minute - 1
+    }
+    document.getElementById('timer').innerHTML = minute + ":" + second;
     setTimeout(startTimer, 1000);
 }
 
 function checkSecond(sec) {
-    if (sec ==0 && m== 0){
+    if (sec < 10 && sec >= 0) {
+        sec = "0" + sec
+    };
         socket.emit('endGame', {
             queryType: 'endGame',
             player1: '',
             player2: ''
         });
-    }
-    if (sec < 10 && sec >= 0) {
-        sec = "0" + sec
-    }
-    ; // add zero in front of numbers < 10
-    if (sec== 0) {
+    if (sec< 0) {
         sec = "59"
-    }
-
-    ;
+    };
     return sec;
-}
-
-//Redirect
-if (min == 0 && sec == 0) {
-    setTimeout("location.href = 'EndGame.html';, 1000");
 }
 
 /*Key Pressed*/
