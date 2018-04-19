@@ -45,13 +45,29 @@ io.on('connection', function(socket){
 
    socket.on('update', function(data) {
        console.log(data);
-       const dgram = require('dgram');
+       var dgram = require('dgram');
        const message = new Buffer(data);
-       //const message = JSON.stringify(data);
        const client = dgram.createSocket('udp4');
        client.send(message, bytePort, IP, (err) => {
            client.close();
        });
+
+       if (data.command == -1){
+           var udpserv = dgram.createSocket('udp4');
+
+           udpserv.on('listening', function () {
+               var address = udpserv.address();
+               console.log('UDP Server listening on ' + address.address + ":" + address.port);
+           });
+
+           server.on('message', function (message, remote) {
+               console.log(remote.address + ':' + remote.port +' - ' + message);
+
+           });
+
+           udpserv.bind(9090, 'localhost');
+       }
+
    });
 });
 
