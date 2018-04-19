@@ -3,26 +3,12 @@
 var startTime = -1;
 var animationLength = 2000; // Animation length in milliseconds
 
-var params = new URLSearchParams(window.location.search);
-window.localStorage.token = params.get(token);
-
-//queryType: recentGame
-//player1: ''
-//player2: ''
-var socket = io.connect("127.0.0.1:9000");
-
 function doAnimation(timestamp) {
     // Calculate animation progress
     var progress = 0;
 
     if (startTime < 0) {
         startTime = timestamp;
-        socket.emit('endGame', JSON.stringify({
-            queryType: 'recentGame',
-            player1: window.localStorage.token,
-            player2: window.localStorage.token
-        }));
-
     } else {
         progress = timestamp - startTime;
     }

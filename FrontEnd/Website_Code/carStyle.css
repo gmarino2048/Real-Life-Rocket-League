@@ -7,6 +7,20 @@ body {
 
 /*Analytics*/
 
+/*Boost*/
+.myProgress {
+    width: 100%;
+    background-color: grey;
+    top: 0%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.myBar{
+    width: 1%;
+    height: 30px;
+    background-color: red;
+}
+
 /*CarSoccer*/
 .bgimg {
     background-color: black;
@@ -25,7 +39,6 @@ body {
     background-color:red;
     border: none;
     border-radius: 15px;
-    position: absolute;
     top:60%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -270,6 +283,13 @@ buttonQ {
         box-shadow: 0 5px #666;
         transform: translate3d(4px)
     }
+/*Timer*/
+div{
+    background-color: red;
+    color: white;
+    font-size:20px;
+    text-align:center;
+}
 /*Welcome_Page*/
 input[type=text], input[type=password] {
     width: 100%;
