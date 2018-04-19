@@ -29,6 +29,9 @@
 
 
 var socket = io.connect("127.0.0.1:9000");
+socket.emit('game',  JSON.stringify({
+    queryType: 'gameCreation'
+}));
 
 const newLocal = document.getElementById("buttonQ").onclick = function () {
     location.href = "EndGame.html";
