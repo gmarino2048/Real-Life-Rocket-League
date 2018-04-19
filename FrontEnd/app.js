@@ -122,7 +122,7 @@ app.get('/CarSoccer', function (request, response) {
 
 //app.use('/Website_Code', express.static(__dirname + '/Website_Code'));
 
-app.use(express.static(''));
+//app.use(express.static(''));
 
 app.use(express.static(path.join(__dirname + '')));
 
