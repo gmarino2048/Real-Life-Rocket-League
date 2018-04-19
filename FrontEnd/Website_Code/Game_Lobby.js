@@ -6,8 +6,7 @@ $.ajax({
     url: "http://localhost/data?token=" + window.localStorage.token,
     type: "GET",
     success: function (data) {
-
-
+        //Display the information
     },
     error: function (data) {
         console.log(data);

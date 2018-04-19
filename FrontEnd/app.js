@@ -8,7 +8,7 @@ var server = app.listen(9000, function(){
     console.log("CONNECTED TO SERVER...")
 });
 
-//postman
+//postman for testing
 
 const datagram = require('dgram');
 var net = require('net');
@@ -34,9 +34,9 @@ var db = mongoose.connection;
 var socket = require('socket.io');
 
 
-var tcpIP = '172.20.12.100';
-var dbPort = 9000;
-var bytePort = 9000;
+var IP = '172.19.38.180';
+var dbPort = 9009;
+var bytePort = 8001;
 
 //waits for client to make connection
 var io = socket(server);
@@ -45,26 +45,15 @@ io.on('connection', function(socket){
 
    socket.on('update', function(data) {
        console.log(data);
-
-       /**
-       client.connect(bytePort, tcpIP, function() {
-           console.log(JSON.stringify(req.body));
-           client.write(JSON.stringify(req.body));
+       const dgram = require('dgram');
+       const message = new Buffer(data);
+       //const message = JSON.stringify(data);
+       const client = dgram.createSocket('udp4');
+       client.send(message, bytePort, IP, (err) => {
+           client.close();
        });
 
-       client.on('data', function(data) {
-           var info = data;
-           console.log('Received: ' + data);
-           client.destroy(); // kill client after server's response
-       });
-
-       client.on('close', function() {
-           console.log('Connection closed');
-       });
-       console.log(JSON.stringify(req.body));
-
-        **/
-       });
+   });
 });
 
 
@@ -119,14 +108,22 @@ app.get('/Welcome_Page', function(request, response){
 // Gets info from LOGIN, SEND TO BACKEND TO VERIFY CREDENTIALS
 app.post('/Welcome_Page', urlencodedParser, function(req, res){
 
-    client.connect(tcpPort, tcpIP, function() {
+    client.connect(dbPort, IP, function() {
         console.log(JSON.stringify(req.body));
         client.write(JSON.stringify(req.body));
     });
 
     client.on('data', function(data) {
-        var info = data;
-        console.log('Received: ' + data);
+        var info = JSON.parse(data);
+        console.log('Received: ' + JSON.stringify(info));
+
+        //if login success, send data to the web
+        if (info.queryResult == 'success'){
+            res.redirect('/Game_Lobby?token=' + info.username);
+        }
+        //else send an error page
+        else
+            res.end('Login failure. Please try again.');
         client.destroy(); // kill client after server's response
     });
 
@@ -135,23 +132,8 @@ app.post('/Welcome_Page', urlencodedParser, function(req, res){
     });
     console.log(JSON.stringify(req.body));
 
-    //sample JSON data
-    var myObj = {
-        name: "savi",
-        job: 'student',
-        address: '234D',
-        token: 'token'
-    };
-
     //token should be part of the JSON
 
-    //send JSON to web
-    if (true){
-        res.redirect('/Game_Lobby?token=' + myObj.token);
-    }
-    else{
-        res.end("Login failure. Please try again.");
-    }
     //send request to database server
 
 });
@@ -181,9 +163,9 @@ app.get('/Analytics', function(request, response){
 //get for /data
 app.get('/data', function(request, response){
    var token = request.query.token;
+   //query to get the information for specific user
 
-    /**
-     client.connect(dbPort, tcpIP, function() {
+     client.connect(dbPort, IP, function() {
            console.log(token);
            client.write(token);
        });
@@ -199,13 +181,15 @@ app.get('/data', function(request, response){
        });
      console.log(JSON.stringify(req.body));
 
-     **/
+
 
    //send token to backend to get user data, get json back
+
 
     response.json("insert json file");
 
 });
+
 
 app.get('End_Game', function (request, response){
 

@@ -11,6 +11,20 @@
  * 8, Reverse+Left - driveState = 2, turnState = 2
  * 9, Brake - driveState = 0, turnState = 0
  * 10, Boost - boostState = 1
+ *
+ *
+ * forward 1
+ * wheels right 2
+ * reverse 3
+ * wheels left 4
+ * drive right 5
+ * drive left 6
+ * reverse right 7
+ * reverse left 8
+ * brake 9
+ * boost 10
+ *
+ *
  */
 
 
@@ -39,19 +53,13 @@ var arena = {
 
         window.addEventListener('keydown', function (e) {
             arena.key = e.keyCode;
-            socket.emit('update', JSON.stringify({
-                driveState: '2',
-                turnState: '0'
-            }));
+
 
         });
         window.addEventListener('keyup', function (e) {
-            socket.emit('update', JSON.stringify({
-                driveState: '1',
-                turnState: '0'
-            }));
             arena.key = false;
-        })
+        });
+
     },
     clear: function () {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -98,38 +106,77 @@ function updateArena() {
     //left arrow
     if (arena.key && arena.key == 37) {
         car.speedX = -1;
+        socket.emit('update', JSON.stringify({
+            player: 1,
+            command: 1
+        }));
+
     }
     //right arrow
     if (arena.key && arena.key == 39) {
         car.speedX = 1;
+        socket.emit('update', JSON.stringify({
+            player: 1,
+            command: 2
+
+        }));
     }
     //up arrow
     if (arena.key && arena.key == 38) {
         car.speedY = -1;
+        socket.emit('update', JSON.stringify({
+            player: 1,
+            command: 3
+
+        }));
     }
     //down arrow
     if (arena.key && arena.key == 40) {
         car.speedY = 1;
+        socket.emit('update', JSON.stringify({
+            player: 1,
+            command: 4
+
+        }));
     }
     //left (a)
     if (arena.key && arena.key == 65) {
         car.speedX = -1;
+        socket.emit('update', JSON.stringify({
+            player: 1,
+            command: 5
+
+        }));
     }
     //right (d)
     if (arena.key && arena.key == 68) {
         car.speedX = 1;
+        socket.emit('update', JSON.stringify({
+            player: 2,
+            command: 0
+
+        }));
     }
     //up (w)
     if (arena.key && arena.key == 87) {
         car.speedY = -1;
+        socket.emit('update', JSON.stringify({
+            player: 2,
+            command: 1
+
+        }));
     }
     //down (s)
     if (arena.key && arena.key == 83) {
        car.speedY = 1;
+        socket.emit('update', JSON.stringify({
+            player: 2,
+            command: 1,
+
+        }));
     }
     car.newPos();
     car.update();
-
     car.newPos();
     car.update();
 }
