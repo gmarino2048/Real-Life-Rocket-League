@@ -284,7 +284,7 @@ buttonQ {
         transform: translate3d(4px)
     }
 /*Timer*/
-div{
+timeDiv{
     background-color: red;
     color: white;
     font-size:20px;

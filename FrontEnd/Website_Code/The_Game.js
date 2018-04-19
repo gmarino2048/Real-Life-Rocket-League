@@ -43,9 +43,10 @@ function startGame() {
     car = new component(40, 40, "red_car.png", 540, 120, "image");
     myBackground = new component(880, 470, "soccer_field_311115.jpg", 0, 0, "image");
     arena.start();
-    document.getElementById('timer').innerHTML = 03 + ":" + 00;
+    document.getElementById('timer').innerHTML = 00 + ": " + 10;
     startTimer();
 }
+
 var arena = {
     canvas: document.createElement("canvas"), start: function () {
         this.canvas.width = 880;
@@ -69,6 +70,7 @@ var arena = {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 }
+
 function component(width, height, color, x, y, type) {
     this.type = type;
     if (type == "image") {
@@ -98,24 +100,43 @@ function component(width, height, color, x, y, type) {
 }
 
 
-
 function startTimer() {
-   
+
     var presentTime = document.getElementById('timer').innerHTML;
     var timeArray = presentTime.split(/[:]+/);
-    var m = timeArray[0];
-    var s = checkSecond((timeArray[1] - 1));
-    if (s == 59) { m = m - 1 }
-    if(m<0){alert('timer completed')}
+    var min = timeArray[0];
+    var sec = checkSecond((timeArray[1] - 1));
+    if (sec == 59) { min = min - 1 }
+
+   
 
     document.getElementById('timer').innerHTML = m + ":" + s;
     setTimeout(startTimer, 1000);
 }
 
 function checkSecond(sec) {
-    if (sec < 10 && sec >= 0) { sec = "0" + sec }; // add zero in front of numbers < 10
-    if (sec < 0) { sec = "59" };
+    if (sec ==0 && m== 0){
+        socket.emit('endGame', {
+            queryType: 'endGame',
+            player1: '',
+            player2: ''
+        });
+    }
+    if (sec < 10 && sec >= 0) {
+        sec = "0" + sec
+    }
+    ; // add zero in front of numbers < 10
+    if (sec== 0) {
+        sec = "59"
+    }
+
+    ;
     return sec;
+}
+
+//Redirect
+if (min == 0 && sec == 0) {
+    setTimeout("location.href = 'EndGame.html';, 1000");
 }
 
 /*Key Pressed*/
@@ -193,7 +214,7 @@ function updateArena() {
     }
     //down (s)
     if (arena.key && arena.key == 83) {
-       car.speedY = 1;
+        car.speedY = 1;
         socket.emit('update', JSON.stringify({
             player: 2,
             command: 1,
@@ -203,7 +224,11 @@ function updateArena() {
 
     //Boost
     if (arena.key && arena.key == 32) {
-        //command
+        socket.emit('update', JSON.stringify({
+            player: 2,
+            command: 10,
+
+        }));
     }
     car.newPos();
     car.update();
