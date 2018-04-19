@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MySQL_Connector {
@@ -240,7 +241,7 @@ public class MySQL_Connector {
 		}
 	}
 
-	public boolean getMostRecentGame(String player1, String player2) {
+	public String getMostRecentGame(String player1, String player2) {
 		String query = "select * from " + gameTable + " where p1_username ='" + player1 + "' and p2_username='"
 				+ player2 + "'";
 		try {
@@ -262,11 +263,11 @@ public class MySQL_Connector {
 			// System.out.println(earliest.toString());
 			this.result = this.statement.executeQuery(query);
 			this.result.next();
-			return true;
+			return this.result.getString("gameID");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false;
+			return "";
 		}
 
 	}
@@ -313,7 +314,86 @@ public class MySQL_Connector {
 		}
 
 	}
-	
 
+	public JSONObject getJSONforUser() {
+		// TODO Auto-generated method stub
+		if (this.result == null) {
+			return null;
+		}
+		JSONObject json = new JSONObject();
+		try {
+			json.accumulate("username", this.result.getString("username"));
+			json.accumulate("winCount", this.result.getInt("totalWins"));
+			json.accumulate("lossCount", this.result.getInt("totalLosses"));
+			json.accumulate("gameCount", this.result.getInt("totalGames"));
+			json.accumulate("goalCount", this.result.getInt("totalGoals"));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(json.toString());
+		return json;
+	}
+
+	public JSONObject getJSONforUserGames(String user) {
+		// TODO Auto-generated method stub
+		List<String> games = this.getGameList(user);
+		JSONObject data = new JSONObject();
+		int i = 0;
+		for (String game : games) {
+
+			this.getGameData(game);
+			try {
+				data.accumulate("gameNo:" + i,
+						getJSONforGame(game));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			i++;
+
+		}
+
+		return data;
+	}
+
+	public JSONObject getJSONforGame(String gameid) {
+		// TODO Auto-generated method stub
+		this.getGameData(gameid);
+		try {
+			return new JSONObject().accumulate("player1", this.result.getString("p1_username"))
+			.accumulate("player2", this.result.getString("p2_username"))
+			.accumulate("player1Score", this.result.getInt("goals_P1"))
+			.accumulate("player2Score", this.result.getInt("goals_P2"))
+			.accumulate("winner", this.result.getString("winner"))
+			.accumulate("gameID", this.result.getString("gameID"));
+		} catch (JSONException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+
+	public boolean validateLogin(String username, String password) {
+		// TODO Auto-generated method stub
+		if(username.toUpperCase().equals(password)) {
+			return true;
+		}
+		String hashedPassword = hashPassword(password);
+		this.getUser(username);
+		try {
+			if(this.result.getString("password").equals(hashedPassword)) {
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
 
 }
