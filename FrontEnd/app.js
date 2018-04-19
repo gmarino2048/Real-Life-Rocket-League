@@ -70,7 +70,6 @@ io.on('connection', function (socket) {
 
          **/
 
-
     });
 
     socket.on('game', function (data2) {

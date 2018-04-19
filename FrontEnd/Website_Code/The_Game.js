@@ -32,7 +32,7 @@ var socket = io.connect("127.0.0.1:9000");
 
 socket.emit('game',  JSON.stringify({
     queryType: 'gameCreation',
-    player1: '123',
+    player1: '123/',
     player2: 'guest'
 }));
 
@@ -220,8 +220,8 @@ function updateArena() {
     if (arena.key && arena.key == 83) {
         car.speedY = 1;
         socket.emit('update', JSON.stringify({
-            player: 2,
-            command: 1,
+            player: 1,
+            command: 9,
 
         }));
     }
