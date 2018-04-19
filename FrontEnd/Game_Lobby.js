@@ -12,10 +12,13 @@ $.ajax({
         console.log(data);
     }
 });*/
+document.getElementById("game").onclick = function () {
+    location.href = "Login_Page.html";
+}
 
-    document.getElementById("game").onclick = function () {
-        location.href = "Login_Page.html";
-    };
-    document.getElementById("stats").onclick = function () {
-        location.href = "Analytics.html";
-    };
+document.getElementById("logout").onclick = function () {
+    location.href = "Index.html";
+}
+document.getElementById("stats").onclick = function () {
+    location.href = "Analytics.html";
+}
