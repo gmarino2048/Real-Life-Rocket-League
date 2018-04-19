@@ -91,7 +91,12 @@ body {
 }
 
 /*EndGame*/
-
+.container1 {
+    position: relative;
+    text-align: center;
+    color: white;
+    top: 30%;
+}
 /*Game_Lobby*/
 
 buttonGame {

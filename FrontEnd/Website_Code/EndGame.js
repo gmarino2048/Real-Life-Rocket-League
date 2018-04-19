@@ -1,8 +1,7 @@
-$(document).ready(function () {
+/*$(document).ready(function () {*/
 
 	/**
 	 * call the data.php file to fetch the result from db table.
-	 */
     $.ajax({
         url: "http://localhost/chartjs2/api/data.php",
         type: "GET",
@@ -77,4 +76,8 @@ $(document).ready(function () {
             console.log(data);
         }
     });
-}
+}*/
+
+    window.setTimeout(function () {
+        window.location.href = 'Final_Game_Stats.html';
+    }, 10000);
