@@ -19,14 +19,18 @@ var socket = io.connect("127.0.0.1:9000");
 const newLocal = document.getElementById("buttonQ").onclick = function () {
     location.href = "EndGame.html";
 };
+
 //Car Code
 var car;
 var state;
 var myBackground;
+
 function startGame() {
     car = new component(40, 40, "red_car.png", 540, 120, "image");
     myBackground = new component(880, 470, "soccer_field_311115.jpg", 0, 0, "image");
     arena.start();
+    document.getElementById('timer').innerHTML = 03 + ":" + 00;
+    startTimer();
 }
 var arena = {
     canvas: document.createElement("canvas"), start: function () {
@@ -74,6 +78,28 @@ function component(width, height, color, x, y, type) {
         this.x += this.speedX;
         this.y += this.speedY;
     }
+}
+
+
+
+function startTimer() {
+   
+    var presentTime = document.getElementById('timer').innerHTML;
+    var timeArray = presentTime.split(/[:]+/);
+    var m = timeArray[0];
+    var s = checkSecond((timeArray[1] - 1));
+    if (s == 59) { m = m - 1 }
+    //if(m<0){alert('timer completed')}
+
+    document.getElementById('timer').innerHTML =
+        m + ":" + s;
+    setTimeout(startTimer, 1000);
+}
+
+function checkSecond(sec) {
+    if (sec < 10 && sec >= 0) { sec = "0" + sec }; // add zero in front of numbers < 10
+    if (sec < 0) { sec = "59" };
+    return sec;
 }
 
 /*Key Pressed*/
