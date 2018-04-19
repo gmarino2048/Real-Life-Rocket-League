@@ -201,6 +201,11 @@ function updateArena() {
 
         }));
     }
+
+    //Boost
+    if (arena.key && arena.key == 32) {
+        //command
+    }
     car.newPos();
     car.update();
     car.newPos();
