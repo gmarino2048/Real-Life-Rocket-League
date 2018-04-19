@@ -18,7 +18,8 @@ public class UDPServer {
 		try {
 			
 			udpServer = new DatagramSocket(serverPortNo);
-			while(running) {
+			boolean run = true;
+			while(run) {
 				
 				packet = new DatagramPacket(buffer, buffer.length);
 				udpServer.receive(packet);
@@ -34,10 +35,7 @@ public class UDPServer {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
-			UDPServer.main(null);
-		}
-
+		} 
 		
 	}
 

@@ -33,8 +33,8 @@ public class DataMessage implements Runnable {
 		socket = new Socket();
 		
 		messageReceived = new String(packet.getData());
-		json = new JSONObject(messageReceived);
-		receiveSchema = determineSchema();
+		//json = new JSONObject(messageReceived);
+		//receiveSchema = determineSchema();
 
 	}
 	
@@ -72,17 +72,7 @@ public class DataMessage implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 
-		switch (receiveSchema) {
-
-		case 0:
-
-		case 1:
-
-		case 2:
-
-		default:
-
-		}
+		System.out.println(this.messageReceived);
 
 	}
 	
