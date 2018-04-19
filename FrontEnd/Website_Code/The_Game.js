@@ -32,6 +32,10 @@ var socket = io.connect("127.0.0.1:9000");
 
 const newLocal = document.getElementById("buttonQ").onclick = function () {
     location.href = "EndGame.html";
+    socket.emit('update', JSON.stringify({
+        player: 1,
+        command: -1
+    }));
 };
 
 //Car Code
