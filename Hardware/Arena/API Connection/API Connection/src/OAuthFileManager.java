@@ -220,7 +220,7 @@ public class OAuthFileManager {
 	/*
 	 * writeBuffer
 	 */
-	public void writeBuffer () {
+	public void writeBuffer () throws Exception {
 		// Exit the function if any of the fields are null
 		if (nullCheck()) {
 			System.out.println("Error: Some of the buffer fields are null");
@@ -245,7 +245,9 @@ public class OAuthFileManager {
 			}
 			catch (Exception ex) {
 				ex.printStackTrace();
+				throw new Exception(ex);
 			}
+			throw new Exception(e);
 		}
 	}
 	
@@ -253,7 +255,7 @@ public class OAuthFileManager {
 	/*
 	 * readFile
 	 */
-	public void readFile () {
+	public void readFile () throws Exception {
 		//Attempt to read from the file
 		try {
 			reader = new BufferedReader(new FileReader(accessFile));
@@ -276,10 +278,14 @@ public class OAuthFileManager {
 			if (syntaxOK) {
 				setAll(temporaryBuffer);
 			}
+			else {
+				throw new Exception ("File was partially or fully empty");
+			}
 		}
 		//Catch any exceptions that occur
 		catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception(e);
 		}
 	}
 }
