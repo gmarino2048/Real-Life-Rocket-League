@@ -3,6 +3,7 @@
  * 
  * OAuthFileManager
  * 
+ * 
  */
 
 import java.io.*;
@@ -23,14 +24,13 @@ public class OAuthFileManager {
 	private char dir;
 	
 	//The number of fields in the buffer
-	private static final int FIELDS = 5;
+	private static final int FIELDS = 4;
 	
 	//The respective line numbers and buffer locations of the information
 	private static final int USERNAME = 0;
 	private static final int PASSWORD = 1;
 	private static final int DEVICEID = 2;
-	private static final int CLIENTID = 3;
-	private static final int CLIENTSECRET = 4;
+	private static final int TOKEN = 3;
 	
 	//The name of the file
 	private static final String FILENAME = "access.oauth";
@@ -46,13 +46,12 @@ public class OAuthFileManager {
 	 * setAll
 	 */
 	public void setAll (String username, String password, String deviceID,
-			String clientID, String clientSecret) {
+			String token) {
 		//Put all strings in their relative positions inside the buffer
 		informationBuffer[USERNAME] = username;
 		informationBuffer[PASSWORD] = password;
 		informationBuffer[DEVICEID] = deviceID;
-		informationBuffer[CLIENTID] = clientID;
-		informationBuffer[CLIENTSECRET] = clientSecret;
+		informationBuffer[TOKEN] = token;
 	}
 	
 	/*
@@ -60,7 +59,7 @@ public class OAuthFileManager {
 	 */
 	public void setAll (String[] newBuffer) {
 		//Check to make sure the new buffer is the right length
-		if (newBuffer.length == 5) {
+		if (newBuffer.length == FIELDS) {
 			informationBuffer = newBuffer;
 		}
 		//Otherwise keep the old buffer and notify user
@@ -98,10 +97,24 @@ public class OAuthFileManager {
 	}
 	
 	/*
+	 * getUsername
+	 */
+	public String getUsername () {
+		return informationBuffer[USERNAME];
+	}
+	
+	/*
 	 * setPassword
 	 */
 	public void setPassword (String newPassword) {
 		informationBuffer[PASSWORD] = newPassword;
+	}
+	
+	/*
+	 * getPassword
+	 */
+	public String getPassword () {
+		return informationBuffer[PASSWORD];
 	}
 	
 	/*
@@ -112,18 +125,26 @@ public class OAuthFileManager {
 	}
 	
 	/*
-	 * setClientID
+	 * getDeviceID
 	 */
-	public void setClientID (String newClientID) {
-		informationBuffer[CLIENTID] = newClientID;
+	public String getDeviceID () {
+		return informationBuffer[DEVICEID];
 	}
 	
 	/*
-	 * setClientSecret
+	 * setClientID
 	 */
-	public void setClientSecret (String newClientSecret) {
-		informationBuffer[CLIENTSECRET] = newClientSecret;
+	public void setAccessToken (String newToken) {
+		informationBuffer[TOKEN] = newToken;
 	}
+	
+	/*
+	 * getAccessToken
+	 */
+	public String getAccessToken () {
+		return informationBuffer[TOKEN];
+	}
+
 	
 	/*
 	 * getDirectoryFormat
@@ -233,13 +254,15 @@ public class OAuthFileManager {
 	 * readFile
 	 */
 	public void readFile () {
-		
+		//Attempt to read from the file
 		try {
 			reader = new BufferedReader(new FileReader(accessFile));
 			String[] temporaryBuffer = new String[FIELDS];
 			
 			for (int i = 0; i < FIELDS; i++) {
 				temporaryBuffer[i] = reader.readLine();
+				//Debug check line. If not reading properly
+				//System.out.println("Read " + temporaryBuffer[i] + " from file.");
 			}
 			
 			//Check to make sure the file wasn't empty
@@ -251,9 +274,10 @@ public class OAuthFileManager {
 			}
 			
 			if (syntaxOK) {
-				informationBuffer = temporaryBuffer;
+				setAll(temporaryBuffer);
 			}
 		}
+		//Catch any exceptions that occur
 		catch (Exception e) {
 			e.printStackTrace();
 		}

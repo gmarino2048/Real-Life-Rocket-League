@@ -212,6 +212,7 @@ String getValue (String regex) {
 
 void reset () {
   startTime = minutes * 60;
+  currentTime = startTime;
   lastReset = millis();
 }
 
