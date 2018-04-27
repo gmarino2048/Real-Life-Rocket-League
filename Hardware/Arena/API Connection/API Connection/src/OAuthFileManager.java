@@ -1,11 +1,3 @@
-/*
- * SocCar Project
- * 
- * OAuthFileManager
- * 
- * 
- */
-
 import java.io.*;
 
 public class OAuthFileManager {
@@ -37,16 +29,15 @@ public class OAuthFileManager {
 	//The name of the file
 	private static final String FILENAME = "access.oauth";
 	
-	
+	// The constructor initializes the information buffer, gets the directory format,
+	// and opens the file.
 	public OAuthFileManager () {
 		informationBuffer = new String[FIELDS];
 		getDirectoryFormat();
 		getFile();
 	}
 	
-	/*
-	 * setAll
-	 */
+	// Sets all of the fields in th buffer at once
 	public void setAll (String username, String password, String deviceID,
 			String clientid, String clientsecret, String token) {
 		//Put all strings in their relative positions inside the buffer
@@ -58,9 +49,7 @@ public class OAuthFileManager {
 		informationBuffer[TOKEN] = token;
 	}
 	
-	/*
-	 * setAll
-	 */
+	// Sets all the elements in the buffer with new elements at a single time
 	public void setAll (String[] newBuffer) {
 		//Check to make sure the new buffer is the right length
 		if (newBuffer.length == FIELDS) {
@@ -72,9 +61,7 @@ public class OAuthFileManager {
 		}
 	}
 	
-	/*
-	 * getBuffer
-	 */
+	// Returns the entire string array of the buffer
 	public String[] getBuffer () {
 		boolean empty = false;
 		
@@ -93,96 +80,68 @@ public class OAuthFileManager {
 		else return null;
 	}
 	
-	/*
-	 * setUsername
-	 */
+	// Writes the username to the buffer
 	public void setUsername (String newUsername) {
 		informationBuffer[USERNAME] = newUsername;
 	}
 	
-	/*
-	 * getUsername
-	 */
+	// Returns the username from the buffer
 	public String getUsername () {
 		return informationBuffer[USERNAME];
 	}
 	
-	/*
-	 * setPassword
-	 */
+	// Writes the password to the buffer
 	public void setPassword (String newPassword) {
 		informationBuffer[PASSWORD] = newPassword;
 	}
 	
-	/*
-	 * getPassword
-	 */
+	// Returns the password from the buffer
 	public String getPassword () {
 		return informationBuffer[PASSWORD];
 	}
 	
-	/*
-	 * setDeviceID
-	 */
+	// Writes the device ID to the buffer
 	public void setDeviceID (String newDeviceID) {
 		informationBuffer[DEVICEID] = newDeviceID;
 	}
 	
-	/*
-	 * getDeviceID
-	 */
+	// Gets the device ID from the buffer
 	public String getDeviceID () {
 		return informationBuffer[DEVICEID];
 	}
 	
-	/*
-	 * setClientID
-	 */
+	// Writes the client ID to the buffer
 	public void setClientID (String newClientID) {
 		informationBuffer[CLIENTID] = newClientID;
 	}
 	
-	
-	
-	/*
-	 * getAccessToken
-	 */
+	// Returns the client ID from the buffer
 	public String getClientID () {
 		return informationBuffer[CLIENTID];
 	}
 	
-	/*
-	 * setClientSecret
-	 */
+	// Writes the client secret to the buffer
 	public void setClientSecret (String newClientSecret) {
 		informationBuffer[CLIENTSECRET] = newClientSecret;
 	}
 	
-	/*
-	 * getClientSecret
-	 */
+	// Returns the client secret from the buffer
 	public String getClientSecret () {
 		return informationBuffer[CLIENTSECRET];
 	}
 	
-	/*
-	 * setAccessToken
-	 */
+	// Writes the access token to the buffer
 	public void setAccessToken (String newToken) {
 		informationBuffer[TOKEN] = newToken;
 	}
 	
-	/*
-	 * getClientSecret
-	 */
+	// Returns the access token from the buffer
 	public String getAccessToken () {
 		return informationBuffer[TOKEN];
 	}
 
 	
-	/*
-	 * getDirectoryFormat
-	 */
+	// Formats the directory slashes so that they go the right way for the OS
 	private void getDirectoryFormat () {
 		//Get the operating System of the machine
 		String operatingSystem = System.getProperty("os.name").toLowerCase();
@@ -197,16 +156,13 @@ public class OAuthFileManager {
 		}
 	}
 	
-	/*
-	 * getCWD
-	 */
+	// This function gets the Current Working Directory of wherever this function was called from
+	// Returns a string with the path of the current working directory
 	private String getCWD () {
 		return System.getProperty("user.dir");
 	}
 	
-	/*
-	 * getFile
-	 */
+	// This function follows the directory path to the file and opens it.
 	private void getFile () {
 		//Get the current working directory
 		String cwd = getCWD();
@@ -233,9 +189,8 @@ public class OAuthFileManager {
 		}
 	}
 	
-	/*
-	 * nullCheck
-	 */
+	// Check to make sure none of the fields are null
+	// Return true if they are all filled, false otherwise
 	public boolean nullCheck () {
 		boolean fileIsNull = accessFile == null;
 		boolean bufferIsNull = false;
@@ -251,9 +206,7 @@ public class OAuthFileManager {
 		return fileIsNull || bufferIsNull;
 	}
 	
-	/*
-	 * writeBuffer
-	 */
+	// This function writes the current buffer to the access.oauth file
 	public void writeBuffer () throws Exception {
 		// Exit the function if any of the fields are null
 		if (nullCheck()) {
@@ -286,9 +239,7 @@ public class OAuthFileManager {
 	}
 	
 	
-	/*
-	 * readFile
-	 */
+	// This function attempts to read from the access.oauth file
 	public void readFile () throws Exception {
 		//Attempt to read from the file
 		try {
