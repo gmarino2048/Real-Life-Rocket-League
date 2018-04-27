@@ -1,18 +1,21 @@
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Base64;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.json.JSONObject;
+
 public class Authenticator {
 	
-	public static void main (String[] args) {
-		Authenticator auth = new Authenticator();
-		auth.retrieve();
-	}
+	private static String BASE_URL = "https://api.particle.io/oauth/token";
 	
 	private OAuthFileManager fileManager;
 	
@@ -21,18 +24,109 @@ public class Authenticator {
 	private String username;
 	private String password;
 	private String deviceid;
+	private String clientid;
+	private String clientsecret;
 	private String accessToken;
 	
 	public Authenticator () {
 		fileManager = new OAuthFileManager();
+		count = 0;
+		retrieve();
 	}
 	
-	public String getAccessToken () throws Exception{
-		return "";
+	public String getAccessToken() {
+		return accessToken;
+	}
+	
+	public String getDeviceID () {
+		return deviceid;
+	}
+	
+	public void fetchAccessToken () throws Exception{
+		boolean usernameIsNull = username == null;
+		boolean passwordIsNull = password == null;
+		boolean clientidIsNull = clientid == null;
+		boolean clientsecretIsNull = clientsecret == null;
+		
+		if (usernameIsNull || passwordIsNull || clientidIsNull || clientsecretIsNull) {
+			retrieve();
+		}
+		
+		String toSend = "";
+		
+		toSend += "client_id=" + clientid;
+		toSend += "&client_secret=" + clientsecret;
+		toSend += "&grant_type=password";
+		toSend += "&username=" + username;
+		toSend += "&password=" + password;
+		toSend += "&expires_in=0";
+        
+		System.out.println(toSend);
+		
+		try {
+			URL url = new URL(BASE_URL);
+			
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			
+			connection.setRequestMethod("POST");
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+			connection.setInstanceFollowRedirects(false);
+			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			connection.setRequestProperty("Content-Length", Integer.toString(toSend.length()));
+			connection.setRequestProperty("charset", "UTF-8");
+			
+			
+			DataOutputStream bw = new DataOutputStream(connection.getOutputStream());
+			
+			bw.write(toSend.getBytes("UTF-8"));
+			
+			String rawresponse ;
+			if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+				InputStream inputStream = connection.getInputStream();
+				rawresponse = "";
+	            
+				int character = inputStream.read();
+				while (character != -1) {
+					rawresponse += (char) character;
+					character = inputStream.read();
+				}
+				
+				JSONObject response = new JSONObject(rawresponse);
+				accessToken = response.getString("access_token");
+				System.out.println(accessToken);
+			}
+			else {
+				throw new Exception ("Bad response from server");
+			}
+		}
+		catch (Exception e) {
+			throw e;
+		}
 	}
 	
 	public void stash () {
-		
+		try {
+			while (encryptionKey == null) {
+				setEncryptionKey("Encryption Key not set.");
+			}
+			
+			String encUsername = encrypt(username, encryptionKey);
+			String encPassword = encrypt(password, encryptionKey);
+			String encDeviceID = encrypt(deviceid, encryptionKey);
+			String encClientID = encrypt(clientid, encryptionKey);
+			String encClientSecret = encrypt(clientsecret, encryptionKey);
+			String encToken = encrypt(accessToken, encryptionKey);
+			
+			
+			fileManager.setAll(encUsername, encPassword, encDeviceID, encClientID, encClientSecret, encToken);
+			
+			
+			fileManager.writeBuffer();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private int count;
@@ -48,13 +142,15 @@ public class Authenticator {
 			username = decrypt(fileManager.getUsername(), encryptionKey);
 			password = decrypt(fileManager.getPassword(), encryptionKey);
 			deviceid = decrypt(fileManager.getDeviceID(), encryptionKey);
+			clientid = decrypt(fileManager.getClientID(), encryptionKey);
+			clientsecret = decrypt(fileManager.getClientSecret(), encryptionKey);
 			accessToken = decrypt(fileManager.getAccessToken(), encryptionKey);
 		}
-		catch (BadPaddingException bpe) {
-			if (bpe.getMessage().equals("javax.crypto.BadPaddingException: Given final block not properly padded") && count < 5) {
+		catch (javax.crypto.BadPaddingException bpe) {
+			if (count < 5) {
 				setEncryptionKey("Bad encryption key, try again");
-				retrieve();
 				count ++;
+				retrieve();
 			}
 			else if (count >= 5) {
 				System.out.println("Number of attempts exceeded");
@@ -68,6 +164,8 @@ public class Authenticator {
 			}
 		}
 		catch (Exception e) {
+			
+			System.out.println(e.getClass().toString());
 			System.out.println("Unable to retreive from file... getting user info.");
 			getUserInfo();
 			return;
@@ -78,9 +176,12 @@ public class Authenticator {
 		setUsername();
 		setPassword();
 		setDeviceID();
+		setClientID();
+		setClientSecret();
 		
 		try {
-			getAccessToken();
+			fetchAccessToken();
+			stash();
 		}
 		catch (Exception e) {
 			System.out.println("Could not generate access token with given info");
@@ -143,7 +244,7 @@ public class Authenticator {
 		return data;
 	}
 	
-	public static String decrypt (String hash, String key) throws Exception{
+	public static String decrypt (String hash, String key) throws BadPaddingException, Exception {
 		String data;
 		
 		try {
@@ -153,9 +254,12 @@ public class Authenticator {
 			byte[] decryptedString = cipher.doFinal(Base64.getDecoder().decode(hash));
 			data = new String(decryptedString);
 		}
+		catch (BadPaddingException e) {
+			throw e;
+		}
 		catch (Exception e) {
 			e.printStackTrace();
-			throw new Exception(e);
+			throw e;
 		}
 		
 		return data;
@@ -246,6 +350,64 @@ public class Authenticator {
 		}
 		else {
 			setDeviceID();
+		}
+	}
+	
+	private void setClientID () {
+		BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
+		String temp;
+		
+		System.out.println("Enter your client ID:");
+		try {
+			temp = inputReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		String confirmation;
+		System.out.println("Your entered ID is: " + temp + "\nIs that correct? (y/n)");
+		try {
+			confirmation = inputReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		if (confirmation.equalsIgnoreCase("y") || confirmation.equalsIgnoreCase("yes")) {
+			clientid = temp;
+		}
+		else {
+			setClientID();
+		}
+	}
+	
+	private void setClientSecret () {
+		BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
+		String temp;
+		
+		System.out.println("Enter your client secret:");
+		try {
+			temp = inputReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		String confirmation;
+		System.out.println("Your entered secret is: " + temp + "\nIs that correct? (y/n)");
+		try {
+			confirmation = inputReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		if (confirmation.equalsIgnoreCase("y") || confirmation.equalsIgnoreCase("yes")) {
+			clientsecret = temp;
+		}
+		else {
+			setClientSecret();
 		}
 	}
 }

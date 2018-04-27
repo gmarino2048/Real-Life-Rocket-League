@@ -24,13 +24,15 @@ public class OAuthFileManager {
 	private char dir;
 	
 	//The number of fields in the buffer
-	private static final int FIELDS = 4;
+	private static final int FIELDS = 6;
 	
 	//The respective line numbers and buffer locations of the information
 	private static final int USERNAME = 0;
 	private static final int PASSWORD = 1;
 	private static final int DEVICEID = 2;
-	private static final int TOKEN = 3;
+	private static final int CLIENTID = 3;
+	private static final int CLIENTSECRET = 4;
+	private static final int TOKEN = 5;
 	
 	//The name of the file
 	private static final String FILENAME = "access.oauth";
@@ -46,11 +48,13 @@ public class OAuthFileManager {
 	 * setAll
 	 */
 	public void setAll (String username, String password, String deviceID,
-			String token) {
+			String clientid, String clientsecret, String token) {
 		//Put all strings in their relative positions inside the buffer
 		informationBuffer[USERNAME] = username;
 		informationBuffer[PASSWORD] = password;
 		informationBuffer[DEVICEID] = deviceID;
+		informationBuffer[CLIENTID] = clientid;
+		informationBuffer[CLIENTSECRET] = clientsecret;
 		informationBuffer[TOKEN] = token;
 	}
 	
@@ -134,12 +138,42 @@ public class OAuthFileManager {
 	/*
 	 * setClientID
 	 */
+	public void setClientID (String newClientID) {
+		informationBuffer[CLIENTID] = newClientID;
+	}
+	
+	
+	
+	/*
+	 * getAccessToken
+	 */
+	public String getClientID () {
+		return informationBuffer[CLIENTID];
+	}
+	
+	/*
+	 * setClientSecret
+	 */
+	public void setClientSecret (String newClientSecret) {
+		informationBuffer[CLIENTSECRET] = newClientSecret;
+	}
+	
+	/*
+	 * getClientSecret
+	 */
+	public String getClientSecret () {
+		return informationBuffer[CLIENTSECRET];
+	}
+	
+	/*
+	 * setAccessToken
+	 */
 	public void setAccessToken (String newToken) {
 		informationBuffer[TOKEN] = newToken;
 	}
 	
 	/*
-	 * getAccessToken
+	 * getClientSecret
 	 */
 	public String getAccessToken () {
 		return informationBuffer[TOKEN];
