@@ -211,7 +211,7 @@ public class OAuthFileManager {
 		// Exit the function if any of the fields are null
 		if (nullCheck()) {
 			System.out.println("Error: Some of the buffer fields are null");
-			return;
+			throw new Exception ("Error: Buffer fields null");
 		}
 		
 		// Try to write all the fields to the file
