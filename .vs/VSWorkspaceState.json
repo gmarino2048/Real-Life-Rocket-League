@@ -2,15 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\FrontEnd",
-    "\\FrontEnd\\nightwatch-0.9.20",
-    "\\FrontEnd\\nightwatch-0.9.20\\bin",
-    "\\FrontEnd\\nightwatch-0.9.20\\examples",
-    "\\FrontEnd\\nightwatch-0.9.20\\examples\\pages",
-    "\\FrontEnd\\nightwatch-0.9.20\\examples\\tests",
-    "\\FrontEnd\\nightwatch-0.9.20\\lib",
-    "\\FrontEnd\\nightwatch-0.9.20\\test\\lib",
-    "\\FrontEnd\\Website_Code"
+    "\\FrontEnd\\nightwatch-0.9.20"
   ],
-  "SelectedNode": "\\FrontEnd\\Website_Code\\The_Game.js",
+  "SelectedNode": "\\FrontEnd\\Final_Game_Stats.html",
   "PreviewInSolutionExplorer": false
 }
