@@ -15,26 +15,26 @@ var net = require('net');
 var client = net.Socket();
 var createError = require('http-errors');
 var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var session = require('express-session');
-var passport = require('passport');
-var expressValidator = require('express-validator');
-var localStrategy = require('passport-local').Strategy;
-var multer = require('multer');
-var upload = multer({dest: './uploads'});
-var flash = require('connect-flash');
-var mongo = require('mongodb');
-var mongoose = require('mongoose');
+//var cookieParser = require('cookie-parser');
+//var logger = require('morgan');
+//var session = require('express-session');
+//var passport = require('passport');
+//var expressValidator = require('express-validator');
+//var localStrategy = require('passport-local').Strategy;
+//var multer = require('multer');
+//var upload = multer({dest: './uploads'});
+//var flash = require('connect-flash');
+//var mongo = require('mongodb');
+//var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var stdin = process.openStdin();
 
-var db = mongoose.connection;
+//var db = mongoose.connection;
 
 var socket = require('socket.io');
 
 
-var IP = '172.19.38.180';
+var IP = '172.19.35.166';
 var dbPort = 9009;
 var bytePort = 8001;
 
@@ -149,6 +149,7 @@ app.post('/Welcome_Page', urlencodedParser, function (req, res) {
         var info = JSON.parse(data);
         console.log('Received: ' + JSON.stringify(info));
 
+	//res.redirect('/Game_Lobby.html');
         //if login success, send data to the web
         if (info.queryResult == 'success' && (info.queryType == 'userCreation' || info.queryType == 'userInfo')) {
             console.log('here');

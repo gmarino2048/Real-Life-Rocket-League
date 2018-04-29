@@ -1,245 +1,477 @@
-/*
- * Soccar Project
- * 
- * Class Authenticator
- * 
- * This class is designed to store the authentication information
- * required to log into the particle site. The authentication
- * information is then stored as an encrypted string where it can
- * be recovered later (on server boot).
- * 
- * Data Summary:
- * 
- * Method Summary:
- * 
- */
-import java.security.spec.*;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Base64;
 
-import javax.crypto.*;
-import javax.crypto.spec.*;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.json.JSONObject;
 
 public class Authenticator {
 	
-	// The username to log into the particle cloud
-	private String username;
+	// The base url used to access Particle token generation
+	private static String BASE_URL = "https://api.particle.io/oauth/token";
 	
-	// The password for the particle cloud
-	private String password;
-	
-	// The device ID to connect to
-	private String deviceID;
-	
-	// The OAuth 2.0 access tokens
-	private String key1;
-	private String key2;
-	
-	// The OAuth file manager which saves the information
+	// The File Manager used to store and retrieve the information
 	private OAuthFileManager fileManager;
 	
-	// The key to decrypt the access.oauth file
+	// The encryption key used to encrypt and decrypt the information
 	private String encryptionKey;
 	
-	// Data members necessary for encryption
-	private static final String ENCRYPTION_SCHEME = "DESede";
-	private static final String CHARSET = "UTF8";
-	private KeySpec keySpec;
-	private SecretKeyFactory skFactory;
-	private Cipher cipher;
-	private SecretKey secretKey;
+	// The particle account username: "something@email.com"
+	private String username;
+	// The particle account password
+	private String password;
+	// The particle device ID of the arena, found at https://console.particle.io/
+	private String deviceid;
+	// The client ID of the service, see the text file "ID and Secret.txt"
+	private String clientid;
+	// The client Secret of the service, see the text file "ID and Secret.txt"
+	private String clientsecret;
+	// The access token used to get and send data with the API
+	private String accessToken;
 	
-	/*
-	 * Constructor
-	 * 
-	 * The Authenticator constructor takes no arguments and is
-	 * meant to be called once so that the variables are initialized
-	 * properly.
-	 * 
-	 */
+	// The Authenticator Constructor
+	// Creates a new file manager for data and sets the bad password count to 0. Attempts to
+	// retrieve stored data.
 	public Authenticator () {
-		// Create the file manager used to update the access.oauth file
 		fileManager = new OAuthFileManager();
+		count = 0;
+		retrieve();
 	}
 	
-	/*
-	 * setEncryptionKey
-	 * 
-	 * This method takes the user specified encryption key from stdin and
-	 * resets the encryption key. This method is usually called if the 
-	 * encryption key is not already set or if the user calls the function.
-	 * 
-	 */
-	public void setEncryptionKey () {
-		// Create the scanner to listen to user input
-		Scanner scan = new Scanner(System.in);
+	// Returns the access token of the Authenticator
+	public String getAccessToken() {
+		return accessToken;
+	}
+	
+	// Returns the device ID of the Authenticator
+	public String getDeviceID () {
+		return deviceid;
+	}
+	
+	// Fetches an access token from particle's website that never expires
+	public void fetchAccessToken () throws Exception{
+		// Make sure none of the fields are null
+		boolean usernameIsNull = username == null;
+		boolean passwordIsNull = password == null;
+		boolean clientidIsNull = clientid == null;
+		boolean clientsecretIsNull = clientsecret == null;
 		
-		// Print out the standard messages and read the user input
-		System.out.println("Enter the new encryption key below:");
-		String newEncryptionKey = scan.nextLine();
-		
-		// Get user confirmation that the key is correct
-		System.out.println("The new encryption key entered is: " + newEncryptionKey);
-		System.out.println("Is this correct? (y/n)");
-		String confirmation = scan.nextLine();
-		
-		// Update the encryption Key and close the scanner
-		if (confirmation.equalsIgnoreCase("y") || confirmation.equalsIgnoreCase("yes")) {
-			encryptionKey = newEncryptionKey;
-			scan.close();
+		// If they are... retrieve new info
+		if (usernameIsNull || passwordIsNull || clientidIsNull || clientsecretIsNull) {
+			retrieve();
 		}
 		
-		// Retry getting the encryption Key
+		// Generate the arguments to be used in the POST request
+		String toSend = "";
+		
+		toSend += "client_id=" + clientid;
+		toSend += "&client_secret=" + clientsecret;
+		toSend += "&grant_type=password";
+		toSend += "&username=" + username;
+		toSend += "&password=" + password;
+		toSend += "&expires_in=0";
+		
+		try {
+			// Attempt a connection with the token generation server
+			URL url = new URL(BASE_URL);
+			
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			
+			// Set request type to "POST" and proper headers to mimic cURL request
+			connection.setRequestMethod("POST");
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+			connection.setInstanceFollowRedirects(false);
+			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			connection.setRequestProperty("Content-Length", Integer.toString(toSend.length()));
+			connection.setRequestProperty("charset", "UTF-8");
+			
+			// Write the arguments to the connection
+			DataOutputStream bw = new DataOutputStream(connection.getOutputStream());
+			
+			bw.write(toSend.getBytes("UTF-8"));
+			
+			// If the connection is OK and data was accepted
+			String rawresponse ;
+			if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+				InputStream inputStream = connection.getInputStream();
+				rawresponse = "";
+	            
+				// Read the response from the server bytewise and...
+				int character = inputStream.read();
+				while (character != -1) {
+					rawresponse += (char) character;
+					character = inputStream.read();
+				}
+				
+				// Get the access token from the responding JSON
+				JSONObject response = new JSONObject(rawresponse);
+				accessToken = response.getString("access_token");
+				System.out.println(accessToken);
+			}
+			// If connection is not okay, then throw an exception
+			else {
+				throw new Exception ("Bad response from server");
+			}
+		}
+		// Forward any caught exceptions
+		catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	
+	// This function encrypts the data and stores it in the access.oauth file
+	public void stash () {
+		try {
+			// Make sure encryption key is not null
+			while (encryptionKey == null) {
+				// If it is, set it
+				setEncryptionKey("Encryption Key not set.");
+			}
+			
+			// Encrypt ALL the data
+			String encUsername = encrypt(username, encryptionKey);
+			String encPassword = encrypt(password, encryptionKey);
+			String encDeviceID = encrypt(deviceid, encryptionKey);
+			String encClientID = encrypt(clientid, encryptionKey);
+			String encClientSecret = encrypt(clientsecret, encryptionKey);
+			String encToken = encrypt(accessToken, encryptionKey);
+			
+			// Set encrypted data in file manager
+			fileManager.setAll(encUsername, encPassword, encDeviceID, encClientID, encClientSecret, encToken);
+			
+			// Write to file
+			fileManager.writeBuffer();
+		}
+		// Catch and print any exceptions
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// The number of bad password attempts
+	private int count;
+	
+	public void retrieve () {
+		try {
+			// Attempt to load data from file
+			fileManager.readFile();
+			
+			// Make sure encryption key is not null
+			if (encryptionKey == null) {
+				// If it is, set it
+				setEncryptionKey();
+			}
+			
+			// Try to decrypt all info
+			username = decrypt(fileManager.getUsername(), encryptionKey);
+			password = decrypt(fileManager.getPassword(), encryptionKey);
+			deviceid = decrypt(fileManager.getDeviceID(), encryptionKey);
+			clientid = decrypt(fileManager.getClientID(), encryptionKey);
+			clientsecret = decrypt(fileManager.getClientSecret(), encryptionKey);
+			accessToken = decrypt(fileManager.getAccessToken(), encryptionKey);
+		}
+		// This exception is thrown if the encryption key is bad
+		catch (javax.crypto.BadPaddingException bpe) {
+			// Prompt the user for a new key if password is bad
+			if (count < 5) {
+				setEncryptionKey("Bad encryption key, try again");
+				count ++;
+				retrieve();
+			}
+			// Get user info manually if more than 5 bad attempts in a row
+			else if (count >= 5) {
+				System.out.println("Number of attempts exceeded");
+				getUserInfo();
+				count = 0;
+			}
+			// Just get user info manually in case something goes wrong
+			else {
+				System.out.println("Something went wrong... getting user info manually.");
+				getUserInfo();
+				return;
+			}
+		}
+		// If the data can't be retrieved just get it from the user
+		catch (Exception e) {
+			System.out.println("Unable to retreive from file... getting user info.");
+			getUserInfo();
+			return;
+		}
+	}
+	
+	// Gets all of the user info from System.in
+	public void getUserInfo () {
+		setUsername();
+		setPassword();
+		setDeviceID();
+		setClientID();
+		setClientSecret();
+		
+		// Try to fetch the access token
+		try {
+			fetchAccessToken();
+			stash();
+		}
+		// Try again if getting token failed
+		catch (Exception e) {
+			System.out.println("Could not generate access token with given info");
+			getUserInfo();
+		}
+	}
+	
+	// Gets the encryption key after displaying a message
+	public void setEncryptionKey(String message) {
+		System.out.println(message);
+		setEncryptionKey();
+	}
+	
+	// Sets the encryption key from stdin
+	public void setEncryptionKey () {
+		// Open the buffered reader to read from stdin
+		BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
+		String temp;
+		
+		// Try to read the key
+		System.out.println("Enter cipher key:");
+		try {
+			temp = inputReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		// Prompt user for confirmation
+		String confirmation;
+		System.out.println("Your entered key is: " + temp + "\nIs that correct? (y/n)");
+		try {
+			confirmation = inputReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		// Verify confirmation. If confirmation is bad, try again.
+		if (confirmation.equalsIgnoreCase("y") || confirmation.equalsIgnoreCase("yes")) {
+			encryptionKey = temp;
+		}
 		else {
-			scan.close();
 			setEncryptionKey();
 		}
 	}
 	
-	/*
-	 * setEncryptionKey
-	 * 
-	 * This method uses the previously defined setEncryptionKey method
-	 * to update the encryption key. This method enables a message to be
-	 * sent to the user in order to update the encryption key.
-	 * 
-	 * Arguments:
-	 * message, the message to display to the user
-	 * 
-	 */
-	public void setEncryptionKey (String message) {
-		// Send the output to the Server manager
-		System.out.println(message);
-		
-		// Update the encryption Key
-		setEncryptionKey();
-	}
-	
-	public String getSecureUserInput (String message) {
-		return "";
-	}
-	
-	public String getUserName () {
-		return "";
-	}
-	
-	public void UpdateInformation () {
-		
-	}
-	
-	public void setUsername (String newUserName) {
-		
-	}
-	
-	public void setPassword (String newPassword) {
-		
-	}
-	
-	public void setDeviceID (String newDeviceID) {
-		
-	}
-	
-	public void SetAuthenticationTokens (String newToken1, String newToken2) {
-		
-	}
-	
-	/*
-	 * encrypt
-	 * 
-	 * This method encrypts a string using the DESede scheme
-	 * 
-	 * Arguments:
-	 * regex, the unencryped string
-	 * 
-	 * Returns:
-	 * A new string encrypted based on encryptionKey
-	 */
-	private String encrypt (String regex) {
-		//Check that encryption key exists
-		if (encryptionKey != null) {
-			try {
-				//Show the manager the encryption key
-				System.out.println("The key used for this encryption is:\n" + encryptionKey);
-				
-				//Convert encryption key to byte array
-				byte[] key = encryptionKey.getBytes(CHARSET);
-				
-				//Set up the encryption
-				keySpec = new DESedeKeySpec(key);
-				skFactory = SecretKeyFactory.getInstance(ENCRYPTION_SCHEME);
-				cipher = Cipher.getInstance(ENCRYPTION_SCHEME);
-				secretKey = skFactory.generateSecret(keySpec);
-				
-				//Encrypt the string
-				cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-				byte[] unencrypted = regex.getBytes(CHARSET);
-				byte[] encrypted = cipher.doFinal(unencrypted);
-				return new String(encrypted, CHARSET);
-			}
-			catch (Exception e) {
-				//Print error
-				e.printStackTrace(System.out);
-				
-				//Input new key and try again
-				setEncryptionKey("Encryption Failed.");
-				return encrypt(regex);
-			}
+	// Encrypts a string to another String value
+	// Returns the encrypted string
+	public static String encrypt (String text, String key) throws Exception {
+		String data;
+		try {
+			// Set up the cipher info
+			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), "Blowfish");
+			Cipher cipher = Cipher.getInstance("Blowfish");
+			cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+			
+			// Encrypt the string's byte array and then encode it into another string
+			byte[] encryptedString = cipher.doFinal(text.getBytes());
+			data = Base64.getEncoder().encodeToString(encryptedString);
 		}
-		//Otherwise prompt for encryption key and try again
+		// Throw an exception if anything goes wrong
+		catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(e);
+		}
+		
+		// Return the encrypted String
+		return data;
+	}
+	
+	// Takes an encrypted string and attempts to decrypt it with the current encryption key
+	// Returns the decrypted string
+	public static String decrypt (String hash, String key) throws BadPaddingException, Exception {
+		String data;
+		try {
+			// Set up the cipher info
+			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), "Blowfish");
+			Cipher cipher = Cipher.getInstance("Blowfish");
+			cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
+			
+			// Decrypt the string's byte array and store the result in data
+			byte[] decryptedString = cipher.doFinal(Base64.getDecoder().decode(hash));
+			data = new String(decryptedString);
+		}
+		// Forward the bad key exception
+		catch (BadPaddingException e) {
+			throw e;
+		}
+		// Forward any other exceptions
+		catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+		// Return the decrypted String
+		return data;
+	}
+	
+	/*
+	 * NOTE: The following functions will not be commented
+	 * 
+	 * Why? because they are literally cookie cutter string functions in the same exact format
+	 * as setEncryptionKey. They take user input, and prompt for confirmation. That's all. If you
+	 * really want to know what's going on, look at the comments for setEncryptionKey. It's all
+	 * the same stuff.
+	 */
+	
+	private void setUsername () {
+		BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
+		String temp;
+		
+		System.out.println("Enter your username:");
+		try {
+			temp = inputReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		String confirmation;
+		System.out.println("Your entered username is: " + temp + "\nIs that correct? (y/n)");
+		try {
+			confirmation = inputReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		if (confirmation.equalsIgnoreCase("y") || confirmation.equalsIgnoreCase("yes")) {
+			username = temp;
+		}
 		else {
-			setEncryptionKey("Encryption Key Not Set.");
-			return encrypt(regex);
+			setUsername();
 		}
 	}
 	
-	
-	/*
-	 * decrypt
-	 * 
-	 * This method encrypts a string using the DESede scheme
-	 * 
-	 * Arguments:
-	 * regex, the encrypted string
-	 * 
-	 * Returns:
-	 * The string decrypted based on encryptionKey
-	 */
-	private String decrypt (String regex) {
-		//Check that an encryption key exists
-		if (encryptionKey != null) {
-			try {
-				//Show the manager the encryption key
-				System.out.println("The key used for this encryption is:\n" + encryptionKey);
-				
-				//Convert encryption key to byte array
-				byte[] key = encryptionKey.getBytes(CHARSET);
-				
-				//Set up the encryption
-				keySpec = new DESedeKeySpec(key);
-				skFactory = SecretKeyFactory.getInstance(ENCRYPTION_SCHEME);
-				cipher = Cipher.getInstance(ENCRYPTION_SCHEME);
-				secretKey = skFactory.generateSecret(keySpec);
-				
-				//Decrypt the String
-				cipher.init(Cipher.DECRYPT_MODE, secretKey);
-				byte[] encrypted = regex.getBytes(CHARSET);
-				byte[] unencrypted = cipher.doFinal(encrypted);
-				return new String(unencrypted, CHARSET);
-			}
-			catch (Exception e) {
-				//Print error
-				e.printStackTrace(System.out);
-				
-				//Input new key and try again
-				setEncryptionKey("Decryption Failed.");
-				return decrypt(regex);
-			}
+	private void setPassword () {
+		BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
+		String temp;
+		
+		System.out.println("Enter your password:");
+		try {
+			temp = inputReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
 		}
-		//Otherwise prompt for encryption key and try again
+		
+		String confirmation;
+		System.out.println("Your entered password is: " + temp + "\nIs that correct? (y/n)");
+		try {
+			confirmation = inputReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		if (confirmation.equalsIgnoreCase("y") || confirmation.equalsIgnoreCase("yes")) {
+			password = temp;
+		}
 		else {
-			setEncryptionKey("Encryption Key Not Set.");
-			return decrypt(regex);
+			setPassword();
 		}
 	}
 	
+	private void setDeviceID () {
+		BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
+		String temp;
+		
+		System.out.println("Enter your device's ID:");
+		try {
+			temp = inputReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		String confirmation;
+		System.out.println("Your entered ID is: " + temp + "\nIs that correct? (y/n)");
+		try {
+			confirmation = inputReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		if (confirmation.equalsIgnoreCase("y") || confirmation.equalsIgnoreCase("yes")) {
+			deviceid = temp;
+		}
+		else {
+			setDeviceID();
+		}
+	}
 	
+	private void setClientID () {
+		BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
+		String temp;
+		
+		System.out.println("Enter your client ID:");
+		try {
+			temp = inputReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		String confirmation;
+		System.out.println("Your entered ID is: " + temp + "\nIs that correct? (y/n)");
+		try {
+			confirmation = inputReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		if (confirmation.equalsIgnoreCase("y") || confirmation.equalsIgnoreCase("yes")) {
+			clientid = temp;
+		}
+		else {
+			setClientID();
+		}
+	}
+	
+	private void setClientSecret () {
+		BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
+		String temp;
+		
+		System.out.println("Enter your client secret:");
+		try {
+			temp = inputReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		String confirmation;
+		System.out.println("Your entered secret is: " + temp + "\nIs that correct? (y/n)");
+		try {
+			confirmation = inputReader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		if (confirmation.equalsIgnoreCase("y") || confirmation.equalsIgnoreCase("yes")) {
+			clientsecret = temp;
+		}
+		else {
+			setClientSecret();
+		}
+	}
 }
