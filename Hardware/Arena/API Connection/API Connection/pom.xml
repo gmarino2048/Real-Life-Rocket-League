@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>SocCar-Project</groupId>
   <artifactId>API-Connection</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1</version>
   <name>API Connection</name>
   <description>The API Connection to the Particle cloud for our arena</description>
   <build>
