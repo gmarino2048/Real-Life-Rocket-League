@@ -1,4 +1,8 @@
-A$(document).ready(function () {
+window.setTimeout(function () {
+    window.location.href = 'Game_Lobby.html';
+}, 30000);
+
+$(document).ready(function () {
     $('#analytics').DataTable({
         "processing": true,
         "serverSide": true,
