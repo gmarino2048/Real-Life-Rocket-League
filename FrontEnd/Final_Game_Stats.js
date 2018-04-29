@@ -1,3 +1,7 @@
+window.setTimeout(function () {
+    window.location.href = 'Game_Lobby.html';
+}, 30000);
+
 $(document).ready(function () {
     $('#final').DataTable({
         "processing": true,
