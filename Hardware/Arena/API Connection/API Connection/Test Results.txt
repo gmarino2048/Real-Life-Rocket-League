@@ -1,0 +1,34 @@
+TEST RESULTS
+
+The API Connection Test hits approximately 85 - 90% of our source code.
+However, this depends heavily on the manual user input, so below I will
+cover how to achieve maximal code coverage on a single run:
+
+1. Start the APIConnectionTest Class
+
+2. Enter the correct information. See ID and Secret.txt
+
+3. Be sure to answer "no" when prompted at least once for each field
+
+4. When prompted for the cipher key, be sure to remember which one you 
+used!!! Default value is "Password"
+
+5. Wait one minute
+
+6. When prompted for a new cipher key, enter a bad one at least once
+before entering the correct value. This should be the same one used
+in step 4
+
+7. View results!
+
+The above method should give 60% code coverage overall, with 85% coverage
+on the authenticator, 70% coverage on the OAuthFileManager, and 88% coverage
+on the APIConnection. 
+
+Since the OAuth File manager did not have excellent coverage using the 
+APIConnectionTest class, a second test suite was designed to be run against
+the OAuthFileManager. These tests get a coverage of about 93% on the 
+OAuthFileManager.
+
+
+All tests report PASS.
