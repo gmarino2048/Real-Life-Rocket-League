@@ -142,6 +142,53 @@ function checkSecond(sec) {
     };
     return sec;
 }
+//Creating arena boundaries
+/*var xAxis = 880;
+var yAxis = 470;
+
+function keyDown(e) {
+    
+    //up
+    if (e.keyCode == 38) {
+
+        arena.clear();
+        if (yAxis - 3 > 0) {
+            yAxis = yAxis - 3;
+        }
+        context.drawImage(car, xAxis, yAxis, 880, 370);
+    }
+
+    //down
+    if (e.keyCode == 40) {
+        arena.clear();
+        if (yAxis + 3 + 370 < canvas.height) {
+            yAxis = yAxis + 3;
+        }
+        context.drawImage(car, xAxis, yAxis, 880, 370);
+    }
+    //left
+    if (e.keyCode == 37) {
+        arena.clear();
+        if (xAxis - 10 > 0) {
+            xAxis = xAxis - 10;
+        }
+        context.drawImage(car, xAxis, yAxis, 880, 370);
+    }
+    //right
+    if (e.keyCode == 39) {
+        arena.clear();
+        if (xAxis + 10 + 880 < canvas.width) {
+            xAxis = Axis + 10;
+        }
+        context.drawImage(car, xAxis, yAxis, 880, 370);
+    }
+}
+
+function clearCanvas() {
+    this.canvas.width = canvas.width;
+}*/
+
+
 
 /*Key Pressed*/
 function updateArena() {
@@ -150,6 +197,7 @@ function updateArena() {
     myBackground.update();
     car.newPos();
     car.update();
+    carWidth = 40;
     car.speedX = 0;
     car.speedY = 0;
 
@@ -160,7 +208,6 @@ function updateArena() {
             player: 1,
             command: 1
         }));
-
     }
     //right arrow
     if (arena.key && arena.key == 39) {
