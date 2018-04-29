@@ -23,7 +23,12 @@ in step 4
 
 The above method should give 60% code coverage overall, with 85% coverage
 on the authenticator, 70% coverage on the OAuthFileManager, and 88% coverage
-on the APIConnection. 
+on the APIConnection.
+
+It was deemed too inefficient to attempt to generate another test case for the
+Authenticator, as the few methods which could be tested involved encryption and
+decryption, each of which are fully covered by using the example above. Besides,
+if anything goes wrong in the encryption and decryption process
 
 Since the OAuth File manager did not have excellent coverage using the 
 APIConnectionTest class, a second test suite was designed to be run against
