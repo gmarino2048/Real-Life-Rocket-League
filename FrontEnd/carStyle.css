@@ -6,7 +6,32 @@ body {
 /* Account_Info */
 
 /*Analytics*/
+#analytics {
+    font-family: "Trebuchet MS", Arial, Arial, Helvetica, sans-serif, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
 
+    #analytics td, #analytics th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    #analytics tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    #analytics tr:hover {
+        background-color: #ddd;
+    }
+
+    #analytics th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: center;
+        background-color: red;
+        color: white;
+    }
 /*Boost*/
 .myProgress {
     width: 100%;
@@ -114,6 +139,33 @@ body {
     margin-top: -100px;
     transform: translate(-0%,-125%);
 }
+/*Final Game Stats*/
+#final{
+    font-family:"Trebuchet MS", Arial, Arial, Helvetica, sans-serif, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#final td, #final th{
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#final tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+
+#final tr:hover{
+    background-color: #ddd;
+}
+
+#final th{
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: red;
+    color: white;
+}
 /*Game_Lobby*/
 buttonLogout {
     background-color: red;
@@ -200,30 +252,10 @@ buttonStat {
 }
 
 /*Login_Page*/
-input[type=text], select {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+#myimage{
+    height:200px;
+    width: 200px;
 }
-
-input[type=submit] {
-    width: 100%;
-    background-color: red;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-    input[type=submit]:hover {
-        background-color: red;
-    }
 /*Logout*/
 .topPage {
     background: black;

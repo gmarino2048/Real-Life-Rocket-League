@@ -1,21 +1,7 @@
-Analytics();
-
-function Analytics() {
-    document.getElementById("button").onclick = function () {
-        location.href = "Game_Lobby.html";
-    };
-}
-$.ajax({
-    url: "http://localhost/data?token=" + window.localStorage.token,
-    type: "GET",
-    success: function (data) {
-
-
-        //Display the information
-
-
-    },
-    error: function (data) {
-        console.log(data);
-    }
+A$(document).ready(function () {
+    $('#analytics').DataTable({
+        "processing": true,
+        "serverSide": true,
+        "ajax": "../server_side/scripts/server_processing.php"
+    });
 });
