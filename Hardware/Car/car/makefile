@@ -1,5 +1,5 @@
 CC = gcc -o
-P1 = udp_run_.c
+P1 = udp_run.c
 E1 = run
 
 
