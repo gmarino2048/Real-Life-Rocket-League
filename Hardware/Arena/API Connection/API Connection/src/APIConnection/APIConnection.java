@@ -1,3 +1,5 @@
+package APIConnection;
+
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;

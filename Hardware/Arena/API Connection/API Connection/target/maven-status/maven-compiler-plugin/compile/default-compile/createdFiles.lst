@@ -1,5 +1,5 @@
-OAuthFileManagerTest.class
-OAuthFileManager.class
-APIConnection.class
-APIConnectionTest.class
-Authenticator.class
+APIConnection\APIConnectionTest.class
+APIConnection\OAuthFileManager.class
+APIConnection\APIConnection.class
+APIConnection\Authenticator.class
+APIConnection\OAuthFileManagerTest.class
