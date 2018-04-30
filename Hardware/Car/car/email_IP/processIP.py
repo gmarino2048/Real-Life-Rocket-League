@@ -35,9 +35,6 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print 'Interrupted'
         try:
-            os.remove("/tmp/myfifo")
-            #ser.write(b"a");
-            #ser.close()
             sys.exit(0)
         except SystemExit:
             os._exit(0)
