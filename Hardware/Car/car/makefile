@@ -1,10 +1,7 @@
 CC = gcc -o
-P1 = udp_run.c
+P1 = udp_run_.c
 E1 = run
-P2 = udp_test.c
-E2 = test
 
 
 all:
 	$(CC) $(E1) $(P1)
-	$(CC) $(E2) $(P2)
