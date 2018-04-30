@@ -4,28 +4,20 @@ var fs = require('fs');
 var app = express();
 //var server = http.Server(app);
 
-var server = app.listen(9000, function () {
-    console.log("CONNECTED TO SERVER...")
+var server = app.listen(9000, '172.20.15.108', function () {
+    console.log("CONNECTED TO SERVER AT PORT 9000")
 });
 
 //postman for testing
+//pm2
+
 
 const datagram = require('dgram');
 var net = require('net');
 var client = net.Socket();
 var createError = require('http-errors');
 var path = require('path');
-//var cookieParser = require('cookie-parser');
-//var logger = require('morgan');
-//var session = require('express-session');
-//var passport = require('passport');
-//var expressValidator = require('express-validator');
-//var localStrategy = require('passport-local').Strategy;
-//var multer = require('multer');
-//var upload = multer({dest: './uploads'});
-//var flash = require('connect-flash');
-//var mongo = require('mongodb');
-//var mongoose = require('mongoose');
+
 var bodyParser = require('body-parser');
 var stdin = process.openStdin();
 
@@ -34,7 +26,7 @@ var stdin = process.openStdin();
 var socket = require('socket.io');
 
 
-var IP = '172.19.35.166';
+var IP = '172.20.15.108';
 var dbPort = 9009;
 var bytePort = 8001;
 
@@ -168,6 +160,8 @@ app.post('/Welcome_Page', urlencodedParser, function (req, res) {
 
     //send request to database server
 
+  //status code
+  //res.status(303).redirect('');
 });
 
 
