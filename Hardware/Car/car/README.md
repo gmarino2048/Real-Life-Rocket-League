@@ -1,6 +1,9 @@
 ##   Everything works like a charm - minimal delay.
 
-####   carStateMachine: arduino script car will run on, thoroughly commented
+####   email_IP/sendIP.sh: shell script that sends IP addr to person running car
+				---> calls processIP.py, and smtpCommands.sh to help
 ####   udp_run.c/run: c script that will run on pi at launch
-####   makefile: compilation for both c scripts
-####   serialComm.py: python script that goes between pi and arduino
+				---> calls serialComm.py, a script that goes between
+						 Pi and Arduino.
+####   makefile: compilation for c script
+####   carStateMachine: arduino script car will run on, thoroughly commented
