@@ -8,11 +8,22 @@ import org.json.*;
 import APIConnection.APIConnection;
 import sql.MySQL_Connector;
 
-public class SQL_Server implements Runnable{
+/**
+ * Class to run the TCP server which receives queries to interact with the SQL
+ * database
+ * 
+ * @author nikhil
+ *
+ */
+public class SQL_Server implements Runnable {
 
 	private static final int portno = 9009;
 	private static MySQL_Connector conn;
 	private static ServerSocket server;
+
+	/*
+	 * query type names
+	 */
 	private static final String userCreate = "userCreation";
 	private static final String userInfo = "userInfo";
 	private static final String userGames = "userGames";
@@ -21,23 +32,33 @@ public class SQL_Server implements Runnable{
 	public APIConnection apiConn;
 
 	public SQL_Server() {
-	//	apiConn = new APIConnection();
+		// apiConn = new APIConnection();
 	}
-	
+
+	/**
+	 * I turned this class into a thread so it could be started from a different
+	 * class (UDPServer), therefore reducing the number of classes needed to be
+	 * started
+	 */
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
 			server = new ServerSocket(portno);
 			conn = new MySQL_Connector();
-			// System.out.println(server.getInetAddress().getHostName());
 			boolean run = true;
 			while (run) {
 				Socket sock = server.accept();
 				System.out.println("conn made");
+				/**
+				 * start a thread for the connection
+				 */
 				new Thread(new SQL_Server().new SQL_Query(sock)).start();
 
 			}
+			/**
+			 * if somehow the loop stops working, close connections
+			 */
 			server.close();
 			conn.terminate();
 
@@ -47,10 +68,14 @@ public class SQL_Server implements Runnable{
 		}
 	}
 
-
+	/**
+	 * ignore, is the same as run()
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
+
 		try {
 			server = new ServerSocket(portno);
 			conn = new MySQL_Connector();
@@ -72,6 +97,12 @@ public class SQL_Server implements Runnable{
 
 	}
 
+	/**
+	 * private class for each query, is a thread
+	 * 
+	 * @author nikhil
+	 *
+	 */
 	private class SQL_Query implements Runnable {
 
 		private Socket socket;
@@ -81,6 +112,11 @@ public class SQL_Server implements Runnable{
 
 		}
 
+		/**
+		 * turn the data from the socket into a json object
+		 * 
+		 * @return JSONObject
+		 */
 		private JSONObject getData() {
 			byte[] data = new byte[256];
 			try {
@@ -95,6 +131,10 @@ public class SQL_Server implements Runnable{
 
 		}
 
+		/**
+		 * The thread will jsonify the input from the socket, then depending on the
+		 * queryType, send an appropriate response/action
+		 */
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
@@ -117,10 +157,18 @@ public class SQL_Server implements Runnable{
 
 		}
 
+		/**
+		 * creates a game
+		 * 
+		 * @param request
+		 */
 		private void gameCreationRequest(JSONObject request) {
 			// TODO Auto-generated method stub
 			conn.createGame(request.getString("player1"), request.getString("player2"));
-			//apiConn.startGame(request.getString("player1"), request.getString("player2"), 10);
+			// The particle API connection was giving connection issues, so it has been
+			// commented out
+			// apiConn.startGame(request.getString("player1"), request.getString("player2"),
+			// 10);
 			try {
 				this.socket.getOutputStream().write(new JSONObject().accumulate("queryResult", "success")
 						.accumulate("queryType", request.get("queryType")).toString().getBytes());
@@ -133,6 +181,11 @@ public class SQL_Server implements Runnable{
 			}
 		}
 
+		/**
+		 * gets most recent game data for 2 players
+		 * 
+		 * @param request
+		 */
 		private void recentGameRequest(JSONObject request) {
 			// TODO Auto-generated method stub
 			conn.getMostRecentGame(request.getString("player1"), request.getString("player2"));
@@ -149,6 +202,11 @@ public class SQL_Server implements Runnable{
 
 		}
 
+		/**
+		 * gets all games for a user
+		 * 
+		 * @param request
+		 */
 		private void userGamesRequest(JSONObject request) {
 			// TODO Auto-generated method stub
 			try {
@@ -164,6 +222,11 @@ public class SQL_Server implements Runnable{
 
 		}
 
+		/**
+		 * gets user info for a user
+		 * 
+		 * @param request
+		 */
 		private void userInfoRequest(JSONObject request) {
 			// TODO Auto-generated method stub
 			if (conn.validateLogin(request.get("username").toString(), request.get("password").toString())) {
@@ -186,6 +249,11 @@ public class SQL_Server implements Runnable{
 
 		}
 
+		/**
+		 * sends an error message
+		 * 
+		 * @param request
+		 */
 		private void sendErrorMessage(JSONObject request) {
 			// TODO Auto-generated method stub
 			try {
@@ -199,6 +267,11 @@ public class SQL_Server implements Runnable{
 
 		}
 
+		/**
+		 * creates a user
+		 * 
+		 * @param request
+		 */
 		private void userCreationRequest(JSONObject request) {
 			// TODO Auto-generated method stub
 			conn.createUser(request.getString("username"), request.getString("password"));
@@ -214,6 +287,5 @@ public class SQL_Server implements Runnable{
 		}
 
 	}
-
 
 }
