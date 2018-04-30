@@ -1,7 +1,7 @@
 ##   Car code --> all code in each car.
 
 
-####   carStateMachine: arduino script running
+####   carStateMachine: script arduino is running
 ####   email_IP/sendIP.sh: shell script that sends IP addr to person running car
 				---> calls processIP.py, and smtpCommands.sh to help
 ####   udp_run.c/run: c script that will run on pi at launch
