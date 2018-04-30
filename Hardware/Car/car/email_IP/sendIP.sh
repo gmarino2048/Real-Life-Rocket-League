@@ -20,17 +20,17 @@ echo "address sent."
 # allows quick changes to all smtp request specifiers
 
 #which server
-echo "helo eecs.case.edu" < ~/Desktop/car/email_IP/commands/handshake.txt
+echo "helo eecs.case.edu" > ~/Desktop/car/email_IP/commands/handshake.txt
 #address mail is coming from
-echo "mail from: <pi@case.edu>" < ~/Desktop/car/email_IP/commands/from.txt
+echo "mail from: <pi@case.edu>" > ~/Desktop/car/email_IP/commands/from.txt
 #address mail is going to
-echo "rcpt to: <gjbsaiia@gmail.com>" < ~/Desktop/car/email_IP/commands/to.txt
+echo "rcpt to: <gjbsaiia@gmail.com>" > ~/Desktop/car/email_IP/commands/to.txt
 #email content specifier
-echo "data" <~/Desktop/car/email_IP/commands/contents.txt
+echo "data" > ~/Desktop/car/email_IP/commands/contents.txt
 
 #actual message is stored in currentIP.txt
 
 #end of message command
-echo "." < ~/Desktop/car/email_IP/commands/endMsg.txt
+echo "." > ~/Desktop/car/email_IP/commands/endMsg.txt
 #close connection command
-echo "quit" < ~/Desktop/car/email_IP/commands/quit.txt
+echo "quit" > ~/Desktop/car/email_IP/commands/quit.txt
