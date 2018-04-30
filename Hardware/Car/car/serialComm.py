@@ -5,7 +5,7 @@ import time
 import os
 import sys
 #sets the port of the arduino + the baud rate
-#ser = serial.Serial('/dev/ttyACM0',9600)
+ser = serial.Serial('/dev/ttyACM0',9600)
 
 def main():
     #path for FIFO
@@ -21,12 +21,12 @@ def main():
                     print("no state in pipe.")
                     break
                 print(b"{0}".format(state))
-                #ser.write(b"{0}".format(state))
+                ser.write(b"{0}".format(state))
                 if state == '-1':
                     raise KeyboardInterrupt
                 break
     os.remove("/tmp/myfifo")
-    #ser.close()
+    ser.close()
 
 if __name__ == '__main__':
     try:
@@ -35,8 +35,8 @@ if __name__ == '__main__':
         print 'Interrupted'
         try:
             os.remove("/tmp/myfifo")
-            #ser.write(b"a");
-            #ser.close()
+            ser.write(b"a");
+            ser.close()
             sys.exit(0)
         except SystemExit:
             os._exit(0)
