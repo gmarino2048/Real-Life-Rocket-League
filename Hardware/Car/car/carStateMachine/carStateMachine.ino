@@ -33,11 +33,14 @@ STATE TABLE
 
   //******************drive motor***************************
   //enable allows for in1/in2 to accept input and takes rpm
-  #define enA  11//pin
+  #define enA  8//pin
+  #define enB 11//pin
   //foward
-  #define in1  9//pin
+  #define rin1  9//pin
+  #define lin1 12//pin
   //reverse
-  #define in2  10//pin
+  #define rin2  10//pin
+  #define lin2 13//pin
   //normal speed
   #define NSPD  150//rpm
 
@@ -74,8 +77,11 @@ STATE TABLE
 void setup(){
   //sets drive motor control pins to output
   pinMode(enA, OUTPUT);
-  pinMode(in1, OUTPUT);
-  pinMode(in2, OUTPUT);
+  pinMode(rin1, OUTPUT);
+  pinMode(rin2, OUTPUT);
+  pinMode(enB, OUTPUT);
+  pinMode(lin1, OUTPUT);
+  pinMode(lin2, OUTPUT);
   //sets stepper control pins
   pinmode(enS, OUTPUT);
   pinMode(sIn1, OUTPUT);
@@ -218,8 +224,11 @@ void drive(int turn){
     }
   }
   analogWrite(enA, driveSpeed);
-  digitalWrite(in2, LOW);
-  digitalWrite(in1, HIGH);
+  analogWrite(enB, driveSpeed);
+  digitalWrite(lin1, HIGH);
+  digitalWrite(lin2, LOW);
+  digitalWrite(rin1, LOW);
+  digitalWrite(rin2, HIGH);
 }
 
 //reverse, we're going backwards
@@ -239,8 +248,11 @@ void reverse(int turn){
     }
   }
   analogWrite(enA, driveSpeed);
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, HIGH);
+  analogWrite(enB, driveSpeed);
+  digitalWrite(lin1, LOW);
+  digitalWrite(lin2, HIGH);
+  digitalWrite(rin1, HIGH);
+  digitalWrite(rin2, LOW);
 }
 
 //right, turning right, '2'
@@ -273,8 +285,11 @@ void left(){
 
 void brake(){
   digitalWrite(enA, LOW);
-  digitalWrite(in1, LOW);
-  digitalWrite(in2, LOW);
+  digitalWrite(lin1, LOW);
+  digitalWrite(lin2, LOW);
+  digitalWrite(enB, LOW);
+  digitalWrite(rin1, LOW);
+  digitalWrite(rin2, LOW);
   digitalWrite(sIn1, LOW);
   digitalWrite(sIn2, LOW);
   digitalWrite(sIn3, LOW);

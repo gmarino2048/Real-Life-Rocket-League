@@ -1,0 +1,5 @@
+
+TEST RESULT: PASS
+
+The serialEvent function takes user input and spits it back out perfectly,
+meaning we can use this for the entire program.

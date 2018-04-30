@@ -1,0 +1,6 @@
+
+TEST RESULT: PASS
+
+The Arduino due is completely capable of breaking down
+each message into its component parts and parsing them for
+the important bits of each message.

@@ -22,7 +22,6 @@ def main():
                     break
                 print(b"{0}".format(state))
                 ser.write(b"{0}".format(state))
-                time.sleep(1)
                 if state == '-1':
                     raise KeyboardInterrupt
                 break
