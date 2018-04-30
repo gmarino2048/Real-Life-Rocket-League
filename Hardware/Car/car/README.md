@@ -1,13 +1,14 @@
 ##   Car code --> all code in each car.
 
 
-####   carStateMachine: arduino script running
-####   email_IP/sendIP.sh: shell script that sends IP addr to person running car
+####   carStateMachine: script running on arduino
+####   /email_IP/sendIP.sh: shell script runs on start up
+        ---> sends IP address of car to specified email
 		---> calls processIP.py, and smtpCommands.sh to help
-####   udp_run.c/run: c script that will run on pi at launch
+####   run: c script that runs after shell script
+        ---> udp_run.c compiles to run, this is done prior to startup.
 		---> calls serialComm.py, a script that goes between Pi and Arduino.
-####   makefile: compiles for c script
-        ---> calls serialComm.py, a script that goes between Pi and Arduino.
+####   makefile: compiles udp_run.c
 
 #####  remoteControlMod:
         ---> a lil bit of code I wrote for fun, that isn't really part of the project 
