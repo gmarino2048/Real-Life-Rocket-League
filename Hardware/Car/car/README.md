@@ -8,3 +8,8 @@
 				---> calls serialComm.py, a script that goes between
 						 Pi and Arduino.
 ####   makefile: compiles for c script
+
+##### remoteControlMod:
+---> a lil bit of code I wrote for fun, that isn't really part of the project - 
+	but I didn't know where else to put it.  if you have a linux machine
+	it allows you to control the car without backend/frontend
