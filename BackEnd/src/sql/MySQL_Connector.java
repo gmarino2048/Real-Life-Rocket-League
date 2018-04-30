@@ -62,6 +62,7 @@ public class MySQL_Connector {
 	 * @param player2
 	 */
 	public String createGame(String player1, String player2) {
+		clearActiveGames();
 		LocalDateTime now = LocalDateTime.now();
 		String query = "insert into " + gameTable + " (gameID, p1_username, p2_username, isActive) values ('"
 				+ now.toString() + "', '" + player1 + "', '" + player2 + "', 1)";
@@ -75,6 +76,19 @@ public class MySQL_Connector {
 		}
 	}
 
+	public boolean clearActiveGames() {
+		String query = "delete from "+gameTable+" where isActive=1";
+		try {
+			this.statement.executeUpdate(query);
+
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	public Statement getStatement() {
 		return this.statement;
 	}

@@ -16,6 +16,7 @@ public class SQL_Server {
 	private static final String userInfo = "userInfo";
 	private static final String userGames = "userGames";
 	private static final String recentGame = "recentGame";
+	private static final String createGame = "gameCreation";
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -79,9 +80,27 @@ public class SQL_Server {
 					userGamesRequest(request);
 				} else if (request.getString("queryType").equals(recentGame)) {
 					recentGameRequest(request);
+				} else if (request.getString("queryType").equals(createGame)) {
+					gameCreationRequest(request);
 				}
 			}
 
+		}
+
+		private void gameCreationRequest(JSONObject request) {
+			// TODO Auto-generated method stub
+			conn.createGame(request.getString("player1"), request.getString("player2"));
+
+			try {
+				this.socket.getOutputStream().write(new JSONObject().accumulate("queryResult", "success")
+						.accumulate("queryType", request.get("queryType")).toString().getBytes());
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		private void recentGameRequest(JSONObject request) {
@@ -114,8 +133,6 @@ public class SQL_Server {
 			}
 
 		}
-		
-		
 
 		private void userInfoRequest(JSONObject request) {
 			// TODO Auto-generated method stub
