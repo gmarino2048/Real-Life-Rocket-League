@@ -4,7 +4,7 @@ var fs = require('fs');
 var app = express();
 //var server = http.Server(app);
 
-var server = app.listen(9000, '172.20.15.108', function () {
+var server = app.listen(9000, function () {
     console.log("CONNECTED TO SERVER AT PORT 9000")
 });
 
@@ -145,7 +145,7 @@ app.post('/Welcome_Page', urlencodedParser, function (req, res) {
         //if login success, send data to the web
         if (info.queryResult == 'success' && (info.queryType == 'userCreation' || info.queryType == 'userInfo')) {
             console.log('here');
-            res.redirect('/Game_Lobby.html');
+            res.status(303).redirect('/Game_Lobby.html');
         }
         else {
             res.end('Login failure. Please try again.');
@@ -219,7 +219,6 @@ app.get('/EndGame', function (request, response) {
 });
 
 app.get('/Final_Game_Stats', function (req, res){
-
 
     var json = {
         queryType: 'recentGame',
