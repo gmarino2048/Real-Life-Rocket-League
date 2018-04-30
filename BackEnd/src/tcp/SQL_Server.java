@@ -5,9 +5,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import org.json.*;
 
+import APIConnection.APIConnection;
 import sql.MySQL_Connector;
 
-public class SQL_Server {
+public class SQL_Server implements Runnable{
 
 	private static final int portno = 9009;
 	private static MySQL_Connector conn;
@@ -17,10 +18,39 @@ public class SQL_Server {
 	private static final String userGames = "userGames";
 	private static final String recentGame = "recentGame";
 	private static final String createGame = "gameCreation";
+	public APIConnection apiConn;
+
+	public SQL_Server() {
+	//	apiConn = new APIConnection();
+	}
+	
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		try {
+			server = new ServerSocket(portno);
+			conn = new MySQL_Connector();
+			// System.out.println(server.getInetAddress().getHostName());
+			boolean run = true;
+			while (run) {
+				Socket sock = server.accept();
+				System.out.println("conn made");
+				new Thread(new SQL_Server().new SQL_Query(sock)).start();
+
+			}
+			server.close();
+			conn.terminate();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		
 		try {
 			server = new ServerSocket(portno);
 			conn = new MySQL_Connector();
@@ -90,7 +120,7 @@ public class SQL_Server {
 		private void gameCreationRequest(JSONObject request) {
 			// TODO Auto-generated method stub
 			conn.createGame(request.getString("player1"), request.getString("player2"));
-
+			//apiConn.startGame(request.getString("player1"), request.getString("player2"), 10);
 			try {
 				this.socket.getOutputStream().write(new JSONObject().accumulate("queryResult", "success")
 						.accumulate("queryType", request.get("queryType")).toString().getBytes());
@@ -184,5 +214,6 @@ public class SQL_Server {
 		}
 
 	}
+
 
 }

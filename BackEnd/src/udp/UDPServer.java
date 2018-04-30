@@ -3,7 +3,8 @@ package udp;
 import java.io.IOException;
 import java.net.*;
 import org.json.*;
-import sql.MySQL_Connector;
+import sql.*;
+import tcp.SQL_Server;
 
 public class UDPServer {
 	private static final int PORT_NUM = 8001;
@@ -13,13 +14,18 @@ public class UDPServer {
 	public static final int endGamePort = 9090;
 	public static final int endGame = 11;
 
-	public APIConnection conn = new APIConnection();
+	
+	
 	public static int p1prev = -10;
 	public static int p2prev = -10;
 
+	public static SQL_Server sqlserver;
 	public static void main(String argv[]) {
-
+		sqlserver = new SQL_Server();
+		new Thread(sqlserver).start();
 		try {
+		
+			
 			DatagramSocket welcomeSocket = new DatagramSocket(PORT_NUM);
 			// DatagramSocket sock = new DatagramSocket();
 			// byte[] data = new byte[100];
@@ -33,6 +39,8 @@ public class UDPServer {
 			 * commented out
 			 * @author nikhil
 			 */
+			
+			
 			byte[] data;
 			boolean run = true;
 			DatagramPacket pack;
@@ -60,7 +68,7 @@ public class UDPServer {
 		}
 
 		private JSONObject getData() {
-			byte[] data = new byte[256];
+			
 
 			return new JSONObject(new String(this.pack.getData()));
 
@@ -78,7 +86,7 @@ public class UDPServer {
 			byte[] data = new byte[5];
 
 			if (state == endGame) {
-
+				
 				InetAddress client = pack.getAddress();
 				try {
 					data[0] = (byte) endGame;
@@ -91,7 +99,10 @@ public class UDPServer {
 					p2prev = -10;
 					MySQL_Connector conn = new MySQL_Connector();
 					String gameid = (conn.getActiveGameId());
-					conn.updateGameScore(1, 0); // need to obtain actual score here
+					
+					
+					//conn.updateGameScore(sqlserver.apiConn.getScore1(), sqlserver.apiConn.getScore2()); // need to obtain actual score here
+					conn.updateGameScore(1, 0);
 					JSONObject gameData = conn.getJSONforGame(gameid);
 					System.out.println(client.toString());
 					System.out.println(gameData.toString());
