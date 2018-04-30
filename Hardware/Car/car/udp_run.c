@@ -1,3 +1,6 @@
+//Griffin Saiia, gjs64
+//Car server
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,6 +14,22 @@
 #include <netdb.h>
 
 #define PORT 1234 //port we're communicating on
+
+/*
+STATE TABLE
+'12' - start/end game, handled inside serialEvent()
+'0' - neutral
+'1' - Forward, drive()
+'2' - Turn Right, right()
+'3' - Reverse, reverse()
+'4' - Turn Left, left()
+'5' - Forward+Right, rdrive()
+'6' - Forward+Left, ldrive()
+'7' - Reverse+Right, rreverse()
+'8' - Reverse+Left, lreverse()
+'9' - Brake, brake()
+'13' - boost, boost()
+*/
 
 //****************************perror wrapper****************************
 void error(char *msg) {
@@ -105,8 +124,8 @@ int main(int argc, char **argv) {
   bzero(msg, strlen(msg));
   msglen = -1;
   //variable to be passed around
-  int state = -4; //-4, just because it's not a state value.
-  //starts connection monitoring, checks for end game state
+  int state = -2; //-2, just because it's not a state value.
+  //starts connection monitoring - checks exit state, '-1'.
   while(state != -1){
     //waits for message from server
     if ((msglen = recvfrom(sockfd, msg, sizeof(msg), 0,
@@ -116,15 +135,20 @@ int main(int argc, char **argv) {
     else{
       //updates state
       uint32_t myInt1 = msg[0] + (msg[1] << 8) + (msg[2] << 16) + (msg[3] << 24);
-      state = (int)myInt1;
+      char* input = msg;
+      state = atoi(input);
       //passes state into pipe
       fd = open(myFIFO, O_WRONLY);
-      //for whatever reason, arduino reads '-1' as '1'
-      if(state == -1){
+      //byte conversion doesn't like -1, 10, or 11.
+      if(state == 12){
+				//arduino takes "a" for end game
         sprintf(arr1, "a");
         write(fd, arr1, sizeof(arr1));
+				//sets state to break state
+				state = -1;
       }
-      if(state == 10){
+      else if(state == 13){
+				//arduino takes "b" for end game
         sprintf(arr1, "b");
         write(fd, arr1,sizeof(arr1));
       }
@@ -135,10 +159,11 @@ int main(int argc, char **argv) {
       close(fd);
       //used for testing
       fprintf(stderr, "server sent: %s\n", arr1);
-      //clears both buffers
-      bzero(arr1, sizeof(arr1));
-      bzero(msg, sizeof(msg));
     }
+		//clears buffers
+		bzero(input, sizeof(input));
+		bzero(arr1, sizeof(arr1));
+		bzero(msg, sizeof(msg));
   }
   //closes socket
   close(sockfd);
