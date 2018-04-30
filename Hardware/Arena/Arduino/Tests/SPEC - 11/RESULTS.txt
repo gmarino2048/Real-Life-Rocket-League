@@ -1,0 +1,7 @@
+
+
+TEST RESULT: DEPRICATED
+
+This test has been depricated due to the fact that error
+checking is built in to Arduino serial communication, and
+we do not have to do it manually.

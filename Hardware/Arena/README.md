@@ -6,7 +6,7 @@
 
 The API Connection folder contains all of the source code for the connection between the backend and the Arena. If you're interested, there are some functional unit tests in there under the [src](https://github.com/gmarino2048/Real-Life-Rocket-League/tree/master/Hardware/Arena/API%20Connection/API%20Connection/src) folder.
 
-If you are unsure of the login credentials for the project, please see the `ID and Secret.txt` file included
+If you are unsure of the login credentials for the project, please see the `ID and Secret.txt` file included.
 
 ### Arena Hardware
 

@@ -1,0 +1,5 @@
+
+TEST RESULT: PASS
+
+The arena can send data back and forth across all three
+devices without issue.

@@ -1,0 +1,7 @@
+
+TEST RESULT: PASS
+
+The Arduino due was able to successfully print out the
+strings given to the particle photon on the site
+console.particle.io showing that the interfacing between
+the photon and the due was a complete success.

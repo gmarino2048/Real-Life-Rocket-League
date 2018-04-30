@@ -1,0 +1,4 @@
+
+TEST RESULT: PASS
+
+The arena is operating as expected.
