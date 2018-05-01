@@ -1,6 +1,0 @@
-Code Coverage Report (MySQLConnectorTester):
-
-	The code coverage is also represented in a screenshot in this directory.
-	The code coverage of MySQLConnector when the JUnit tests in MySQLConnectorTester are ran is around 70-80%.
-	However, the code not covered are the sections where a SQLException is caught, and I print the error and return an error value.
-	In terms of code that runs when no error occurs, there is approximately a 95% plus coverage.
